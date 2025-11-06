@@ -26,7 +26,7 @@
 
     <ul class="nav">
       <li class="nav-header">Navigation</li>
-      <li class="active">
+      <li class="<?= $page == 'dashboard' ? 'active' : '' ?>">
         <a href="index.php?page=dashboard">
           <i class="fa fa-th-large"></i>
           <span>Dashboard</span>
@@ -42,6 +42,21 @@
           <li><a href="javascript:;">Menu 1.2</a></li>
           <li><a href="javascript:;">Menu 1.3</a></li>
         </ul>
+      </li>
+
+      <li class="has-sub <?= $page == 'roles' || $page == 'users' ? 'active expand' : '' ?>">
+        <a href="javascript:;">
+          <b class="caret"></b>
+          <i class="fa fa-user-cog"></i> 
+          <span>User Management</span>
+        </a>
+        <ul class="sub-menu">
+          <li><a href="javascript:;">Users</a></li>
+          <li class="<?= $page == 'roles' ? 'active' : '' ?>"><a href="index.php?page=roles">Roles</a></li>
+        </ul>
+      </li>
+
+      <li class="has-sub">
         <a href="javascript:;">
           <b class="caret"></b>
           <i class="fa fa-cog"></i> 
@@ -49,16 +64,10 @@
         </a>
         <ul class="sub-menu">
           <li class="has-sub">
-            <a href="javascript:;">
-              <b class="caret"></b>
-              Menu 1.1
-            </a>
+            <a href="javascript:;"><b class="caret"></b>Menu 1.1</a>
             <ul class="sub-menu">
               <li class="has-sub">
-                <a href="javascript:;">
-                  <b class="caret"></b>
-                  Menu 2.1
-                </a>
+                <a href="javascript:;"><b class="caret"></b>Menu 2.1</a>
                 <ul class="sub-menu">
                   <li><a href="javascript:;">Menu 3.1</a></li>
                   <li><a href="javascript:;">Menu 3.2</a></li>
@@ -72,6 +81,7 @@
           <li><a href="javascript:;">Menu 1.3</a></li>
         </ul>
       </li>
+
       <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
     </ul>
   </div>

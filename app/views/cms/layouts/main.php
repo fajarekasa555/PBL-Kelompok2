@@ -19,13 +19,21 @@
 	<link href="public/assets/css/default/style.min.css" rel="stylesheet" />
 	<link href="public/assets/css/default/style-responsive.min.css" rel="stylesheet" />
 	<link href="public/assets/css/default/theme/default.css" rel="stylesheet" />
+    <link href="public/assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="public/assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="public/assets/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css" rel="stylesheet">
+
+    <!-- cdn -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.3/dist/sweetalert2.min.css" rel="stylesheet">
 	<!-- ================== END BASE CSS STYLE ================== -->
 	
 	<!-- ================== BEGIN BASE JS ================== -->
 	<script src="public/assets/plugins/pace/pace.min.js"></script>
+    <script src="public/js/jquery-3.7.1.min.js"></script>
 	<!-- ================== END BASE JS ================== -->
 </head>
 <body>
+    <?php $page = $_GET['page'] ?? ''; ?>
     <div id="page-loader" class="fade in"><span class="spinner"></span></div>
     <div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
         <?php include __DIR__ . '/partials/header.php'; ?>
@@ -48,12 +56,38 @@
 	<script src="public/assets/plugins/js-cookie/js.cookie.js"></script>
 	<script src="public/assets/js/theme/default.min.js"></script>
 	<script src="public/assets/js/apps.min.js"></script>
+    <script src="public/assets/plugins/DataTables/media/js/jquery.dataTables.js"></script>
+    <script src="public/assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="public/assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+    <script src="public/assets/plugins/DataTables/extensions/Select/js/dataTables.select.min.js"></script>
+    <script src="public/assets/plugins/DataTables/extensions/TreeGrid/dataTables.treeGrid.js"></script>
+
+    <!-- cdn -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.3/dist/sweetalert2.all.min.js"></script>
 	<!-- ================== END BASE JS ================== -->
 	
 	<script>
 		$(document).ready(function() {
 			App.init();
 		});
+        
+        function swalConfirm(message, yesCallback) {
+            Swal.fire({
+                title: message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Hapus',
+                cancelButtonText: 'Batal',
+                customClass: {
+                confirmButton: 'btn btn-primary btn-md px-4 mr-1',
+                cancelButton: 'btn btn-danger btn-md px-4'
+            },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (typeof yesCallback === "function") yesCallback();
+                }
+            });
+        }
 	</script>
 </body>
 </html>
