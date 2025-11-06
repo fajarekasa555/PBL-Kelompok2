@@ -1,0 +1,5 @@
+{
+    "name": "labdt/php-mvc",
+    "description": "PHP Native MVC with PostgreSQL and Bootstrap 5.3.3",
+    "require": {}
+}
