@@ -70,13 +70,10 @@ class UserController extends Controller
         ];
 
         $this->userModel->create($data);
-
-        return $this->redirect('index.php?page=users');
     }
 
-    public function edit()
+    public function edit($id)
     {
-        $id = $_GET['id'] ?? null;
         $user_edit = $this->userModel->findOrFail($id);
         $roles = $this->roleModel->all();
 
@@ -94,15 +91,10 @@ class UserController extends Controller
         ];
 
         $this->userModel->update($id, $data);
-
-        return $this->redirect('index.php?page=users');
     }
 
-    public function delete()
+    public function delete($id)
     {
-        $id = $_GET['id'] ?? null;
         $this->userModel->delete($id);
-
-        return $this->redirect('index.php?page=users');
     }
 }

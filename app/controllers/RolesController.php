@@ -67,13 +67,10 @@ class RolesController extends Controller
         if ($name !== '') {
             $this->roleModel->create($name);
         }
-
-        return $this->redirect('index.php?page=roles');
     }
 
-    public function edit()
+    public function edit($id)
     {
-        $id = $_GET['id'] ?? null;
         $role = $this->roleModel->find($id);
 
         return include __DIR__ . '/../Views/cms/user_management/roles/edit.php';
@@ -88,18 +85,12 @@ class RolesController extends Controller
         if ($id && $name) {
             $this->roleModel->update($id, $name);
         }
-
-        return $this->redirect('index.php?page=roles');
     }
 
-    public function delete()
+    public function delete($id)
     {
-        $id = $_GET['id'] ?? null;
-
         if ($id) {
             $this->roleModel->delete($id);
         }
-
-        return $this->redirect('index.php?page=roles');
     }
 }

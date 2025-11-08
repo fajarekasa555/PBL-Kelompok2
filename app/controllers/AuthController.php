@@ -7,7 +7,7 @@ use App\Models\UserModel;
 
 class AuthController extends Controller {
     
-    public function index(){
+    public function index() {
         return $this->login();
     }
 
@@ -17,7 +17,7 @@ class AuthController extends Controller {
         }
 
         if (isset($_SESSION['user'])) {
-            return $this->redirect('index.php?page=dashboard');
+            return $this->redirect('dashboard');
         }
 
         $error = null;
@@ -31,7 +31,7 @@ class AuthController extends Controller {
 
             if ($user && ($user['role_name'] ?? null) === 'admin') {
                 $_SESSION['user'] = $user;
-                return $this->redirect('index.php?page=dashboard');
+                return $this->redirect('dashboard');
             }
 
             $error = 'Login gagal. Pastikan username/password dan role admin benar.';
@@ -46,8 +46,10 @@ class AuthController extends Controller {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
+
         session_unset();
         session_destroy();
-        return $this->redirect('index.php?page=auth');
+
+        return $this->redirect('login');
     }
 }

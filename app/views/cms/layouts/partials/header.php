@@ -12,7 +12,7 @@
         <span class="d-none d-md-inline"><?php echo isset($user['username'])?htmlspecialchars($user['username']):''; ?></span> <b class="caret"></b>
       </a>
       <div class="dropdown-menu dropdown-menu-right">
-        <a href="index.php?page=auth&action=logout" class="dropdown-item">Log Out</a>
+        <a href="<?= $route->base_url('logout') ?>" class="dropdown-item">Log Out</a>
       </div>
     </li>
   </ul>

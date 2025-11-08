@@ -1,3 +1,9 @@
+<?php
+use App\Helpers\Routing;
+$route = new Routing();
+$baseUserUrl = $route->base_url('users');
+?>
+
 <h1 class="page-header d-flex justify-content-between align-items-center">
     <span>Manajemen User</span>
     <button class="btn btn-primary" onclick="createUser()">
@@ -21,12 +27,13 @@
 
 <script>
 let userTable;
+const baseUserUrl = '<?= $baseUserUrl ?>';
 
 $(function() {
     userTable = $('#user-table').DataTable({
         processing: true,
         serverSide: false,
-        ajax: 'index.php?page=user&ajax=1',
+        ajax: `${baseUserUrl}?ajax=1`, // contoh: /user?ajax=1
         columns: [
             { data: 'username' },
             { data: 'role_name' },
@@ -36,7 +43,7 @@ $(function() {
 });
 
 function createUser() {
-    $.get('index.php?page=user&action=create&ajax=1', function(response){
+    $.get(`${baseUserUrl}/create?ajax=1`, function(response) {
         Swal.fire({
             title: 'Tambah User',
             html: response,
@@ -57,7 +64,7 @@ function createUser() {
 }
 
 function storeUser() {
-    $.post('index.php?page=user&action=store', $('#form-create-user').serialize(), function() {
+    $.post(`${baseUserUrl}/store`, $('#form-create-user').serialize(), function() {
         Swal.close();
         userTable.ajax.reload(null, false);
 
@@ -72,7 +79,7 @@ function storeUser() {
 }
 
 function editUser(id) {
-    $.get('index.php?page=user&action=edit&id='+id+'&ajax=1', function(response) {
+    $.get(`${baseUserUrl}/edit/${id}?ajax=1`, function(response) {
         Swal.fire({
             title: 'Edit User',
             html: response,
@@ -93,7 +100,7 @@ function editUser(id) {
 }
 
 function updateUser() {
-    $.post('index.php?page=user&action=update', $('#form-edit-user').serialize(), function() {
+    $.post(`${baseUserUrl}/update`, $('#form-edit-user').serialize(), function() {
         Swal.close();
         userTable.ajax.reload(null, false);
 
@@ -109,7 +116,7 @@ function updateUser() {
 
 function deleteUser(id) {
     swalConfirm('Hapus user ini?', function() {
-        $.get('index.php?page=user&action=delete&id=' + id, function() {
+        $.get(`${baseUserUrl}/delete/${id}`, function() {
             userTable.ajax.reload(null, false);
             Swal.fire({
                 icon: 'success',

@@ -1,6 +1,14 @@
+<?php
+use App\Helpers\Routing;
+$route = new Routing();
+$baseRoleUrl = $route->base_url('roles');
+?>
+
 <h1 class="page-header d-flex justify-content-between align-items-center">
     <span>Manajemen Role</span>
-    <button class="btn btn-primary" onclick="createRole()"><span class="fa fa-plus bold"></span></button>
+    <button class="btn btn-primary" onclick="createRole()">
+        <span class="fa fa-plus bold"></span>
+    </button>
 </h1>
 
 <div class="panel panel-default">
@@ -18,12 +26,13 @@
 
 <script>
 let roleTable;
+const baseRoleUrl = '<?= $baseRoleUrl ?>';
 
 $(function() {
     roleTable = $('#role-table').DataTable({
         processing: true,
         serverSide: false,
-        ajax: 'index.php?page=roles&ajax=1',
+        ajax: `${baseRoleUrl}?ajax=1`, // contoh: /roles?ajax=1
         columns: [
             { data: 'name' },
             { data: 'action', orderable: false, searchable: false, className: 'text-center' }
@@ -32,7 +41,7 @@ $(function() {
 });
 
 function createRole() {
-    $.get('index.php?page=roles&action=create&ajax=1', function(response){
+    $.get(`${baseRoleUrl}/create?ajax=1`, function(response) {
         Swal.fire({
             title: 'Tambah Role',
             html: response,
@@ -53,10 +62,9 @@ function createRole() {
 }
 
 function storeRole() {
-    $.post('index.php?page=roles&action=store', $('#form-create-role').serialize(), function(response) {
+    $.post(`${baseRoleUrl}/store`, $('#form-create-role').serialize(), function() {
         Swal.close();
         roleTable.ajax.reload(null, false);
-
         Swal.fire({
             icon: 'success',
             title: 'Berhasil',
@@ -68,7 +76,7 @@ function storeRole() {
 }
 
 function editRole(id) {
-    $.get('index.php?page=roles&action=edit&id='+id+ '&ajax=1', function(response) {
+    $.get(`${baseRoleUrl}/edit/${id}?ajax=1`, function(response) {
         Swal.fire({
             title: 'Edit Role',
             html: response,
@@ -89,10 +97,9 @@ function editRole(id) {
 }
 
 function updateRole() {
-    $.post('index.php?page=roles&action=update', $('#form-edit-role').serialize(), function(response) {
+    $.post(`${baseRoleUrl}/update`, $('#form-edit-role').serialize(), function() {
         Swal.close();
         roleTable.ajax.reload(null, false);
-
         Swal.fire({
             icon: 'success',
             title: 'Berhasil',
@@ -105,7 +112,7 @@ function updateRole() {
 
 function deleteRole(id) {
     swalConfirm('Hapus role ini?', function() {
-        $.get('index.php?page=roles&action=delete&id=' + id, function() {
+        $.get(`${baseRoleUrl}/delete/${id}`, function() {
             roleTable.ajax.reload(null, false);
             Swal.fire({
                 icon: 'success',
@@ -116,5 +123,4 @@ function deleteRole(id) {
         });
     });
 }
-
 </script>

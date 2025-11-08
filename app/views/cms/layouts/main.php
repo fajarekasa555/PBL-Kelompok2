@@ -33,6 +33,11 @@
 	<!-- ================== END BASE JS ================== -->
 </head>
 <body>
+    <?php
+        use App\Helpers\Routing;
+
+        $route = new Routing();
+    ?>
     <?php $page = $_GET['page'] ?? ''; ?>
     <div id="page-loader" class="fade in"><span class="spinner"></span></div>
     <div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
