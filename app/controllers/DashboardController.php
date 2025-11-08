@@ -1,14 +1,26 @@
 <?php
-require_once __DIR__ . '/../middleware/AuthMiddleware.php';
 
-class DashboardController {
-    public function index() {
+namespace App\Controllers;
+
+use App\Core\Controller;
+use App\Middleware\AuthMiddleware;
+
+class DashboardController extends Controller
+{
+    public function __construct()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
         AuthMiddleware::requireAdmin();
-        if (session_status() !== PHP_SESSION_ACTIVE) session_start();
-        $user = $_SESSION['user'] ?? null;
+    }
 
-        // you can prepare data here to pass to view
-        $content = __DIR__ . '/../views/cms/dashboard/index.php';
-        include __DIR__ . '/../views/cms/layouts/main.php';
+    public function index()
+    {
+        $user = $_SESSION['user'] ?? null;
+        return $this->view('cms/dashboard/index', [
+            'user' => $user
+        ]);
     }
 }

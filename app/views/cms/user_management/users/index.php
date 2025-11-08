@@ -1,15 +1,18 @@
 <h1 class="page-header d-flex justify-content-between align-items-center">
-    <span>Manajemen Role</span>
-    <button class="btn btn-primary" onclick="createRole()"><span class="fa fa-plus bold"></span></button>
+    <span>Manajemen User</span>
+    <button class="btn btn-primary" onclick="createUser()">
+        <span class="fa fa-plus bold"></span>
+    </button>
 </h1>
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <table id="role-table" class="table table-bordered table-striped">
+        <table id="user-table" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Nama Role</th>
-                    <th width="100" class="text-center">Aksi</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th width="120" class="text-center">Aksi</th>
                 </tr>
             </thead>
         </table>
@@ -17,24 +20,25 @@
 </div>
 
 <script>
-let roleTable;
+let userTable;
 
 $(function() {
-    roleTable = $('#role-table').DataTable({
+    userTable = $('#user-table').DataTable({
         processing: true,
         serverSide: false,
-        ajax: 'index.php?page=roles&ajax=1',
+        ajax: 'index.php?page=user&ajax=1',
         columns: [
-            { data: 'name' },
+            { data: 'username' },
+            { data: 'role_name' },
             { data: 'action', orderable: false, searchable: false, className: 'text-center' }
         ]
     });
 });
 
-function createRole() {
-    $.get('index.php?page=roles&action=create&ajax=1', function(response){
+function createUser() {
+    $.get('index.php?page=user&action=create&ajax=1', function(response){
         Swal.fire({
-            title: 'Tambah Role',
+            title: 'Tambah User',
             html: response,
             width: 500,
             showCancelButton: true,
@@ -46,31 +50,31 @@ function createRole() {
                 cancelButton: 'btn btn-danger btn-md px-4'
             },
             preConfirm: () => {
-                storeRole();
+                storeUser();
             }
         });
     });
 }
 
-function storeRole() {
-    $.post('index.php?page=roles&action=store', $('#form-create-role').serialize(), function(response) {
+function storeUser() {
+    $.post('index.php?page=user&action=store', $('#form-create-user').serialize(), function() {
         Swal.close();
-        roleTable.ajax.reload(null, false);
+        userTable.ajax.reload(null, false);
 
         Swal.fire({
             icon: 'success',
             title: 'Berhasil',
-            text: 'Role berhasil ditambahkan.',
+            text: 'User berhasil ditambahkan.',
             timer: 1500,
             showConfirmButton: false
         });
     });
 }
 
-function editRole(id) {
-    $.get('index.php?page=roles&action=edit&id='+id+ '&ajax=1', function(response) {
+function editUser(id) {
+    $.get('index.php?page=user&action=edit&id='+id+'&ajax=1', function(response) {
         Swal.fire({
-            title: 'Edit Role',
+            title: 'Edit User',
             html: response,
             width: 500,
             showCancelButton: true,
@@ -82,31 +86,31 @@ function editRole(id) {
                 cancelButton: 'btn btn-danger btn-md px-4'
             },
             preConfirm: () => {
-                updateRole();
+                updateUser();
             }
         });
     });
 }
 
-function updateRole() {
-    $.post('index.php?page=roles&action=update', $('#form-edit-role').serialize(), function(response) {
+function updateUser() {
+    $.post('index.php?page=user&action=update', $('#form-edit-user').serialize(), function() {
         Swal.close();
-        roleTable.ajax.reload(null, false);
+        userTable.ajax.reload(null, false);
 
         Swal.fire({
             icon: 'success',
             title: 'Berhasil',
-            text: 'Role berhasil diperbarui.',
+            text: 'User berhasil diperbarui.',
             timer: 1500,
             showConfirmButton: false
         });
     });
 }
 
-function deleteRole(id) {
-    swalConfirm('Hapus role ini?', function() {
-        $.get('index.php?page=roles&action=delete&id=' + id, function() {
-            roleTable.ajax.reload(null, false);
+function deleteUser(id) {
+    swalConfirm('Hapus user ini?', function() {
+        $.get('index.php?page=user&action=delete&id=' + id, function() {
+            userTable.ajax.reload(null, false);
             Swal.fire({
                 icon: 'success',
                 title: 'Dihapus',
@@ -116,5 +120,4 @@ function deleteRole(id) {
         });
     });
 }
-
 </script>

@@ -10,8 +10,8 @@
           </div>
           <div class="info">
             <b class="caret pull-right"></b>
-            <?php echo isset($user['username'])?htmlspecialchars($user['username']):''; ?>
-            <small><?php echo isset($user['role_name'])?htmlspecialchars($user['role_name']):''; ?></small>
+            <?php echo isset($_SESSION['user']['username'])?htmlspecialchars($_SESSION['user']['username']):''; ?>
+            <small><?php echo isset($_SESSION['user']['role_name'])?htmlspecialchars($_SESSION['user']['role_name']):''; ?></small>
           </div>
         </a>
       </li>
@@ -44,14 +44,14 @@
         </ul>
       </li>
 
-      <li class="has-sub <?= $page == 'roles' || $page == 'users' ? 'active expand' : '' ?>">
+      <li class="has-sub <?= $page == 'roles' || $page == 'user' ? 'active expand' : '' ?>">
         <a href="javascript:;">
           <b class="caret"></b>
           <i class="fa fa-user-cog"></i> 
           <span>User Management</span>
         </a>
         <ul class="sub-menu">
-          <li><a href="javascript:;">Users</a></li>
+          <li class="<?= $page == 'user' ? 'active' : '' ?>"><a href="index.php?page=user">Users</a></li>
           <li class="<?= $page == 'roles' ? 'active' : '' ?>"><a href="index.php?page=roles">Roles</a></li>
         </ul>
       </li>

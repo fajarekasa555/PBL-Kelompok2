@@ -39,7 +39,7 @@
         <?php include __DIR__ . '/partials/header.php'; ?>
         <?php include __DIR__ . '/sidebar/main.php'; ?>
         <div id="content" class="content">
-            <?php include $content; ?>
+            <?php echo $content; ?>
         </div>
     </div>
 	
