@@ -40,16 +40,51 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
         </a>
       </li>
 
+      <li class="<?= $currentRoute === 'informasi' ? 'active' : '' ?>">
+        <a href="">
+          <i class="fa fa-home"></i>
+          <span>Informasi Lab</span>
+        </a>
+      </li>
+
+      <li class="has-sub <?= in_array($currentRoute, ['publications', 'members', 'social_media', 'educations']) ? 'active expand' : '' ?>">
+        <a href="javascript:;">
+          <b class="caret"></b>
+          <i class="fa fa-user"></i>
+          <span>Anggota Lab</span>
+        </a>
+        <ul class="sub-menu">
+          <li class="<?= $currentRoute === 'members' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('members') ?>">Anggota</a>
+          </li>
+          <li class="<?= $currentRoute === 'social_media' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('social_media') ?>">Sosial Media</a>
+          </li>
+          <li class="<?= $currentRoute === 'educations' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('educations') ?>">Pendidikan</a>
+          </li>
+          <li><a href="">Sertifikasi</a></li>
+          <li><a href="#">Mata Kuliah</a></li>
+          <li class="<?= $currentRoute === 'publications' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('publications') ?>">Publikasi</a>
+          </li>
+          <li><a href="#">Keahlian</a></li>
+        </ul>
+      </li>
+
       <!-- Master -->
       <li class="has-sub">
         <a href="javascript:;">
           <b class="caret"></b>
           <i class="fa fa-database"></i>
-          <span>Master</span>
+          <span>Content</span>
         </a>
         <ul class="sub-menu">
-          <li><a href="#">Menu 1.2</a></li>
-          <li><a href="#">Menu 1.3</a></li>
+          <li><a href="">Fasilitas</a></li>
+          <li><a href="">Mata Kuliah</a></li>
+          <li><a href="#">Fokus Riset</a></li>
+          <li><a href="#">Kegiatan</a></li>
+          <li><a href="#">Proyek</a></li>
         </ul>
       </li>
 
@@ -71,7 +106,7 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
       </li>
 
       <!-- Setting -->
-      <li class="has-sub">
+      <!-- <li class="has-sub">
         <a href="javascript:;">
           <b class="caret"></b>
           <i class="fa fa-cog"></i>
@@ -95,7 +130,7 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
           <li><a href="#">Menu 1.2</a></li>
           <li><a href="#">Menu 1.3</a></li>
         </ul>
-      </li>
+      </li> -->
 
       <!-- Minify button -->
       <li>

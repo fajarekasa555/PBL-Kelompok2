@@ -2,7 +2,12 @@
 
 use App\Controllers\DashboardController;
 use App\Controllers\AuthController;
+use App\Controllers\EducationController;
+use App\Controllers\ExpertiesController;
+use App\Controllers\MembersController;
+use App\Controllers\PublicationsController;
 use App\Controllers\RolesController;
+use App\Controllers\SocialMediaController;
 use App\Controllers\UserController;
 
 /**
@@ -22,6 +27,8 @@ return [
     'login'  => [AuthController::class, 'login', []],
     'logout' => [AuthController::class, 'logout', ['auth']],
 
+    // user management
+
     'users'             => [UserController::class, 'index', ['auth', 'admin']],
     'users/create'      => [UserController::class, 'create', ['auth', 'admin']],
     'users/store'       => [UserController::class, 'store', ['auth', 'admin']],
@@ -35,4 +42,41 @@ return [
     'roles/edit/{id}'   => [RolesController::class, 'edit', ['auth', 'admin']],
     'roles/update'      => [RolesController::class, 'update', ['auth', 'admin']],
     'roles/delete/{id}' => [RolesController::class, 'delete', ['auth', 'admin']],
+
+    // anggota lab
+    'members'             => [MembersController::class, 'index', ['auth', 'admin']],
+    'members/show/{id}'   => [MembersController::class, 'show', ['auth', 'admin']],
+    'members/create'      => [MembersController::class, 'create', ['auth', 'admin']],
+    'members/store'       => [MembersController::class, 'store', ['auth', 'admin']],
+    'members/edit/{id}'   => [MembersController::class, 'edit', ['auth', 'admin']],
+    'members/update'      => [MembersController::class, 'update', ['auth', 'admin']],
+    'members/delete/{id}' => [MembersController::class, 'delete', ['auth', 'admin']],
+
+    'publications'             => [PublicationsController::class, 'index', ['auth', 'admin']],
+    'publications/create'      => [PublicationsController::class, 'create', ['auth', 'admin']],
+    'publications/store'       => [PublicationsController::class, 'store', ['auth', 'admin']],
+    'publications/edit/{id}'   => [PublicationsController::class, 'edit', ['auth', 'admin']],
+    'publications/update'      => [PublicationsController::class, 'update', ['auth', 'admin']],
+    'publications/delete/{id}' => [PublicationsController::class, 'delete', ['auth', 'admin']],
+
+    'social_media'             => [SocialMediaController::class, 'index', ['auth', 'admin']],
+    'social_media/create'      => [SocialMediaController::class, 'create', ['auth', 'admin']],
+    'social_media/store'       => [SocialMediaController::class, 'store', ['auth', 'admin']],
+    'social_media/edit/{id}'   => [SocialMediaController::class, 'edit', ['auth', 'admin']],
+    'social_media/update'      => [SocialMediaController::class, 'update', ['auth', 'admin']],
+    'social_media/delete/{id}' => [SocialMediaController::class, 'delete', ['auth', 'admin']],
+
+    'educations'             => [EducationController::class, 'index', ['auth', 'admin']],
+    'educations/create'      => [EducationController::class, 'create', ['auth', 'admin']],
+    'educations/store'       => [EducationController::class, 'store', ['auth', 'admin']],
+    'educations/edit/{id}'   => [EducationController::class, 'edit', ['auth', 'admin']],
+    'educations/update'      => [EducationController::class, 'update', ['auth', 'admin']],
+    'educations/delete/{id}' => [EducationController::class, 'delete', ['auth', 'admin']],
+
+    'experties'             => [ExpertiesController::class, 'index', ['auth', 'admin']],
+    'experties/create'      => [ExpertiesController::class, 'create', ['auth', 'admin']],
+    'experties/store'       => [ExpertiesController::class, 'store', ['auth', 'admin']],
+    'experties/edit/{id}'   => [ExpertiesController::class, 'edit', ['auth', 'admin']],
+    'experties/update'      => [ExpertiesController::class, 'update', ['auth', 'admin']],
+    'experties/delete/{id}' => [ExpertiesController::class, 'delete', ['auth', 'admin']],
 ];

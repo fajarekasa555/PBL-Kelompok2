@@ -5,7 +5,7 @@
 <!--<![endif]-->
 <head>
 	<meta charset="utf-8" />
-	<title>Color Admin | HTML Startup</title>
+	<title>CMS</title>
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
@@ -32,7 +32,7 @@
     <script src="public/js/jquery-3.7.1.min.js"></script>
 	<!-- ================== END BASE JS ================== -->
 </head>
-<body>
+<body class="theme-default">
     <?php
         use App\Helpers\Routing;
 
