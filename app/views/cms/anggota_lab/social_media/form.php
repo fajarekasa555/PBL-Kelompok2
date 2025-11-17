@@ -1,6 +1,6 @@
 <div class="mb-3 text-left">
     <label>Anggota / Dosen</label>
-    <select class="form-control" name="member_id" required>
+    <select class="form-control select2" name="member_id" required>
         <option value="">-- Pilih Anggota --</option>
         <?php foreach ($members as $m): ?>
             <option value="<?= $m['id'] ?>" 
@@ -19,7 +19,7 @@
 <div class="mb-3 text-left">
     <label>Icon</label>
     <div class="d-flex align-items-center gap-2">
-        <select class="form-control" name="icon" id="icon-select" required style="flex:1;">
+        <select class="form-control select2" name="icon" id="icon-select" required style="flex:1;">
             <option value="">-- Pilih Icon Platform --</option>
 
             <optgroup label="Font Awesome (Media Sosial)">

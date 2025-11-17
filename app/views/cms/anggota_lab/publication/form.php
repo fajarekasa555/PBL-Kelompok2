@@ -4,7 +4,7 @@
 </div>
 <div class="mb-3 text-left">
     <label>Tanggal Publikasi</label>
-    <input type="date" class="form-control" name="date" value="<?= $publications['date'] ?? '' ?>" required>
+    <input type="date" class="form-control datepicker" name="date" value="<?= $publications['date'] ?? '' ?>" required>
 </div>
 <div class="mb-3 text-left">
     <label>Tautan Publikasi</label>
@@ -12,7 +12,7 @@
 </div>
 <div class="mb-3 text-left">
     <label>Anggota / Dosen</label>
-    <select class="form-control" name="member_id" required>
+    <select class="form-control select2" name="member_id" required>
         <option value="">-- Pilih Anggota --</option>
         <?php foreach ($members as $m): ?>
             <option value="<?= $m['id'] ?>" 

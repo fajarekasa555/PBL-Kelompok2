@@ -69,7 +69,6 @@ function createMember() {
             buttonsStyling: false,
             didOpen: () => {
                 $('.multiple-select2').select2({
-                    placeholder: "Pilih bidang keahlian",
                     width: '100%',
                     dropdownParent: $('.swal2-popup')
                 }).trigger('change');

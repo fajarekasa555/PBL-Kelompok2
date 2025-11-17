@@ -65,6 +65,17 @@ function createSocialMedia() {
             confirmButtonText: 'Simpan',
             cancelButtonText: 'Batal',
             buttonsStyling: false,
+            didOpen: () => {
+                $('.select2').select2({
+                    dropdownParent: $('.swal2-container'),
+                    width: '100%'
+                });
+                $('.datepicker').datepicker({
+                    format: 'yyyy-mm-dd',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+            },
             customClass: {
                 confirmButton: 'btn btn-primary btn-md px-4 mr-1',
                 cancelButton: 'btn btn-danger btn-md px-4'
@@ -107,6 +118,17 @@ function editSocialMedia(id) {
             confirmButtonText: 'Update',
             cancelButtonText: 'Batal',
             buttonsStyling: false,
+            didOpen: () => {
+                $('.select2').select2({
+                    dropdownParent: $('.swal2-container'),
+                    width: '100%'
+                });
+                $('.datepicker').datepicker({
+                    format: 'yyyy-mm-dd',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+            },
             customClass: {
                 confirmButton: 'btn btn-warning btn-md mr-1 px-4 text-white',
                 cancelButton: 'btn btn-danger btn-md px-4'

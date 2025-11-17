@@ -10,7 +10,7 @@
 
 <div class="mb-3 text-left">
     <label>Role</label>
-    <select class="form-control" id="role_id" name="role_id" required>
+    <select class="form-control select2" id="role_id" name="role_id" required>
         <option value="">-- Pilih Role --</option>
         <?php foreach ($roles as $role): ?>
             <option value="<?= $role['id'] ?>" 

@@ -1,6 +1,6 @@
     <div class="mb-3 text-left">
         <label>Anggota / Dosen</label>
-        <select class="form-control" name="member_id" required>
+        <select class="form-control select2" name="member_id" required>
             <option value="">-- Pilih Anggota --</option>
             <?php foreach ($members as $m): ?>
                 <option value="<?= $m['id'] ?>" 
@@ -13,7 +13,7 @@
 
     <div class="mb-3 text-left">
         <label>Jenjang Pendidikan</label>
-        <select class="form-control" name="degree" required>
+        <select class="form-control select2" name="degree" required>
             <option value="">-- Pilih Jenjang --</option>
             <?php 
             $degrees = ['D3', 'D4', 'S1', 'S2', 'S3'];

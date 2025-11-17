@@ -1,6 +1,6 @@
 <div class="mb-3 text-left">
     <label>Anggota / Dosen</label>
-    <select class="form-control" name="member_id" required>
+    <select class="form-control select2-member" name="member_id" required>
         <option value="">-- Pilih Anggota --</option>
         <?php foreach ($members as $m): ?>
             <option value="<?= $m['id'] ?>"
@@ -15,7 +15,7 @@
     <label>Nama Sertifikasi</label>
     <input 
         type="text" 
-        class="form-control" 
+        class="form-control"
         name="title" 
         value="<?= htmlspecialchars($cert['title'] ?? '') ?>" 
         placeholder="Contoh: AWS Certified Cloud Practitioner"
@@ -39,19 +39,19 @@
     <div class="col-md-6 mb-3 text-left">
         <label>Tanggal Terbit</label>
         <input 
-            type="date" 
-            class="form-control" 
-            name="issue_date" 
+            type="text"
+            class="form-control datepicker-issue"
+            name="issue_date"
             value="<?= htmlspecialchars($cert['issue_date'] ?? '') ?>"
             required>
     </div>
 
     <div class="col-md-6 mb-3 text-left">
-        <label>Tanggal Kadaluarsa (opsional)</label>
+        <label>Tanggal Kadaluarsa</label>
         <input 
-            type="date" 
-            class="form-control" 
-            name="expiration_date" 
+            type="text"
+            class="form-control datepicker-exp"
+            name="expiration_date"
             value="<?= htmlspecialchars($cert['expiration_date'] ?? '') ?>">
     </div>
 </div>
