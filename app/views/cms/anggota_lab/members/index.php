@@ -28,10 +28,16 @@ $baseMembersUrl = $route->base_url('members');
 </div>
 
 <script>
+
 let membersTable;
 const baseMembersUrl = '<?= $baseMembersUrl ?>';
 
 $(function() {
+    $('.select2').select2({
+        width: '100%',
+        placeholder: "Pilih bidang keahlian",
+        allowClear: true
+    });
     membersTable = $('#members-table').DataTable({
         processing: true,
         serverSide: false,
@@ -56,11 +62,18 @@ function createMember() {
         Swal.fire({
             title: 'Tambah Anggota',
             html: response,
-            width: 600,
+            width: 800,
             showCancelButton: true,
             confirmButtonText: 'Simpan',
             cancelButtonText: 'Batal',
             buttonsStyling: false,
+            didOpen: () => {
+                $('.multiple-select2').select2({
+                    placeholder: "Pilih bidang keahlian",
+                    width: '100%',
+                    dropdownParent: $('.swal2-popup')
+                }).trigger('change');
+            },
             customClass: {
                 confirmButton: 'btn btn-primary btn-md px-4 mr-1',
                 cancelButton: 'btn btn-danger btn-md px-4'
@@ -105,11 +118,18 @@ function editMember(id) {
         Swal.fire({
             title: 'Edit Anggota',
             html: response,
-            width: 600,
+            width: 800,
             showCancelButton: true,
             confirmButtonText: 'Update',
             cancelButtonText: 'Batal',
             buttonsStyling: false,
+            didOpen: () => {
+                $('.multiple-select2').select2({
+                    placeholder: "Pilih bidang keahlian",
+                    width: '100%',
+                    dropdownParent: $('.swal2-popup')
+                }).trigger('change');
+            },
             customClass: {
                 confirmButton: 'btn btn-warning btn-md mr-1 px-4 text-white',
                 cancelButton: 'btn btn-danger btn-md px-4'
@@ -173,7 +193,7 @@ function showMember(id) {
         Swal.fire({
             title: 'Detail Anggota',
             html: response,
-            width: 650,
+            width: 800,
             showCloseButton: true,
             showConfirmButton: false
         });

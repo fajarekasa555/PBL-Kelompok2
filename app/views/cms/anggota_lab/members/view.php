@@ -48,6 +48,21 @@
                     <th>Dibuat</th>
                     <td><?= htmlspecialchars($member['created_at']) ?></td>
                 </tr>
+                <tr>
+                    <th>Bidang Keahlian</th>
+                    <td>
+                        <?php if (!empty($expertises)): ?>
+                            <?php foreach ($expertises as $exp): ?>
+                                <span class="badge bg-primary px-3 py-2"
+                                    style="font-size: 0.9rem; margin-right: 4px; margin-bottom: 4px;">
+                                    <?= htmlspecialchars($exp['name']) ?>
+                                </span>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <span class="text-muted">Tidak ada bidang keahlian</span>
+                        <?php endif; ?>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>

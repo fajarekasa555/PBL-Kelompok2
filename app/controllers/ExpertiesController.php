@@ -25,18 +25,18 @@ class ExpertiesController extends Controller
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
-            $roles = $this->expertiesModel->all();
+            $experties = $this->expertiesModel->all();
             $data = [];
 
-            foreach ($roles as $r) {
+            foreach ($experties as $r) {
                 $data[] = [
                     'name' => $r['name'],
                     'action' => '
                         <div class="btn-group" role="group">
-                            <button class="btn btn-sm btn-warning" onclick="editRole('.$r['id'].')" title="Edit">
+                            <button class="btn btn-sm btn-warning" onclick="editExperties('.$r['id'].')" title="Edit">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteRole('.$r['id'].')" title="Hapus">
+                            <button class="btn btn-sm btn-danger" onclick="deleteExperties('.$r['id'].')" title="Hapus">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </div>
@@ -48,16 +48,16 @@ class ExpertiesController extends Controller
             exit;
         }
 
-        $roles = $this->expertiesModel->all();
+        $experties = $this->expertiesModel->all();
 
-        return $this->view('cms/user_management/roles/index', [
-            'roles' => $roles
+        return $this->view('cms/anggota_lab/experties/index', [
+            'experties' => $experties   
         ]);
     }
 
     public function create()
     {
-        return include __DIR__ . '/../Views/cms/user_management/roles/create.php';
+        return include __DIR__ . '/../Views/cms/anggota_lab/experties/create.php';
     }
 
     public function store()
@@ -71,9 +71,9 @@ class ExpertiesController extends Controller
 
     public function edit($id)
     {
-        $role = $this->expertiesModel->find($id);
+        $experties = $this->expertiesModel->find($id);
 
-        return include __DIR__ . '/../Views/cms/user_management/roles/edit.php';
+        return include __DIR__ . '/../Views/cms/anggota_lab/experties/edit.php';
 
     }
 

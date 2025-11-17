@@ -5,10 +5,14 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Middleware\AuthMiddleware;
 use App\Models\MembersModel;
+use App\Models\ExpertiesModel;
+use App\Models\MemberExpertisesModel;
 
 class MembersController extends Controller
 {
     private $membersModel;
+    private $expertiesModel;
+    private $memberExpertisesModel;
 
     public function __construct()
     {
@@ -17,7 +21,10 @@ class MembersController extends Controller
         }
 
         AuthMiddleware::requireAdmin();
+
         $this->membersModel = new MembersModel();
+        $this->expertiesModel = new ExpertiesModel();
+        $this->memberExpertisesModel = new MemberExpertisesModel();
     }
 
     public function index()
@@ -45,8 +52,7 @@ class MembersController extends Controller
                             <button class="btn btn-sm btn-danger" onclick="deleteMember(' . intval($m['id']) . ')" title="Hapus">
                                 <i class="fa fa-trash"></i>
                             </button>
-                        </div>
-                    '
+                        </div>'
                 ];
             }
 
@@ -54,18 +60,20 @@ class MembersController extends Controller
             exit;
         }
 
-        $members = $this->membersModel->all();
-        return $this->view('cms/anggota_lab/members/index', compact('members'));
+        return $this->view('cms/anggota_lab/members/index');
     }
 
     public function show($id)
     {
         $member = $this->membersModel->findOrFail($id);
+        $expertises = $this->memberExpertisesModel->getExpertisesByMember($id);
+
         return include __DIR__ . '/../Views/cms/anggota_lab/members/view.php';
     }
 
     public function create()
     {
+        $allExpertises = $this->expertiesModel->all();
         return include __DIR__ . '/../Views/cms/anggota_lab/members/create.php';
     }
 
@@ -85,6 +93,15 @@ class MembersController extends Controller
             'photo' => ''
         ];
 
+        $expertises = $_POST['expertises'] ?? [];
+
+        if ($data['name'] === '' || $data['jabatan'] === '') {
+            http_response_code(400);
+            echo "Nama dan jabatan wajib diisi.";
+            exit;
+        }
+
+        // Upload Foto
         if (!empty($_FILES['photo']['name'])) {
             $uploadDir = __DIR__ . '/../../public/uploads/members/';
             if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
@@ -97,24 +114,29 @@ class MembersController extends Controller
             }
         }
 
-        if ($data['name'] === '' || $data['jabatan'] === '') {
-            http_response_code(400);
-            echo "Nama dan jabatan wajib diisi.";
-            exit;
+        // Insert anggota
+        $memberId = $this->membersModel->create($data);
+
+        // Insert expertises
+        if ($memberId && !empty($expertises)) {
+            $this->memberExpertisesModel->insertMany($memberId, $expertises);
         }
 
-        $this->membersModel->create($data);
+        echo "OK";
     }
 
     public function edit($id)
     {
         $members = $this->membersModel->findOrFail($id);
+        $allExpertises = $this->expertiesModel->all();
+        $memberExpertises = $this->memberExpertisesModel->getByMember($id);
+
         return include __DIR__ . '/../Views/cms/anggota_lab/members/edit.php';
     }
 
     public function update()
     {
-        $id = intval($_POST['id'] ?? 0);
+        $id = intval($_POST['id']);
         $old = $this->membersModel->findOrFail($id);
 
         $data = [
@@ -128,8 +150,10 @@ class MembersController extends Controller
             'email' => trim($_POST['email'] ?? ''),
             'phone' => trim($_POST['phone'] ?? ''),
             'address' => trim($_POST['address'] ?? ''),
-            'photo' => $old['photo'] ?? ''
+            'photo' => $old['photo']
         ];
+
+        $expertises = $_POST['expertises'] ?? [];
 
         if (!empty($_FILES['photo']['name'])) {
             $uploadDir = __DIR__ . '/../../public/uploads/members/';
@@ -144,23 +168,38 @@ class MembersController extends Controller
         }
 
         $this->membersModel->update($id, $data);
+
+        $this->memberExpertisesModel->deleteByMember($id);
+
+        if (!empty($expertises)) {
+            $this->memberExpertisesModel->insertMany($id, $expertises);
+        }
+
+        echo "OK";
     }
 
     public function delete($id)
     {
         $id = intval($id);
-        if ($id <= 0) {
-            http_response_code(400);
-            echo "ID tidak valid.";
+        $member = $this->membersModel->findOrFail($id);
+
+        if (!$member) {
+            http_response_code(404);
+            echo "Data tidak ditemukan";
             exit;
         }
 
-        $member = $this->membersModel->findOrFail($id);
-
+        // Hapus foto
         if (!empty($member['photo']) && file_exists(__DIR__ . '/../../../public/' . $member['photo'])) {
             unlink(__DIR__ . '/../../../public/' . $member['photo']);
         }
 
+        // Hapus relasi expertises
+        $this->memberExpertisesModel->deleteByMember($id);
+
+        // Hapus member
         $this->membersModel->delete($id);
+
+        echo "OK";
     }
 }

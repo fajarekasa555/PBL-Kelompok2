@@ -7,7 +7,7 @@ use App\Config\Database;
 class ExpertiesModel {
 
     protected $conn;
-    protected $table = 'experties';
+    protected $table = 'expertises';
 
     public function __construct() {
         $this->conn = (new Database())->connect();

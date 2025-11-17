@@ -1,26 +1,22 @@
 <?php
 use App\Helpers\Routing;
 $route = new Routing();
-$baseEducationsUrl = $route->base_url('educations');
+$baseExpertiesUrl = $route->base_url('experties');
 ?>
 
 <h1 class="page-header d-flex justify-content-between align-items-center">
-    <span>Manajemen Pendidikan</span>
-    <button class="btn btn-primary" onclick="createEducation()">
+    <span>Manajemen Keahlian</span>
+    <button class="btn btn-primary" onclick="createExperties()">
         <span class="fa fa-plus"></span> Tambah
     </button>
 </h1>
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <table id="educations-table" class="table table-bordered table-striped">
+        <table id="experties-table" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Nama Anggota</th>
-                    <th>Gelar</th>
-                    <th>Jurusan</th>
-                    <th>Institusi</th>
-                    <th>Periode</th>
+                    <th>Nama Keahlian</th>
                     <th width="120" class="text-center">Aksi</th>
                 </tr>
             </thead>
@@ -29,36 +25,32 @@ $baseEducationsUrl = $route->base_url('educations');
 </div>
 
 <script>
-let educationsTable;
-const baseEducationsUrl = '<?= $baseEducationsUrl ?>';
+let expertiesTable;
+const baseExpertiesUrl = '<?= $baseExpertiesUrl ?>';
 
 $(function() {
-    educationsTable = $('#educations-table').DataTable({
+    expertiesTable = $('#experties-table').DataTable({
         processing: true,
         serverSide: false,
-        ajax: `${baseEducationsUrl}?ajax=1`,
+        ajax: `${baseExpertiesUrl}?ajax=1`,
         columns: [
-            { data: 'member_name', defaultContent: '-' },
-            { data: 'degree', defaultContent: '-' },
-            { data: 'major', defaultContent: '-' },
-            { data: 'institution', defaultContent: '-' },
-            { data: 'periode', defaultContent: '-' },
+            { data: 'name', defaultContent: '-' },
             { 
                 data: 'action', 
                 orderable: false, 
                 searchable: false, 
-                className: 'text-center' 
+                className: 'text-center'
             }
         ]
     });
 });
 
-function createEducation() {
-    $.get(`${baseEducationsUrl}/create?ajax=1`, function(response) {
+function createExperties() {
+    $.get(`${baseExpertiesUrl}/create?ajax=1`, function(response) {
         Swal.fire({
-            title: 'Tambah Pendidikan',
+            title: 'Tambah Keahlian',
             html: response,
-            width: 550,
+            width: 500,
             showCancelButton: true,
             confirmButtonText: 'Simpan',
             cancelButtonText: 'Batal',
@@ -68,39 +60,36 @@ function createEducation() {
                 cancelButton: 'btn btn-danger btn-md px-4'
             },
             preConfirm: () => {
-                storeEducation();
+                storeExperties();
             }
         });
     });
 }
 
-function storeEducation() {
-    const form = $('#form-create-education');
+function storeExperties() {
+    const form = $('#form-create-experties');
     if (!form.length) return;
 
-    $.post(`${baseEducationsUrl}/store`, form.serialize())
+    $.post(`${baseExpertiesUrl}/store`, form.serialize())
         .done(() => {
             Swal.close();
-            educationsTable.ajax.reload(null, false);
+            expertiesTable.ajax.reload(null, false);
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
-                text: 'Data pendidikan berhasil ditambahkan.',
+                text: 'Keahlian berhasil ditambahkan.',
                 timer: 1500,
                 showConfirmButton: false
             });
-        })
-        .fail(() => {
-            Swal.fire('Gagal', 'Terjadi kesalahan saat menambahkan data.', 'error');
         });
 }
 
-function editEducation(id) {
-    $.get(`${baseEducationsUrl}/edit/${id}?ajax=1`, function(response) {
+function editExperties(id) {
+    $.get(`${baseExpertiesUrl}/edit/${id}?ajax=1`, function(response) {
         Swal.fire({
-            title: 'Edit Pendidikan',
+            title: 'Edit Keahlian',
             html: response,
-            width: 550,
+            width: 500,
             showCancelButton: true,
             confirmButtonText: 'Update',
             cancelButtonText: 'Batal',
@@ -110,48 +99,41 @@ function editEducation(id) {
                 cancelButton: 'btn btn-danger btn-md px-4'
             },
             preConfirm: () => {
-                updateEducation();
+                updateExperties();
             }
         });
     });
 }
 
-function updateEducation() {
-    const form = $('#form-edit-education');
+function updateExperties() {
+    const form = $('#form-edit-experties');
     if (!form.length) return;
 
-    $.post(`${baseEducationsUrl}/update`, form.serialize())
+    $.post(`${baseExpertiesUrl}/update`, form.serialize())
         .done(() => {
             Swal.close();
-            educationsTable.ajax.reload(null, false);
+            expertiesTable.ajax.reload(null, false);
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
-                text: 'Data pendidikan berhasil diperbarui.',
+                text: 'Keahlian berhasil diperbarui.',
                 timer: 1500,
                 showConfirmButton: false
             });
-        })
-        .fail(() => {
-            Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data.', 'error');
         });
 }
 
-function deleteEducation(id) {
-    swalConfirm('Hapus data pendidikan ini?', function() {
-        $.get(`${baseEducationsUrl}/delete/${id}`)
+function deleteExperties(id) {
+    swalConfirm('Hapus keahlian ini?', function() {
+        $.get(`${baseExpertiesUrl}/delete/${id}`)
             .done(() => {
-                educationsTable.ajax.reload(null, false);
+                expertiesTable.ajax.reload(null, false);
                 Swal.fire({
                     icon: 'success',
                     title: 'Dihapus',
-                    text: 'Data pendidikan telah dihapus.',
                     timer: 1300,
                     showConfirmButton: false
                 });
-            })
-            .fail(() => {
-                Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus data.', 'error');
             });
     });
 }

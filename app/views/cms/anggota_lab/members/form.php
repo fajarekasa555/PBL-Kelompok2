@@ -81,3 +81,18 @@
             </div>
         <?php endif; ?>
     </div>
+
+<div class="mb-3 text-left">
+    <label>Bidang Keahlian (Expertise)</label>
+    <select name="expertises[]" id="expertises"
+            class="multiple-select2 form-control select2-color-admin"
+            multiple required>
+        <?php foreach ($allExpertises as $exp): ?>
+            <option value="<?= $exp['id'] ?>"
+                <?= !empty($memberExpertises) && in_array($exp['id'], $memberExpertises) ? 'selected' : '' ?>>
+                <?= htmlspecialchars($exp['name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <small class="text-muted">Pilih satu atau lebih bidang keahlian.</small>
+</div>
