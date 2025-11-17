@@ -2,6 +2,8 @@
 
 use App\Controllers\DashboardController;
 use App\Controllers\AuthController;
+use App\Controllers\CertificationController;
+use App\Controllers\CourseController;
 use App\Controllers\EducationController;
 use App\Controllers\ExpertiesController;
 use App\Controllers\MembersController;
@@ -79,4 +81,18 @@ return [
     'experties/edit/{id}'   => [ExpertiesController::class, 'edit', ['auth', 'admin']],
     'experties/update'      => [ExpertiesController::class, 'update', ['auth', 'admin']],
     'experties/delete/{id}' => [ExpertiesController::class, 'delete', ['auth', 'admin']],
+
+    'certifications'             => [CertificationController::class, 'index', ['auth', 'admin']],
+    'certifications/create'      => [CertificationController::class, 'create', ['auth', 'admin']],
+    'certifications/store'       => [CertificationController::class, 'store', ['auth', 'admin']],
+    'certifications/edit/{id}'   => [CertificationController::class, 'edit', ['auth', 'admin']],
+    'certifications/update'      => [CertificationController::class, 'update', ['auth', 'admin']],
+    'certifications/delete/{id}' => [CertificationController::class, 'delete', ['auth', 'admin']],
+
+    'courses'             => [CourseController::class, 'index', ['auth', 'admin']],
+    'courses/create'      => [CourseController::class, 'create', ['auth', 'admin']],
+    'courses/store'       => [CourseController::class, 'store', ['auth', 'admin']],
+    'courses/edit/{id}'   => [CourseController::class, 'edit', ['auth', 'admin']],
+    'courses/update'      => [CourseController::class, 'update', ['auth', 'admin']],
+    'courses/delete/{id}' => [CourseController::class, 'delete', ['auth', 'admin']],
 ];

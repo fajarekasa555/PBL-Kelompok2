@@ -47,7 +47,7 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
         </a>
       </li>
 
-      <li class="has-sub <?= in_array($currentRoute, ['publications', 'members', 'social_media', 'educations', 'experties']) ? 'active expand' : '' ?>">
+      <li class="has-sub <?= in_array($currentRoute, ['publications', 'members', 'social_media', 'educations', 'experties', 'certifications', 'courses']) ? 'active expand' : '' ?>">
         <a href="javascript:;">
           <b class="caret"></b>
           <i class="fa fa-user"></i>
@@ -63,8 +63,12 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
           <li class="<?= $currentRoute === 'educations' ? 'active' : '' ?>">
             <a href="<?= $route->base_url('educations') ?>">Pendidikan</a>
           </li>
-          <li><a href="">Sertifikasi</a></li>
-          <li><a href="#">Mata Kuliah</a></li>
+          <li class="<?= $currentRoute === 'certifications' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('certifications') ?>">Sertifikasi</a>
+          </li>
+          <li class="<?= $currentRoute === 'courses' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('courses') ?>">Mata Kuliah</a>
+          </li>
           <li class="<?= $currentRoute === 'publications' ? 'active' : '' ?>">
             <a href="<?= $route->base_url('publications') ?>">Publikasi</a>
           </li>
