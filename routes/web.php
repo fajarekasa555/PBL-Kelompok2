@@ -1,17 +1,19 @@
 <?php
 
+use App\Controllers\ActivitiesController;
 use App\Controllers\DashboardController;
 use App\Controllers\AuthController;
 use App\Controllers\CertificationController;
 use App\Controllers\CourseController;
 use App\Controllers\EducationController;
 use App\Controllers\ExpertiesController;
+use App\Controllers\LabCourseController;
 use App\Controllers\MembersController;
 use App\Controllers\PublicationsController;
+use App\Controllers\ResearchFocusController;
 use App\Controllers\RolesController;
 use App\Controllers\SocialMediaController;
 use App\Controllers\UserController;
-
 /**
  * Format:
  * 'path' => [ControllerClass, 'method', ['middleware1', 'middleware2']]
@@ -95,4 +97,27 @@ return [
     'courses/edit/{id}'   => [CourseController::class, 'edit', ['auth', 'admin']],
     'courses/update'      => [CourseController::class, 'update', ['auth', 'admin']],
     'courses/delete/{id}' => [CourseController::class, 'delete', ['auth', 'admin']],
+
+    // content management
+    'lab-courses'             => [LabCourseController::class, 'index', ['auth', 'admin']],
+    'lab-courses/create'      => [LabCourseController::class, 'create', ['auth', 'admin']],
+    'lab-courses/store'       => [LabCourseController::class, 'store', ['auth', 'admin']],
+    'lab-courses/edit/{id}'   => [LabCourseController::class, 'edit', ['auth', 'admin']],
+    'lab-courses/update'      => [LabCourseController::class, 'update', ['auth', 'admin']],
+    'lab-courses/delete/{id}' => [LabCourseController::class, 'delete', ['auth', 'admin']],
+
+    'research-focuses'             => [ResearchFocusController::class, 'index', ['auth', 'admin']],
+    'research-focuses/create'      => [ResearchFocusController::class, 'create', ['auth', 'admin']],
+    'research-focuses/store'       => [ResearchFocusController::class, 'store', ['auth', 'admin']],
+    'research-focuses/edit/{id}'   => [ResearchFocusController::class, 'edit', ['auth', 'admin']],
+    'research-focuses/update'      => [ResearchFocusController::class, 'update', ['auth', 'admin']],
+    'research-focuses/delete/{id}' => [ResearchFocusController::class, 'delete', ['auth', 'admin']],
+
+    'activities'             => [ActivitiesController::class, 'index', ['auth', 'admin']],
+    'activities/show/{id}'   => [ActivitiesController::class, 'show', ['auth', 'admin']],
+    'activities/create'      => [ActivitiesController::class, 'create', ['auth', 'admin']],
+    'activities/store'       => [ActivitiesController::class, 'store', ['auth', 'admin']],
+    'activities/edit/{id}'   => [ActivitiesController::class, 'edit', ['auth', 'admin']],
+    'activities/update'      => [ActivitiesController::class, 'update', ['auth', 'admin']],
+    'activities/delete/{id}' => [ActivitiesController::class, 'delete', ['auth', 'admin']],
 ];

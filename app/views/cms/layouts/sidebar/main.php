@@ -79,7 +79,7 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
       </li>
 
       <!-- Master -->
-      <li class="has-sub">
+      <li class="has-sub <?= in_array($currentRoute, ['facilities', 'lab-courses', 'research-focus', 'activities', 'projects']) ? 'active expand' : '' ?>">
         <a href="javascript:;">
           <b class="caret"></b>
           <i class="fa fa-database"></i>
@@ -87,9 +87,15 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
         </a>
         <ul class="sub-menu">
           <li><a href="">Fasilitas</a></li>
-          <li><a href="">Mata Kuliah</a></li>
-          <li><a href="#">Fokus Riset</a></li>
-          <li><a href="#">Kegiatan</a></li>
+          <li class="<?= $currentRoute === 'lab-courses' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('lab-courses') ?>">Mata Kuliah</a>
+          </li>
+          <li class="<?= $currentRoute === 'research-focuses' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('research-focuses') ?>">Fokus Riset</a>
+          </li>
+          <li class="<?= $currentRoute === 'activities' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('activities') ?>">Kegiatan</a>
+          </li>
           <li><a href="#">Proyek</a></li>
         </ul>
       </li>
