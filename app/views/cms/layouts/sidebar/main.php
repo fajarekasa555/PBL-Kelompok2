@@ -2,7 +2,7 @@
 $currentRoute = $_GET['route'] ?? 'dashboard';
 ?>
 
-<div id="sidebar" class="sidebar">
+<div id="sidebar" class="sidebar sidebar-transparent">
   <div data-scrollbar="true" data-height="100%">
 
     <ul class="nav">
@@ -13,20 +13,20 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
             <img src="<?= $route->base_url('public/assets/img/user/user-13.jpg') ?>" alt="User Profile" />
           </div>
           <div class="info">
-            <b class="caret pull-right"></b>
+            <!-- <b class="caret pull-right"></b> -->
             <?= isset($_SESSION['user']['username']) ? htmlspecialchars($_SESSION['user']['username']) : '' ?>
             <small><?= isset($_SESSION['user']['role_name']) ? htmlspecialchars($_SESSION['user']['role_name']) : '' ?></small>
           </div>
         </a>
       </li>
 
-      <li>
+      <!-- <li>
         <ul class="nav nav-profile">
           <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
           <li><a href="#"><i class="fa fa-pencil-alt"></i> Send Feedback</a></li>
           <li><a href="#"><i class="fa fa-question-circle"></i> Help</a></li>
         </ul>
-      </li>
+      </li> -->
     </ul>
 
     <ul class="nav">
@@ -111,32 +111,6 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
         </ul>
       </li>
 
-      <!-- Setting -->
-      <!-- <li class="has-sub">
-        <a href="javascript:;">
-          <b class="caret"></b>
-          <i class="fa fa-cog"></i>
-          <span>Setting</span>
-        </a>
-        <ul class="sub-menu">
-          <li class="has-sub">
-            <a href="javascript:;"><b class="caret"></b>Menu 1.1</a>
-            <ul class="sub-menu">
-              <li class="has-sub">
-                <a href="javascript:;"><b class="caret"></b>Menu 2.1</a>
-                <ul class="sub-menu">
-                  <li><a href="#">Menu 3.1</a></li>
-                  <li><a href="#">Menu 3.2</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Menu 2.2</a></li>
-              <li><a href="#">Menu 2.3</a></li>
-            </ul>
-          </li>
-          <li><a href="#">Menu 1.2</a></li>
-          <li><a href="#">Menu 1.3</a></li>
-        </ul>
-      </li> -->
 
       <!-- Minify button -->
       <li>

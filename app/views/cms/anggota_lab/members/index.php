@@ -11,6 +11,82 @@ $baseMembersUrl = $route->base_url('members');
     </button>
 </h1>
 
+<div class="row g-4 mb-4">
+
+    <!-- Total Anggota -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card card-primary">
+            <div class="gradient-overlay"></div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Total Anggota</div>
+                        <h3 class="stat-value"><?= $stats['total_members'] ?? 0 ?></h3>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jabatan Terdaftar -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card card-success">
+            <div class="gradient-overlay"></div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Jabatan Terdaftar</div>
+                        <h3 class="stat-value"><?= $stats['total_jabatan'] ?? 0 ?></h3>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Terisi -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card card-danger">
+            <div class="gradient-overlay"></div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Email Terisi</div>
+                        <h3 class="stat-value"><?= $stats['filled_email'] ?? 0 ?></h3>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Telepon Terisi -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card card-warning">
+            <div class="gradient-overlay"></div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Telepon Terisi</div>
+                        <h3 class="stat-value"><?= $stats['filled_phone'] ?? 0 ?></h3>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 <div class="panel panel-default">
     <div class="panel-body">
         <table id="members-table" class="table table-bordered table-striped">
@@ -57,6 +133,19 @@ $(function() {
     });
 });
 
+function initFilePond(selector) {
+    return FilePond.create(document.querySelector(selector), {
+        storeAsFile: true,
+        allowMultiple: false,
+        instantUpload: false,
+
+        labelIdle: 'Drag & Drop foto atau <span class="filepond--label-action">Browse</span>',
+        acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg'],
+        maxFileSize: '2MB',
+        credits: false,
+    });
+}
+
 function createMember() {
     $.get(`${baseMembersUrl}/create?ajax=1`, function(response) {
         Swal.fire({
@@ -72,6 +161,7 @@ function createMember() {
                     width: '100%',
                     dropdownParent: $('.swal2-popup')
                 }).trigger('change');
+                initFilePond('.filepond');
             },
             customClass: {
                 confirmButton: 'btn btn-primary btn-md px-4 mr-1',
@@ -84,9 +174,11 @@ function createMember() {
 
 function storeMembers() {
     const form = $('#form-create-members')[0];
-    if (!form) return;
+    if (!form) return false;
 
     const formData = new FormData(form);
+    
+    Swal.showLoading();
 
     $.ajax({
         url: `${baseMembersUrl}/store`,
@@ -94,7 +186,7 @@ function storeMembers() {
         data: formData,
         processData: false,
         contentType: false,
-        success: function() {
+        success: function(response) {
             Swal.close();
             membersTable.ajax.reload(null, false);
             Swal.fire({
@@ -105,10 +197,12 @@ function storeMembers() {
                 showConfirmButton: false
             });
         },
-        error: function() {
+        error: function(xhr) {
             Swal.fire('Gagal', 'Terjadi kesalahan saat menambahkan data.', 'error');
         }
     });
+
+    return false;
 }
 
 
@@ -128,6 +222,13 @@ function editMember(id) {
                     width: '100%',
                     dropdownParent: $('.swal2-popup')
                 }).trigger('change');
+
+                const pond = initFilePond('.filepond');
+
+                const imageUrl = $('#existing_photo').val();
+                if (imageUrl) {
+                    pond.addFile(imageUrl);
+                }
             },
             customClass: {
                 confirmButton: 'btn btn-warning btn-md mr-1 px-4 text-white',
@@ -143,6 +244,8 @@ function updateMembers() {
     if (!form) return;
 
     const formData = new FormData(form);
+
+    Swal.showLoading();
 
     $.ajax({
         url: `${baseMembersUrl}/update`,
@@ -190,7 +293,6 @@ function deleteMember(id) {
 function showMember(id) {
     $.get(`${baseMembersUrl}/show/${id}?ajax=1`, function(response) {
         Swal.fire({
-            title: 'Detail Anggota',
             html: response,
             width: 800,
             showCloseButton: true,
