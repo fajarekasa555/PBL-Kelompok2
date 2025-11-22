@@ -9,6 +9,7 @@ use App\Controllers\EducationController;
 use App\Controllers\ExpertiesController;
 use App\Controllers\LabCourseController;
 use App\Controllers\MembersController;
+use App\Controllers\ProjectController;
 use App\Controllers\PublicationsController;
 use App\Controllers\ResearchFocusController;
 use App\Controllers\RolesController;
@@ -120,4 +121,12 @@ return [
     'activities/edit/{id}'   => [ActivitiesController::class, 'edit', ['auth', 'admin']],
     'activities/update'      => [ActivitiesController::class, 'update', ['auth', 'admin']],
     'activities/delete/{id}' => [ActivitiesController::class, 'delete', ['auth', 'admin']],
+
+    'projects'             => [ProjectController::class, 'index', ['auth', 'admin']],
+    'projects/show/{id}'   => [ProjectController::class, 'show', ['auth', 'admin']],
+    'projects/create'      => [ProjectController::class, 'create', ['auth', 'admin']],
+    'projects/store'       => [ProjectController::class, 'store', ['auth', 'admin']],
+    'projects/edit/{id}'   => [ProjectController::class, 'edit', ['auth', 'admin']],
+    'projects/update'      => [ProjectController::class, 'update', ['auth', 'admin']],
+    'projects/delete/{id}' => [ProjectController::class, 'delete', ['auth', 'admin']],
 ];

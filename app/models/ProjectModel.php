@@ -4,16 +4,15 @@ namespace App\Models;
 use PDO;
 use App\Config\Database;
 
-class ActivitiesModel {
+class ProjectModel {
 
     protected $conn;
-    protected $table = 'activities';
+    protected $table = 'projects';
 
     public function __construct() {
         $this->conn = (new Database())->connect();
     }
 
-        
     public function getConnection() {
         return $this->conn;
     }
@@ -36,40 +35,60 @@ class ActivitiesModel {
         return $data ?: null;
     }
 
-    public function create($title, $description = null, $location = null, $date = null, $documentation = null) {
+    public function create(
+        $name,
+        $description = null,
+        $start_date = null,
+        $end_date = null,
+        $sponsor = null,
+        $documentation = null
+    ) {
         $query = "INSERT INTO {$this->table} 
-                    (title, description, location, date, documentation) 
+                    (name, description, start_date, end_date, sponsor, documentation)
                   VALUES 
-                    (:title, :description, :location, :date, :documentation)";
-        
+                    (:name, :description, :start_date, :end_date, :sponsor, :documentation)";
+
         $stmt = $this->conn->prepare($query);
+
         return $stmt->execute([
-            'title'         => $title,
+            'name'          => $name,
             'description'   => $description,
-            'location'      => $location,
-            'date'          => $date,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
+            'sponsor'       => $sponsor,
             'documentation' => $documentation
         ]);
     }
 
-    public function update($id, $title, $description = null, $location = null, $date = null, $documentation = null) {
+    public function update(
+        $id,
+        $name,
+        $description = null,
+        $start_date = null,
+        $end_date = null,
+        $sponsor = null,
+        $documentation = null
+    ) {
         $query = "UPDATE {$this->table}
-                  SET title = :title,
+                  SET name = :name,
                       description = :description,
-                      location = :location,
-                      date = :date,
+                      start_date = :start_date,
+                      end_date = :end_date,
+                      sponsor = :sponsor,
                       documentation = :documentation,
                       updated_at = CURRENT_TIMESTAMP
                   WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
+
         return $stmt->execute([
-            'title'         => $title,
+            'id'            => $id,
+            'name'          => $name,
             'description'   => $description,
-            'location'      => $location,
-            'date'          => $date,
-            'documentation' => $documentation,
-            'id'            => $id
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
+            'sponsor'       => $sponsor,
+            'documentation' => $documentation
         ]);
     }
 

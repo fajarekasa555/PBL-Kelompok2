@@ -1,25 +1,23 @@
 <?php
 use App\Helpers\Routing;
 $route = new Routing();
-$baseActivitiesUrl = $route->base_url('activities');
+$baseProjectsUrl = $route->base_url('projects');
 ?>
 
 <h1 class="page-header d-flex justify-content-between align-items-center">
-    <span>Manajemen Kegiatan</span>
-    <button class="btn btn-primary" onclick="createActivity()">
+    <span>Manajemen Project</span>
+    <button class="btn btn-primary" onclick="createProject()">
         <span class="fa fa-plus"></span> Tambah
     </button>
 </h1>
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <table id="activities-table" class="table table-bordered table-striped">
+        <table id="projects-table" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>Judul</th>
+                    <th>Nama Project</th>
                     <th>Deskripsi</th>
-                    <th>Lokasi</th>
-                    <th>Tanggal</th>
                     <th width="140" class="text-center">Aksi</th>
                 </tr>
             </thead>
@@ -29,19 +27,17 @@ $baseActivitiesUrl = $route->base_url('activities');
 
 <script>
 
-let activitiesTable;
-const baseActivitiesUrl = '<?= $baseActivitiesUrl ?>';
+let projectsTable;
+const baseProjectsUrl = '<?= $baseProjectsUrl ?>';
 
 $(function() {
-    activitiesTable = $('#activities-table').DataTable({
+    projectsTable = $('#projects-table').DataTable({
         processing: true,
         serverSide: false,
-        ajax: `${baseActivitiesUrl}?ajax=1`,
+        ajax: `${baseProjectsUrl}?ajax=1`,
         columns: [
-            { data: 'title' },
+            { data: 'name' },
             { data: 'description', defaultContent: '-' },
-            { data: 'location', defaultContent: '-' },
-            { data: 'date', defaultContent: '-' },
             { 
                 data: 'action',
                 orderable: false,
@@ -64,10 +60,10 @@ function initFilePond(selector) {
     });
 }
 
-function createActivity() {
-    $.get(`${baseActivitiesUrl}/create?ajax=1`, function(response) {
+function createProject() {
+    $.get(`${baseProjectsUrl}/create?ajax=1`, function(response) {
         Swal.fire({
-            title: 'Tambah Kegiatan',
+            title: 'Tambah Project',
             html: response,
             width: 800,
             showCancelButton: true,
@@ -79,19 +75,20 @@ function createActivity() {
                     width: '100%',
                     dropdownParent: $('.swal2-popup')
                 }).trigger('change');
+
                 initFilePond('.filepond');
             },
             customClass: {
                 confirmButton: 'btn btn-primary btn-md px-4 mr-1',
                 cancelButton: 'btn btn-danger btn-md px-4'
             },
-            preConfirm: () => storeActivity()
+            preConfirm: () => storeProject()
         });
     });
 }
 
-function storeActivity() {
-    const form = $('#form-create-activities')[0];
+function storeProject() {
+    const form = $('#form-create-project')[0];
     if (!form) return false;
 
     const formData = new FormData(form);
@@ -99,35 +96,35 @@ function storeActivity() {
     Swal.showLoading();
 
     $.ajax({
-        url: `${baseActivitiesUrl}/store`,
+        url: `${baseProjectsUrl}/store`,
         type: 'POST',
         data: formData,
         processData: false,
         contentType: false,
         success: function() {
             Swal.close();
-            activitiesTable.ajax.reload(null, false);
+            projectsTable.ajax.reload(null, false);
 
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
-                text: 'Kegiatan berhasil ditambahkan.',
+                text: 'Project berhasil ditambahkan.',
                 timer: 1500,
                 showConfirmButton: false
             });
         },
         error: function() {
-            Swal.fire('Gagal', 'Terjadi kesalahan saat menambahkan data.', 'error');
+            Swal.fire('Gagal', 'Terjadi kesalahan saat menambahkan project.', 'error');
         }
     });
 
     return false;
 }
 
-function editActivity(id) {
-    $.get(`${baseActivitiesUrl}/edit/${id}?ajax=1`, function(response) {
+function editProject(id) {
+    $.get(`${baseProjectsUrl}/edit/${id}?ajax=1`, function(response) {
         Swal.fire({
-            title: 'Edit Kegiatan',
+            title: 'Edit Project',
             html: response,
             width: 800,
             showCancelButton: true,
@@ -139,6 +136,7 @@ function editActivity(id) {
                     width: '100%',
                     dropdownParent: $('.swal2-popup')
                 }).trigger('change');
+
                 const pond = initFilePond('.filepond');
                 const imageUrl = $('#existing_documentation').val();
                 if (imageUrl) {
@@ -149,13 +147,13 @@ function editActivity(id) {
                 confirmButton: 'btn btn-warning btn-md mr-1 px-4 text-white',
                 cancelButton: 'btn btn-danger btn-md px-4'
             },
-            preConfirm: () => updateActivity()
+            preConfirm: () => updateProject()
         });
     });
 }
 
-function updateActivity() {
-    const form = $('#form-edit-activities')[0];
+function updateProject() {
+    const form = $('#form-edit-project')[0];
     if (!form) return;
 
     const formData = new FormData(form);
@@ -163,50 +161,50 @@ function updateActivity() {
     Swal.showLoading();
 
     $.ajax({
-        url: `${baseActivitiesUrl}/update`,
+        url: `${baseProjectsUrl}/update`,
         type: 'POST',
         data: formData,
         processData: false,
         contentType: false,
         success: function() {
             Swal.close();
-            activitiesTable.ajax.reload(null, false);
+            projectsTable.ajax.reload(null, false);
 
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
-                text: 'Kegiatan berhasil diperbarui.',
+                text: 'Project berhasil diperbarui.',
                 timer: 1500,
                 showConfirmButton: false
             });
         },
         error: function() {
-            Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data.', 'error');
+            Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui project.', 'error');
         }
     });
 }
 
-function deleteActivity(id) {
-    swalConfirm('Hapus kegiatan ini?', function() {
-        $.get(`${baseActivitiesUrl}/delete/${id}`)
+function deleteProject(id) {
+    swalConfirm('Hapus project ini?', function() {
+        $.get(`${baseProjectsUrl}/delete/${id}`)
             .done(() => {
-                activitiesTable.ajax.reload(null, false);
+                projectsTable.ajax.reload(null, false);
                 Swal.fire({
                     icon: 'success',
                     title: 'Dihapus',
-                    text: 'Data kegiatan telah dihapus.',
+                    text: 'Project telah dihapus.',
                     timer: 1300,
                     showConfirmButton: false
                 });
             })
             .fail(() => {
-                Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus data.', 'error');
+                Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus project.', 'error');
             });
     });
 }
 
-function showActivity(id) {
-    $.get(`${baseActivitiesUrl}/show/${id}?ajax=1`, function(response) {
+function showProject(id) {
+    $.get(`${baseProjectsUrl}/show/${id}?ajax=1`, function(response) {
         Swal.fire({
             html: response,
             width: 800,
@@ -214,7 +212,7 @@ function showActivity(id) {
             showConfirmButton: false
         });
     }).fail(() => {
-        Swal.fire('Gagal', 'Data kegiatan tidak ditemukan.', 'error');
+        Swal.fire('Gagal', 'Data project tidak ditemukan.', 'error');
     });
 }
 

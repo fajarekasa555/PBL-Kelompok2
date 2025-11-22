@@ -22,4 +22,9 @@ class Database {
             exit;
         }
     }
+
+    public function getConnection()
+    {
+        return $this->connect();
+    }
 }

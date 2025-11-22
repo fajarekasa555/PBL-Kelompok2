@@ -96,7 +96,9 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
           <li class="<?= $currentRoute === 'activities' ? 'active' : '' ?>">
             <a href="<?= $route->base_url('activities') ?>">Kegiatan</a>
           </li>
-          <li><a href="#">Proyek</a></li>
+          <li class="<?= $currentRoute === 'projects' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('projects') ?>">Project</a>
+          </li>
         </ul>
       </li>
 

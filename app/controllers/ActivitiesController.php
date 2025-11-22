@@ -5,10 +5,15 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Middleware\AuthMiddleware;
 use App\Models\ActivitiesModel;
+use App\Models\MembersModel;
+use App\Models\ActivityMemberModel;
+use PDOException;
 
 class ActivitiesController extends Controller
 {
     private $activitiesModel;
+    private $memberModel;
+    private $activityMembersModel;
 
     public function __construct()
     {
@@ -19,6 +24,8 @@ class ActivitiesController extends Controller
         AuthMiddleware::requireAdmin();
 
         $this->activitiesModel = new ActivitiesModel();
+        $this->memberModel = new MembersModel();
+        $this->activityMembersModel = new ActivityMemberModel();
     }
 
     public function index()
@@ -60,71 +67,171 @@ class ActivitiesController extends Controller
     public function show($id)
     {
         $activity = $this->activitiesModel->findOrFail($id);
+        $members = $this->activityMembersModel->getDetailedMembersByActivity($id);
+
         return include __DIR__ . '/../Views/cms/content/activities/view.php';
     }
 
     public function create()
     {
+        $allMembers = $this->memberModel->all();
         return include __DIR__ . '/../Views/cms/content/activities/create.php';
     }
 
     public function store()
     {
-        $data = [
-            'title' => trim($_POST['title'] ?? ''),
-            'date' => trim($_POST['date'] ?? ''),
-            'location' => trim($_POST['location'] ?? ''),
-            'description' => trim($_POST['description'] ?? ''),
-            'documentation' => ''
-        ];
+        try {
+            $db = $this->activitiesModel->getConnection();
+            $db->beginTransaction();
 
-        if ($data['title'] === '') {
-            http_response_code(400);
-            echo "Judul kegiatan wajib diisi.";
-            exit;
-        }
+            $data = [
+                'title' => trim($_POST['title'] ?? ''),
+                'date' => trim($_POST['date'] ?? ''),
+                'location' => trim($_POST['location'] ?? ''),
+                'description' => trim($_POST['description'] ?? ''),
+                'documentation' => '',
+            ];
 
-        $allowed = [
-            'image/jpeg', 'image/png', 'image/webp',
-            'application/pdf',
-            'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        ];
+            if ($data['title'] === '') {
+                throw new \Exception("Judul kegiatan wajib diisi.");
+            }
 
-        if (!in_array($_FILES['documentation']['type'], $allowed)) {
-            die("File tidak diizinkan.");
-        }
+            // Upload file
+            if (!empty($_FILES['documentation']['name'])) {
+                $this->validateFile($_FILES['documentation']['type']);
 
-        if (!empty($_FILES['documentation']['name'])) {
-            $uploadDir = __DIR__ . '/../../public/uploads/activities/';
-            if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
+                $uploadDir = __DIR__ . '/../../public/uploads/activities/';
+                if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
 
-            $filename = time() . '_' . basename($_FILES['documentation']['name']);
-            $targetFile = $uploadDir . $filename;
+                $filename = time() . '_' . basename($_FILES['documentation']['name']);
+                $targetFile = $uploadDir . $filename;
 
-            if (move_uploaded_file($_FILES['documentation']['tmp_name'], $targetFile)) {
+                if (!move_uploaded_file($_FILES['documentation']['tmp_name'], $targetFile)) {
+                    throw new \Exception("Gagal mengupload file.");
+                }
+
                 $data['documentation'] = 'uploads/activities/' . $filename;
             }
+
+            // CREATE activity
+            $activityId = $this->activitiesModel->create($data);
+
+            // Insert activity members
+            $members = $_POST['members'] ?? [];
+            $this->activityMembersModel->insertMany($activityId, $members);
+
+            $db->commit();
+            echo "OK";
+
+        } catch (PDOException $e) {
+            $db->rollback();
+            http_response_code(500);
+            echo "Database error: " . $e->getMessage();
+        } catch (\Exception $e) {
+            if ($db->inTransaction()) $db->rollback();
+            http_response_code(400);
+            echo $e->getMessage();
         }
-
-        $this->activitiesModel->create($data);
-
-        echo "OK";
     }
 
     public function edit($id)
     {
+        $allMembers = $this->memberModel->all();
         $activity = $this->activitiesModel->findOrFail($id);
+        $activityMembers = $this->activityMembersModel->getMembersByActivity($id);
+        $activityMembers = array_column($activityMembers, 'member_id');
+        
         return include __DIR__ . '/../Views/cms/content/activities/edit.php';
     }
 
     public function update()
     {
-        $id = intval($_POST['id']);
-        $old = $this->activitiesModel->findOrFail($id);
+        try {
+            $db = $this->activitiesModel->getConnection();
+            $db->beginTransaction();
 
-        $documentation = $old['documentation'];
+            $id = intval($_POST['id']);
+            $old = $this->activitiesModel->findOrFail($id);
+            $documentation = $old['documentation'];
 
+            // File upload
+            if (!empty($_FILES['documentation']['name'])) {
+                $this->validateFile($_FILES['documentation']['type']);
+
+                $uploadDir = __DIR__ . '/../../public/uploads/activities/';
+                if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
+
+                $filename = time() . '_' . basename($_FILES['documentation']['name']);
+                $targetFile = $uploadDir . $filename;
+
+                if (!move_uploaded_file($_FILES['documentation']['tmp_name'], $targetFile)) {
+                    throw new \Exception("Gagal mengupload file.");
+                }
+
+                $documentation = 'uploads/activities/' . $filename;
+            }
+
+            // Update main data
+            $this->activitiesModel->update(
+                $id,
+                $_POST['title'],
+                $_POST['description'],
+                $_POST['location'],
+                $_POST['date'],
+                $documentation
+            );
+
+            // Update members
+            $this->activityMembersModel->deleteByActivity($id);
+            $this->activityMembersModel->insertMany($id, $_POST['members'] ?? []);
+            $db->commit();
+            echo "OK";
+
+        } catch (PDOException $e) {
+            $db->rollback();
+            http_response_code(500);
+            echo "Database error: " . $e->getMessage();
+        } catch (\Exception $e) {
+            if ($db->inTransaction()) $db->rollback();
+            http_response_code(400);
+            echo $e->getMessage();
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $db = $this->activitiesModel->getConnection();
+            $db->beginTransaction();
+
+            $activity = $this->activitiesModel->findOrFail($id);
+
+            if (!empty($activity['documentation'])) {
+                $filePath = __DIR__ . '/../../../public/' . $activity['documentation'];
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
+
+            $this->activityMembersModel->deleteByActivity($id);
+            $this->activitiesModel->delete($id);
+
+            $db->commit();
+            echo "OK";
+
+        } catch (PDOException $e) {
+            $db->rollback();
+            http_response_code(500);
+            echo "Database error: " . $e->getMessage();
+        } catch (\Exception $e) {
+            if ($db->inTransaction()) $db->rollback();
+            http_response_code(400);
+            echo $e->getMessage();
+        }
+    }
+
+    private function validateFile($mime)
+    {
         $allowed = [
             'image/jpeg', 'image/png', 'image/webp',
             'application/pdf',
@@ -132,52 +239,8 @@ class ActivitiesController extends Controller
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         ];
 
-        if (!in_array($_FILES['documentation']['type'], $allowed)) {
-            die("File tidak diizinkan.");
+        if (!in_array($mime, $allowed)) {
+            throw new \Exception("File tidak diizinkan.");
         }
-
-        if (!empty($_FILES['documentation']['name'])) {
-
-            $uploadDir = __DIR__ . '/../../public/uploads/activities/';
-            if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
-
-            $filename = time() . '_' . basename($_FILES['documentation']['name']);
-            $targetFile = $uploadDir . $filename;
-
-            if (move_uploaded_file($_FILES['documentation']['tmp_name'], $targetFile)) {
-                $documentation = 'uploads/activities/' . $filename;
-            }
-        }
-
-        $this->activitiesModel->update(
-            $id,
-            $_POST['title'],
-            $_POST['description'],
-            $_POST['location'],
-            $_POST['date'],
-            $documentation
-        );
-
-        echo "OK";
-    }
-
-    public function delete($id)
-    {
-        $id = intval($id);
-        $activity = $this->activitiesModel->findOrFail($id);
-
-        if (!$activity) {
-            http_response_code(404);
-            echo "Data tidak ditemukan";
-            exit;
-        }
-
-        if (!empty($activity['documentation']) && file_exists(__DIR__ . '/../../../public/' . $activity['documentation'])) {
-            unlink(__DIR__ . '/../../../public/' . $activity['documentation']);
-        }
-
-        $this->activitiesModel->delete($id);
-
-        echo "OK";
     }
 }
