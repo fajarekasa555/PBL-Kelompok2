@@ -15,7 +15,12 @@ class LandingPageController extends Controller
 
     public function index()
     {
+        $visions = $this->landingPageModel->getVisions();
+        $missions = $this->landingPageModel->getMissions();
         
-        return $this->view('landing_page/index', [], false);
+        return $this->view('landing_page/index', [
+            'visions' => $visions, 
+            'missions' => $missions
+        ], false);
     }
 }

@@ -13,7 +13,6 @@ class LabMissionModel {
         $this->conn = (new Database())->connect();
     }
 
-    // Get all active missions (sorted)
     public function allActive() {
         $query = "SELECT * FROM {$this->table} 
                   WHERE is_active = TRUE
@@ -22,14 +21,12 @@ class LabMissionModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Get all missions including inactive
     public function all() {
         $query = "SELECT * FROM {$this->table} ORDER BY order_number ASC";
         $stmt = $this->conn->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Find by ID
     public function find($id) {
         $query = "SELECT * FROM {$this->table} WHERE id = :id LIMIT 1";
         $stmt = $this->conn->prepare($query);
@@ -37,7 +34,6 @@ class LabMissionModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Create new mission
     public function create($data) {
         $query = "INSERT INTO {$this->table} (mission, order_number, is_active) 
                   VALUES (:mission, :order_number, :is_active)";
@@ -50,7 +46,6 @@ class LabMissionModel {
         ]);
     }
 
-    // Update mission
     public function update($id, $data) {
         $query = "UPDATE {$this->table} SET 
             mission = :mission,
@@ -69,7 +64,6 @@ class LabMissionModel {
         ]);
     }
 
-    // Soft delete mission
     public function softDelete($id) {
         $query = "UPDATE {$this->table} 
                   SET is_active = FALSE, updated_at = CURRENT_TIMESTAMP
@@ -79,7 +73,6 @@ class LabMissionModel {
         return $stmt->execute(['id' => $id]);
     }
 
-    // Restore mission
     public function restore($id) {
         $query = "UPDATE {$this->table} 
                   SET is_active = TRUE, updated_at = CURRENT_TIMESTAMP
@@ -89,10 +82,15 @@ class LabMissionModel {
         return $stmt->execute(['id' => $id]);
     }
 
-    // Hard delete
     public function delete($id) {
         $query = "DELETE FROM {$this->table} WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute(['id' => $id]);
+    }
+
+    public function getMaxOrder()
+    {
+        $stmt = $this->conn->query("SELECT COALESCE(MAX(order_number), 0) AS max_order FROM lab_missions");
+        return $stmt->fetch()['max_order'];
     }
 }

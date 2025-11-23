@@ -9,6 +9,8 @@ use App\Controllers\EducationController;
 use App\Controllers\ExpertiesController;
 use App\Controllers\LabCourseController;
 use App\Controllers\LabInformationController;
+use App\Controllers\LabMissionController;
+use App\Controllers\LabVisionController;
 use App\Controllers\LandingPageController;
 use App\Controllers\MembersController;
 use App\Controllers\ProjectController;
@@ -132,6 +134,20 @@ return [
     'projects/edit/{id}'   => [ProjectController::class, 'edit', ['auth', 'admin']],
     'projects/update'      => [ProjectController::class, 'update', ['auth', 'admin']],
     'projects/delete/{id}' => [ProjectController::class, 'delete', ['auth', 'admin']],
+
+    'vision'             => [LabVisionController::class, 'index', ['auth', 'admin']],
+    'vision/create'      => [LabVisionController::class, 'create', ['auth', 'admin']],
+    'vision/store'       => [LabVisionController::class, 'store', ['auth', 'admin']],
+    'vision/edit/{id}'   => [LabVisionController::class, 'edit', ['auth', 'admin']],
+    'vision/update'      => [LabVisionController::class, 'update', ['auth', 'admin']],
+    'vision/delete/{id}' => [LabVisionController::class, 'delete', ['auth', 'admin']],
+
+    'mission'             => [LabMissionController::class, 'index', ['auth', 'admin']],
+    'mission/create'      => [LabMissionController::class, 'create', ['auth', 'admin']],
+    'mission/store'       => [LabMissionController::class, 'store', ['auth', 'admin']],
+    'mission/edit/{id}'   => [LabMissionController::class, 'edit', ['auth', 'admin']],
+    'mission/update'      => [LabMissionController::class, 'update', ['auth', 'admin']],
+    'mission/delete/{id}' => [LabMissionController::class, 'delete', ['auth', 'admin']],
 
     'lab_information'             => [LabInformationController::class, 'index', ['auth', 'admin']],
     'lab_information/store'       => [LabInformationController::class, 'store', ['auth', 'admin']],

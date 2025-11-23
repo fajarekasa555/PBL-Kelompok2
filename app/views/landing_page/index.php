@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laboratorium Data & Teknologi</title>
+	<link rel="icon" type="image/png" href="public/assets/img/logo/logo-icon.png" />
     <link rel="stylesheet" href="public/assets/plugins/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -661,8 +662,17 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-flask"></i> DataLab
+           <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <img 
+                    src="public/assets/img/logo/logo-icon.png" 
+                    alt="DataLab Logo" 
+                    width="36" 
+                    height="36"
+                    style="object-fit: contain;"
+                >
+                <span class="font-weight-bold" style="font-size: 1.2rem; letter-spacing: .5px;">
+                    DataTech
+                </span>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" style="background: rgba(255,255,255,0.2);">
                 <i class="fas fa-bars" style="color: white;"></i>
@@ -731,19 +741,20 @@
             <p class="text-center mb-5 scroll-animate" style="font-size: 1.2rem;">Arah dan tujuan kami dalam mengembangkan teknologi dan pendidikan</p>
             <div class="row">
                 <div class="col-md-12">
+                    <?php foreach ($visions as $vision): ?>
                     <div class="visi-misi-card scroll-slide-left">
                         <h4 style="color: var(--accent-color); margin-bottom: 1rem;"><i class="fas fa-eye mr-2"></i>Visi</h4>
-                        <p style="line-height: 1.8;">Menjadi pusat keunggulan dalam pendidikan dan riset data science serta teknologi informasi yang menghasilkan lulusan berkualitas dan inovasi yang berdampak pada masyarakat.</p>
+                        <p style="line-height: 1.8;"><?= htmlspecialchars($vision['vision']) ?></p>
                     </div>
+                    <?php endforeach; ?>
                 </div>
                 <div class="col-md-12">
                     <div class="visi-misi-card scroll-slide-right">
                         <h4 style="color: var(--accent-color); margin-bottom: 1rem;"><i class="fas fa-bullseye mr-2"></i>Misi</h4>
                         <ul style="line-height: 2;">
-                            <li>Menyelenggarakan pendidikan berkualitas di bidang data dan teknologi</li>
-                            <li>Melakukan riset yang inovatif dan aplikatif</li>
-                            <li>Membangun kolaborasi dengan industri dan institusi</li>
-                            <li>Mengembangkan solusi teknologi untuk masyarakat</li>
+                            <?php foreach ($missions as $mission): ?>
+                            <li><?= htmlspecialchars($mission['mission']) ?></li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </div>
