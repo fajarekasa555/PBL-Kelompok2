@@ -16,6 +16,29 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
     background: linear-gradient(180deg, #0a4275 0%, #001a33 100%) !important;
 }
 
+/* ================== REMOVE ALL LIST STYLES ================== */
+#sidebar ul,
+#sidebar ul li,
+#sidebar .nav,
+#sidebar .nav li,
+#sidebar .sub-menu,
+#sidebar .sub-menu li {
+    list-style: none !important;
+    list-style-type: none !important;
+    list-style-image: none !important;
+    list-style-position: outside !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+}
+
+#sidebar ul::before,
+#sidebar ul::after,
+#sidebar li::before,
+#sidebar li::after {
+    content: none !important;
+    display: none !important;
+}
+
 /* ================== PROFILE SECTION - CLEAN ================== */
 #sidebar .nav-profile {
     margin: 0;
@@ -183,11 +206,19 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
     padding: 0.5rem 0 !important;
     margin: 0 !important;
     list-style: none !important;
+    list-style-type: none !important;
 }
 
 #sidebar .nav > li.has-sub > .sub-menu > li {
     position: relative;
     margin: 0 !important;
+    list-style: none !important;
+    list-style-type: none !important;
+}
+
+#sidebar .nav > li.has-sub > .sub-menu > li::before {
+    display: none !important;
+    content: none !important;
 }
 
 #sidebar .nav > li.has-sub > .sub-menu > li > a {
@@ -322,9 +353,8 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
 
 <div id="sidebar" class="sidebar">
   <div data-scrollbar="true" data-height="100%">
-    <ul class="nav" style="list-style-type: none;">
-      <li class="nav-header">Navigation</li>
-
+    <ul class="nav-header">Navigation</ul>
+    <ul class="nav">
       <!-- Dashboard -->
       <li class="<?= $currentRoute === 'dashboard' ? 'active' : '' ?>">
         <a href="<?= $route->base_url('dashboard') ?>">

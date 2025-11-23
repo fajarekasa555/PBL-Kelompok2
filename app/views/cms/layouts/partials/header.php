@@ -1,7 +1,16 @@
 <div id="header" class="header navbar-default">
   <div class="navbar-header">
-    <a href="<?= $route->base_url('dashboard') ?>" class="navbar-brand">
-      <b>Content</b> Management System
+    <a class="navbar-brand d-flex align-items-center gap-2" href="<?= $route->base_url('dashboard') ?>">
+        <img 
+            src="public/assets/img/logo/logo-icon.png" 
+            alt="DataLab Logo" 
+            width="36" 
+            height="36"
+            style="object-fit: contain;"
+        >
+        <span class="font-weight-regular" style="font-size: 1.2rem; letter-spacing: .5px;">
+            DataTech <b>CMS</b>
+        </span>
     </a>
   </div>
   
