@@ -9,6 +9,7 @@ use App\Controllers\EducationController;
 use App\Controllers\ExpertiesController;
 use App\Controllers\LabCourseController;
 use App\Controllers\LabInformationController;
+use App\Controllers\LandingPageController;
 use App\Controllers\MembersController;
 use App\Controllers\ProjectController;
 use App\Controllers\PublicationsController;
@@ -27,6 +28,7 @@ use App\Controllers\UserController;
 
 return [
 
+    'landing_page' => [LandingPageController::class, 'index', []],
     '' => [DashboardController::class, 'index', ['auth']],
     'dashboard' => [DashboardController::class, 'index', ['auth']],
 
