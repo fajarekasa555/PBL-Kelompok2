@@ -40,8 +40,8 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
         </a>
       </li>
 
-      <li class="<?= $currentRoute === 'informasi' ? 'active' : '' ?>">
-        <a href="">
+      <li class="<?= $currentRoute === 'lab_information' ? 'active' : '' ?>">
+        <a href="<?= $route->base_url('lab_information') ?>">
           <i class="fa fa-home"></i>
           <span>Informasi Lab</span>
         </a>

@@ -8,6 +8,7 @@ use App\Controllers\CourseController;
 use App\Controllers\EducationController;
 use App\Controllers\ExpertiesController;
 use App\Controllers\LabCourseController;
+use App\Controllers\LabInformationController;
 use App\Controllers\MembersController;
 use App\Controllers\ProjectController;
 use App\Controllers\PublicationsController;
@@ -129,4 +130,10 @@ return [
     'projects/edit/{id}'   => [ProjectController::class, 'edit', ['auth', 'admin']],
     'projects/update'      => [ProjectController::class, 'update', ['auth', 'admin']],
     'projects/delete/{id}' => [ProjectController::class, 'delete', ['auth', 'admin']],
+
+    'lab_information'             => [LabInformationController::class, 'index', ['auth', 'admin']],
+    'lab_information/store'       => [LabInformationController::class, 'store', ['auth', 'admin']],
+    'lab_information/edit/{id}'   => [LabInformationController::class, 'edit', ['auth', 'admin']],
+    'lab_information/update/{id}'      => [LabInformationController::class, 'update', ['auth', 'admin']],
+    'lab_information/delete/{id}' => [LabInformationController::class, 'delete', ['auth', 'admin']],
 ];
