@@ -1,6 +1,8 @@
 <div id="header" class="header navbar-default">
   <div class="navbar-header">
-    <a href="index.html" class="navbar-brand"><span class="navbar-logo"></span> <b>Content</b> Management System</a>
+    <a href="<?= $route->base_url('dashboard') ?>" class="navbar-brand">
+      <b>Content</b> Management System
+    </a>
   </div>
   
   <ul class="navbar-nav navbar-right">
