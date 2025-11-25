@@ -88,7 +88,7 @@ function addRow() {
             </td>
             <td>
                 <div class="textarea-wrapper">
-                    <textarea id="value" name="value" class="textarea-modern" 
+                    <textarea id="new_value" name="value" class="textarea-modern" 
                         placeholder="Masukkan isi konten..."
                         oninput="autoResize(this)"></textarea>
                 </div>

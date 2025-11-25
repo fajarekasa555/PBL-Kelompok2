@@ -17,10 +17,16 @@ class LandingPageController extends Controller
     {
         $visions = $this->landingPageModel->getVisions();
         $missions = $this->landingPageModel->getMissions();
+        $lab_information = $this->landingPageModel->getLabInfo();
+        $research_focuses = $this->landingPageModel->getRiset();
+        $courses = $this->landingPageModel->getCourses();
         
         return $this->view('landing_page/index', [
             'visions' => $visions, 
-            'missions' => $missions
+            'missions' => $missions,
+            'lab_information' => $lab_information,
+            'research_focuses' => $research_focuses,
+            'courses' => $courses
         ], false);
     }
 }

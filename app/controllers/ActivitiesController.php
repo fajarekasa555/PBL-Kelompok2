@@ -113,12 +113,25 @@ class ActivitiesController extends Controller
                 $data['documentation'] = 'uploads/activities/' . $filename;
             }
 
-            // CREATE activity
-            $activityId = $this->activitiesModel->create($data);
-
-            // Insert activity members
             $members = $_POST['members'] ?? [];
-            $this->activityMembersModel->insertMany($activityId, $members);
+
+            $membersFormatted = [];
+
+            foreach ($members as $m) {
+                $membersFormatted[] = [
+                    'member_id' => (int)$m,
+                    'role' => null
+                ];
+            }
+
+            $activityId = $this->activitiesModel->createWithMembers(
+                $data['title'],
+                $data['description'],
+                $data['location'],
+                $data['date'],
+                $data['documentation'],
+                $membersFormatted
+            );
 
             $db->commit();
             echo "OK";

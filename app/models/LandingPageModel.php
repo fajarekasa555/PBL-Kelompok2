@@ -11,6 +11,19 @@ class LandingPageModel {
         $this->conn = (new Database())->connect();
     }
 
+    public function getLabInfo() {
+        $query = "SELECT * FROM lab_information";
+        $stmt = $this->conn->query($query);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $data = [];
+        foreach ($rows as $row) {
+            $data[$row['key']] = $row['value'];
+        }
+
+        return $data;
+    }
+
     public function getVisions() {
         $query = "SELECT * FROM lab_vision ORDER BY id ASC";
         $stmt = $this->conn->query($query);
@@ -19,6 +32,18 @@ class LandingPageModel {
     
     public function getMissions() {
         $query = "SELECT * FROM lab_missions WHERE is_active = TRUE ORDER BY order_number ASC";
+        $stmt = $this->conn->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getRiset() {
+        $query = "SELECT * FROM research_focuses ORDER BY id ASC";
+        $stmt = $this->conn->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getCourses() {
+        $query = "SELECT * FROM lab_courses ORDER BY id ASC";
         $stmt = $this->conn->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

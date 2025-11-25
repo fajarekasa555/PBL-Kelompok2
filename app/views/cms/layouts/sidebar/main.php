@@ -402,7 +402,7 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
       </li>
 
       <!-- Master -->
-      <li class="has-sub <?= in_array($currentRoute, ['facilities', 'lab-courses', 'research-focus', 'activities', 'projects', 'vision', 'mission']) ? 'active expand' : '' ?>">
+      <li class="has-sub <?= in_array($currentRoute, ['facilities', 'lab-courses', 'research-focuses', 'activities', 'projects', 'vision', 'mission']) ? 'active expand' : '' ?>">
         <a href="javascript:;">
           <b class="caret"></b>
           <i class="fa fa-database"></i>

@@ -32,7 +32,7 @@ class RoleModel {
     }
 
     public function create($name) {
-        $query = "INSERT INTO {$this->table} (name) VALUES (:name)";
+        $query = "CALL create_role(:name)";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute(['name' => $name]);
     }

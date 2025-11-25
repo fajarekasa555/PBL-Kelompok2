@@ -2,7 +2,7 @@
   <div class="navbar-header">
     <a class="navbar-brand d-flex align-items-center gap-2" href="<?= $route->base_url('dashboard') ?>">
         <img 
-            src="public/assets/img/logo/logo-icon.png" 
+            src="<?= $route->base_url('public/assets/img/logo/logo-icon.png') ?>" 
             alt="DataLab Logo" 
             width="36" 
             height="36"

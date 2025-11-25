@@ -52,6 +52,29 @@ class ActivitiesModel {
         ]);
     }
 
+    public function createWithMembers($title, $description, $location, $date, $documentation, $members)
+    {
+        $query = "CALL create_activity_with_members(
+                    :title, 
+                    :description, 
+                    :location, 
+                    :date, 
+                    :documentation, 
+                    :members
+                )";
+
+        $stmt = $this->conn->prepare($query);
+
+        return $stmt->execute([
+            'title'         => $title,
+            'description'   => $description,
+            'location'      => $location,
+            'date'          => $date,
+            'documentation' => $documentation,
+            'members'       => json_encode($members)
+        ]);
+    }
+
     public function update($id, $title, $description = null, $location = null, $date = null, $documentation = null) {
         $query = "UPDATE {$this->table}
                   SET title = :title,

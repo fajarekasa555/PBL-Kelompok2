@@ -217,6 +217,13 @@
             color: var(--primary-color);
             margin-bottom: 1rem;
         }
+
+        .riset-subtitle {
+            display: block;
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
         
         /* Kegiatan Section */
         .section-kegiatan {
@@ -687,9 +694,9 @@
                     <li class="nav-item"><a class="nav-link" href="#tim">TIM</a></li>
                     <li class="nav-item"><a class="nav-link" href="#fasilitas">FASILITAS</a></li>
                     <li class="nav-item"><a class="nav-link" href="#publikasi">PUBLIKASI</a></li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <button class="btn btn-login">LOGIN</button>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -700,8 +707,8 @@
         <div class="container">
             <div class="row align-items-center hero-content">
                 <div class="col-lg-6">
-                    <h1 class="hero-title">Laboratorium Data & Teknologi</h1>
-                    <p class="hero-subtitle">Membangun masa depan dengan inovasi teknologi dan analisis data</p>
+                    <h1 class="hero-title"><?= $lab_information['hero_title'] ?? '' ?></h1>
+                    <p class="hero-subtitle"><?= $lab_information['hero_subtitle'] ?? '' ?></p>
                     <button class="btn btn-login btn-lg">
                         <i class="fas fa-arrow-right mr-2"></i>Pelajari Lebih Lanjut
                     </button>
@@ -718,13 +725,10 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 scroll-slide-left">
-                    <h2 class="section-title">Tentang</h2>
-                    <h3 class="section-subtitle">Laboratorium Data & Teknologi</h3>
+                    <h2 class="section-title"><?= $lab_information['about_title'] ?? '' ?></h2>
+                    <h3 class="section-subtitle"><?= $lab_information['about_subtitle'] ?? '' ?></h3>
                     <p style="font-size: 1.1rem; line-height: 1.8;">
-                        <span class="highlight-text">Laboratorium Data & Teknologi</span> adalah laboratorium yang 
-                        berfokus pada pengembangan kapasitas mahasiswa dalam bidang analisis data, teknologi informasi, 
-                        dan inovasi digital. Kami berkomitmen untuk menciptakan lingkungan pembelajaran yang mendukung 
-                        riset dan pengembangan teknologi terkini.
+                        <span class="highlight-text"><?= $lab_information['about_highlight'] ?? '' ?></span> <?= $lab_information['about_description'] ?? '' ?>
                     </p>
                 </div>
                 <div class="col-lg-6 scroll-slide-right">
@@ -737,8 +741,8 @@
     <!-- Visi Misi Section -->
     <section id="visi-misi" class="section-visi-misi">
         <div class="container">
-            <h2 class="section-title text-center scroll-animate" style="color: white;">Visi & Misi</h2>
-            <p class="text-center mb-5 scroll-animate" style="font-size: 1.2rem;">Arah dan tujuan kami dalam mengembangkan teknologi dan pendidikan</p>
+            <h2 class="section-title text-center scroll-animate" style="color: white;"><?= $lab_information['visi_title'] ?? '' ?></h2>
+            <p class="text-center mb-5 scroll-animate" style="font-size: 1.2rem;"><?= $lab_information['visi_subtitle'] ?? '' ?></p>
             <div class="row">
                 <div class="col-md-12">
                     <?php foreach ($visions as $vision): ?>
@@ -768,28 +772,18 @@
             <h2 class="section-title text-center scroll-animate">Fokus Riset</h2>
             <h3 class="section-subtitle text-center mb-5 scroll-animate">Laboratorium</h3>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="riset-card scroll-scale">
-                        <div class="riset-icon"><i class="fas fa-brain"></i></div>
-                        <h5 class="riset-title">Machine Learning</h5>
-                        <p>Pengembangan algoritma pembelajaran mesin untuk berbagai aplikasi</p>
+                <?php if(isset($research_focuses)) { ?>
+                    <?php foreach($research_focuses as $research) { ?>
+                    <div class="col-md-4">
+                        <div class="riset-card scroll-scale">
+                            <div class="riset-icon"><i class="fas fa-brain"></i></div>
+                            <h5 class="riset-title"><?= htmlspecialchars($research['title']) ?></h5>
+                            <b class="riset-subtitle"><?= htmlspecialchars($research['field']) ?></b>
+                            <p><?= htmlspecialchars($research['description']) ?></p>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="riset-card scroll-scale">
-                        <div class="riset-icon"><i class="fas fa-chart-line"></i></div>
-                        <h5 class="riset-title">Big Data Analytics</h5>
-                        <p>Analisis data berskala besar untuk insight bisnis dan riset</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="riset-card scroll-scale">
-                        <div class="riset-icon"><i class="fas fa-network-wired"></i></div>
-                        <h5 class="riset-title">IoT & Smart Systems</h5>
-                        <p>Pengembangan sistem cerdas berbasis Internet of Things</p>
-                    </div>
-                </div>
-            </div>
+                <?php } ?>
+            <?php } ?>
         </div>
     </section>
 
@@ -950,27 +944,15 @@
             <h2 class="section-title text-center scroll-animate">Mata Kuliah</h2>
             <h3 class="section-subtitle text-center mb-5 scroll-animate">Terkait</h3>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="riset-card scroll-scale">
-                        <div class="riset-icon"><i class="fas fa-database"></i></div>
-                        <h5 class="riset-title">Struktur Data</h5>
-                        <p>3 SKS - Semester 3</p>
-                    </div>
-                </div>
+                <?php foreach ($courses as $course): ?>
                 <div class="col-md-4">
                     <div class="riset-card scroll-scale">
                         <div class="riset-icon"><i class="fas fa-code"></i></div>
-                        <h5 class="riset-title">Algoritma & Pemrograman</h5>
-                        <p>4 SKS - Semester 2</p>
+                        <h5 class="riset-title"><?= htmlspecialchars($course['name']) ?></h5>
+                        <p><?= htmlspecialchars($course['description']) ?></p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="riset-card scroll-scale">
-                        <div class="riset-icon"><i class="fas fa-robot"></i></div>
-                        <h5 class="riset-title">Kecerdasan Buatan</h5>
-                        <p>3 SKS - Semester 6</p>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -980,28 +962,33 @@
         <div class="container">
             <div class="row footer-content">
                 <div class="col-md-4">
-                    <h5><i class="fas fa-flask mr-2"></i>DataLab</h5>
-                    <p>Laboratorium Data & Teknologi</p>
-                    <p style="font-size: 0.9rem; opacity: 0.8;">Membangun masa depan dengan inovasi teknologi dan analisis data yang berkelanjutan.</p>
+                    <h5 class="d-flex align-items-center gap-2">
+                        <i> 
+                            <img src="<?= $lab_information['logo'] ?>" width="35" height="35" alt="" srcset="" style="object-fit: contain;">
+                        </i>
+                        DataTech
+                    </h5>
+                    <p><?= $lab_information['site_name'] ?></p>
+                    <p style="font-size: 0.9rem; opacity: 0.8;"><?= $lab_information['tagline'] ?></p>
                 </div>
                 <div class="col-md-4">
                     <h5>Kontak</h5>
-                    <p><i class="fas fa-map-marker-alt mr-2"></i>Jl. Universitas No. 123, Jakarta</p>
-                    <p><i class="fas fa-phone mr-2"></i>+62 21 1234 5678</p>
-                    <p><i class="fas fa-envelope mr-2"></i>info@datalab.ac.id</p>
+                    <p><i class="fas fa-map-marker-alt mr-2"></i><?= $lab_information['address'] ?></p>
+                    <p><i class="fas fa-phone mr-2"></i><?= $lab_information['phone'] ?></p>
+                    <p><i class="fas fa-envelope mr-2"></i><?= $lab_information['email'] ?></p>
                 </div>
                 <div class="col-md-4">
                     <h5>Ikuti Kami</h5>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="<?= htmlspecialchars($lab_information['facebook']) ?>" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+                        <a href="<?= htmlspecialchars($lab_information['twitter']) ?>" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+                        <a href="<?= htmlspecialchars($lab_information['linkedin']) ?>" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="<?= htmlspecialchars($lab_information['instagram']) ?>" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
             <div class="text-center" style="opacity: 0.7; font-size: 0.9rem;">
-                &copy; 2024 Laboratorium Data & Teknologi. All rights reserved.
+                &copy; 2025 Laboratorium Data & Teknologi. All rights reserved.
             </div>
         </div>
     </footer>

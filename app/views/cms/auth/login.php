@@ -327,9 +327,9 @@
 		<div class="login-card">
 			<!-- Login Header -->
 			<div class="login-header">
-				<div class="login-logo">
-					<i class="fas fa-flask"></i>
-				</div>
+				<!-- <div class="login-logo"> -->
+				<i><img src="public/assets/img/logo/logo-icon.png" width="50" height="50" alt="" srcset="" style="object-fit: contain;"></i>
+				<!-- </div> -->
 				<h1>DataLab CMS</h1>
 				<p>Content Management System</p>
 			</div>

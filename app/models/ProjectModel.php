@@ -60,6 +60,31 @@ class ProjectModel {
         ]);
     }
 
+    public function createWithMembers($name, $description, $start_date, $end_date, $sponsor, $documentation, $members)
+    {
+        $query = "CALL create_project_with_members(
+                    :name, 
+                    :description, 
+                    :start_date, 
+                    :end_date, 
+                    :sponsor, 
+                    :documentation, 
+                    :members
+                )";
+
+        $stmt = $this->conn->prepare($query);
+
+        return $stmt->execute([
+            'name'          => $name,
+            'description'   => $description,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
+            'sponsor'       => $sponsor,
+            'documentation' => $documentation,
+            'members'       => json_encode($members)
+        ]);
+    }
+
     public function update(
         $id,
         $name,

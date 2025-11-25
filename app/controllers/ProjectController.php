@@ -110,18 +110,34 @@ class ProjectController extends Controller
                 $data['documentation'] = 'uploads/projects/' . $filename;
             }
 
-            $projectId = $this->projectsModel->create(
-                $data['name'],
-                $data['description'],
-                $data['start_date'],
-                $data['end_date'],
-                $data['sponsor'],
-                $data['documentation']
-            );
-
             if (!empty($_POST['members'])) {
                 $members = $_POST['members'];
-                $this->projectMembersModel->insertMany($projectId, $members);
+
+                $membersFormatted = [];
+
+                foreach ($members as $m) {
+                    $membersFormatted[] = [
+                        'member_id' => intval($m)
+                    ];
+                }
+                $this->projectsModel->createWithMembers(
+                    $data['name'],
+                    $data['description'],
+                    $data['start_date'],
+                    $data['end_date'],
+                    $data['sponsor'],
+                    $data['documentation'],
+                    $membersFormatted
+                );
+            }else{
+                $this->projectsModel->create(
+                    $data['name'],
+                    $data['description'],
+                    $data['start_date'],
+                    $data['end_date'],
+                    $data['sponsor'],
+                    $data['documentation']
+                );
             }
 
             $db->commit();
