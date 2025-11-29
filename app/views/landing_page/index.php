@@ -773,11 +773,16 @@
             <h2 class="section-title text-center scroll-animate">Fokus Riset</h2>
             <h3 class="section-subtitle text-center mb-5 scroll-animate">Laboratorium</h3>
             <div class="row">
-                <?php if(isset($research_focuses)) { ?>
-                    <?php foreach($research_focuses as $research) { ?>
+                <?php if(isset($research_focuses)) { 
+                    $research_icons = ['fa-brain', 'fa-network-wired', 'fa-robot', 'fa-chart-line', 'fa-database', 'fa-code'];
+                    $icon_index = 0;
+                    foreach($research_focuses as $research) { 
+                        $icon = $research_icons[$icon_index % count($research_icons)];
+                        $icon_index++;
+                ?>
                     <div class="col-md-4">
                         <div class="riset-card scroll-scale">
-                            <div class="riset-icon"><i class="fas fa-brain"></i></div>
+                            <div class="riset-icon"><i class="fas <?= $icon ?>"></i></div>
                             <h5 class="riset-title"><?= htmlspecialchars($research['title']) ?></h5>
                             <b class="riset-subtitle"><?= htmlspecialchars($research['field']) ?></b>
                             <p><?= htmlspecialchars($research['description']) ?></p>

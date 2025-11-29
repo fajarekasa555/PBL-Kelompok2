@@ -7,6 +7,7 @@ use App\Controllers\CertificationController;
 use App\Controllers\CourseController;
 use App\Controllers\EducationController;
 use App\Controllers\ExpertiesController;
+use App\Controllers\FacilitiesController;
 use App\Controllers\LabCourseController;
 use App\Controllers\LabInformationController;
 use App\Controllers\LabMissionController;
@@ -154,4 +155,12 @@ return [
     'lab_information/edit/{id}'   => [LabInformationController::class, 'edit', ['auth', 'admin']],
     'lab_information/update/{id}'      => [LabInformationController::class, 'update', ['auth', 'admin']],
     'lab_information/delete/{id}' => [LabInformationController::class, 'delete', ['auth', 'admin']],
+
+    'facilities'             => [FacilitiesController::class, 'index', ['auth', 'admin']],
+    'facilities/show/{id}'   => [FacilitiesController::class, 'show', ['auth', 'admin']],
+    'facilities/create'      => [FacilitiesController::class, 'create', ['auth', 'admin']],
+    'facilities/store'       => [FacilitiesController::class, 'store', ['auth', 'admin']],
+    'facilities/edit/{id}'   => [FacilitiesController::class, 'edit', ['auth', 'admin']],
+    'facilities/update'      => [FacilitiesController::class, 'update', ['auth', 'admin']],
+    'facilities/delete/{id}' => [FacilitiesController::class, 'delete', ['auth', 'admin']],
 ];

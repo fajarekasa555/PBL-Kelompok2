@@ -409,7 +409,9 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
           <span>Content</span>
         </a>
         <ul class="sub-menu">
-          <li><a href="">Fasilitas</a></li>
+          <li class="<?= $currentRoute === 'facilities' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('facilities') ?>">Fasilitas</a>
+          </li>
           <li class="<?= $currentRoute === 'lab-courses' ? 'active' : '' ?>">
             <a href="<?= $route->base_url('lab-courses') ?>">Mata Kuliah</a>
           </li>
