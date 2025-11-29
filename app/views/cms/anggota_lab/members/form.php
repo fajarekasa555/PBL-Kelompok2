@@ -174,12 +174,14 @@
             value="<?= htmlspecialchars($members['program_studi'] ?? '') ?>"
             placeholder="Masukkan program studi">
     </div>
-
-    <div class="col-md-6 text-left">
-        <label>Jabatan / Posisi <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" name="jabatan"
-            value="<?= htmlspecialchars($members['jabatan'] ?? '') ?>"
-            placeholder="Masukkan jabatan atau posisi" required>
+    <div class="col-md-6">
+        <label class="form-label">Jabatan / Posisi <span class="text-danger">*</span></label>
+        <select class="form-control select2-jabatan" name="jabatan" required>
+            <option value="">-- Pilih Jabatan --</option>
+            <option value="ketua"   <?= ($members['jabatan'] ?? '') == 'ketua' ? 'selected' : '' ?>>Ketua</option>
+            <option value="wakil"   <?= ($members['jabatan'] ?? '') == 'wakil' ? 'selected' : '' ?>>Wakil</option>
+            <option value="anggota" <?= ($members['jabatan'] ?? '') == 'anggota' ? 'selected' : '' ?>>Anggota</option>
+        </select>
     </div>
 </div>
 

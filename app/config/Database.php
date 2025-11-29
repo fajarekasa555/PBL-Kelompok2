@@ -8,7 +8,7 @@ class Database {
     private $host = "localhost";
     private $port = "5432";
     private $db = "profile_dt";
-    private $user = "postgres";
+    private $user = "Bismillah";
     private $pass = "";
     public $conn;
 

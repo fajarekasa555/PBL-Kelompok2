@@ -6,11 +6,13 @@ use App\Core\Controller;
 use App\Middleware\AuthMiddleware;
 use App\Models\MembersModel;
 use App\Models\PublicationsModel;
+use App\Requests\PublicationRequest;
 
 class PublicationsController extends Controller
 {
     private $publicationsModel;
     private $membersModel;
+    private $request;
 
     public function __construct()
     {
@@ -21,6 +23,7 @@ class PublicationsController extends Controller
         AuthMiddleware::requireAdmin();
         $this->publicationsModel = new PublicationsModel();
         $this->membersModel = new MembersModel();
+        $this->request = new PublicationRequest();
     }
 
     public function index()
@@ -71,17 +74,31 @@ class PublicationsController extends Controller
 
     public function store()
     {
-        $title = trim($_POST['title'] ?? '');
-        $date = $_POST['date'] ?? '';
-        $link = trim($_POST['link'] ?? '');
-        $member_id = intval($_POST['member_id'] ?? 0);
+        header('Content-Type: application/json; charset=utf-8');
 
-        if ($title !== '' && $date !== '' && $link !== '' && $member_id > 0) {
-            $this->publicationsModel->create($member_id, $title, $date, $link);
-        } else {
-            http_response_code(400);
-            echo "Invalid input data.";
+        $data = [
+            'title'     => trim($_POST['title'] ?? ''),
+            'date'      => $_POST['date'] ?? '',
+            'link'      => trim($_POST['link'] ?? ''),
+            'member_id' => intval($_POST['member_id'] ?? 0)
+        ];
+
+        $errors = $this->request->validateStore($data);
+
+        if (!empty($errors)) {
+            echo json_encode([
+                'status' => 'error',
+                'errors' => $errors
+            ]);
+            return;
         }
+
+        $this->publicationsModel->create($data['member_id'], $data['title'], $data['date'], $data['link']);
+
+        echo json_encode([
+            'status'  => 'success',
+            'message' => 'Publikasi berhasil ditambahkan.'
+        ]);
     }
 
     public function edit($id)
@@ -97,18 +114,32 @@ class PublicationsController extends Controller
 
     public function update()
     {
-        $id = intval($_POST['id'] ?? 0);
-        $title = trim($_POST['title'] ?? '');
-        $date = $_POST['date'] ?? '';
-        $link = trim($_POST['link'] ?? '');
-        $member_id = intval($_POST['member_id'] ?? 0);
+        header('Content-Type: application/json; charset=utf-8');
 
-        if ($id > 0 && $title !== '' && $date !== '' && $link !== '' && $member_id > 0) {
-            $this->publicationsModel->update($id, $member_id, $title, $date, $link);
-        } else {
-            http_response_code(400);
-            echo "Invalid input data.";
+        $data = [
+            'id'        => $_POST['id'] ?? '',
+            'title'     => trim($_POST['title'] ?? ''),
+            'date'      => $_POST['date'] ?? '',
+            'link'      => trim($_POST['link'] ?? ''),
+            'member_id' => intval($_POST['member_id'] ?? 0)
+        ];
+
+        $errors = $this->request->validateUpdate($data);
+
+        if (!empty($errors)) {
+            echo json_encode([
+                'status' => 'error',
+                'errors' => $errors
+            ]);
+            return;
         }
+
+        $this->publicationsModel->update($data['id'], $data['member_id'], $data['title'], $data['date'], $data['link']);
+
+        echo json_encode([
+            'status'  => 'success',
+            'message' => 'Publikasi berhasil diperbarui.'
+        ]);
     }
 
     public function delete($id)

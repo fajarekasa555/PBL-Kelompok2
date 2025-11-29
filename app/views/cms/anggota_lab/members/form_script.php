@@ -1,7 +1,9 @@
 
 <script>
 $(function() {
-    // Template untuk setiap section
+    $('.select2-jabatan').select2({
+        width: '100%'
+    });
     const templates = {
         social: `
             <div class="row dynamic-row social-row">
@@ -161,14 +163,12 @@ $(function() {
         `
     };
 
-    // Fungsi untuk update nomor urut
     function updateRowNumbers(container) {
         const rows = container.find('.dynamic-row');
         rows.each(function(index) {
             $(this).find('.row-number').text(index + 1);
         });
         
-        // Toggle empty state
         const emptyState = container.siblings('.empty-state');
         if (rows.length === 0) {
             emptyState.addClass('show');
@@ -177,26 +177,22 @@ $(function() {
         }
     }
 
-    // Fungsi untuk menambah row baru
     function addRow(type) {
         const container = $(`#${type}-container`);
         const newRow = $(templates[type]);
         container.append(newRow);
         updateRowNumbers(container);
         
-        // Initialize Select2 untuk row baru
         if (type === 'social') {
             initializeSocialMediaSelect(newRow);
         } else if (type === 'course') {
             initializeCourseSelect(newRow);
         }
         
-        // Smooth scroll ke row baru
         $('html, body').animate({
             scrollTop: newRow.offset().top - 100
         }, 500);
         
-        // Focus ke input pertama
         if (type === 'social' || type === 'course') {
             newRow.find('select:first').select2('open');
         } else {
@@ -204,7 +200,6 @@ $(function() {
         }
     }
 
-    // Initialize Select2 untuk Social Media
     function initializeSocialMediaSelect(row) {
         const selectElement = row.find('.social-platform-select');
         const iconInput = row.find('.social-icon-input');
@@ -216,7 +211,6 @@ $(function() {
             width: '100%'
         });
         
-        // Event handler untuk auto-fill icon
         selectElement.on('change', function() {
             const selectedOption = $(this).find('option:selected');
             const iconClass = selectedOption.data('icon');
@@ -231,7 +225,6 @@ $(function() {
         });
     }
 
-    // Initialize Select2 untuk Course Semester
     function initializeCourseSelect(row) {
         const selectElement = row.find('.course-semester-select');
         
@@ -239,16 +232,14 @@ $(function() {
             placeholder: '-- Pilih Semester --',
             allowClear: true,
             width: '100%',
-            minimumResultsForSearch: -1 // Hide search box karena hanya 2 pilihan
+            minimumResultsForSearch: -1
         });
     }
 
-    // Event delegation untuk tombol hapus
     $(document).on('click', '.remove-btn', function() {
         const row = $(this).closest('.dynamic-row');
         const container = $(this).closest('[id$="-container"]');
         
-        // Konfirmasi sebelum hapus menggunakan SweetAlert
         Swal.fire({
             title: 'Hapus Item?',
             text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -265,7 +256,6 @@ $(function() {
                     $(this).remove();
                     updateRowNumbers(container);
                     
-                    // Toast notification setelah berhasil dihapus
                     Swal.fire({
                         toast: true,
                         position: 'top-end',
@@ -345,5 +335,101 @@ $(function() {
     $(document).on('input', '.is-invalid', function() {
         $(this).removeClass('is-invalid');
     });
+
+    <?php if (!empty($social)) : ?>
+    loadExistingSocial(<?= json_encode($social) ?>);
+    <?php endif; ?>
+
+    <?php if (!empty($certifications)) : ?>
+    loadExistingCert(<?= json_encode($certifications) ?>);
+    <?php endif; ?>
+
+    <?php if (!empty($education)) : ?>
+    loadExistingEdu(<?= json_encode($education) ?>);
+    <?php endif; ?>
+
+    <?php if (!empty($courses)) : ?>
+    loadExistingCourse(<?= json_encode($courses) ?>);
+    <?php endif; ?>
+
+    function loadExistingSocial(data) {
+        const container = $("#social-container");
+
+        data.forEach(item => {
+            const row = $(templates.social);
+
+            row.find('select[name="social[platform][]"]')
+                .val(item.platform)
+                .trigger('change');
+
+            row.find('input[name="social[icon][]"]').val(item.icon);
+            row.find('.social-icon-preview').attr('class', `social-icon-preview ${item.icon}`);
+            
+            row.find('input[name="social[url][]"]').val(item.url);
+
+            container.append(row);
+            initializeSocialMediaSelect(row);
+        });
+
+        updateRowNumbers(container);
+    }
+
+    function loadExistingCert(data) {
+        const container = $("#cert-container");
+
+        data.forEach(item => {
+            const row = $(templates.cert);
+
+            row.find('input[name="cert[title][]"]').val(item.title);
+            row.find('input[name="cert[issuer][]"]').val(item.issuer);
+            row.find('input[name="cert[issue_date][]"]').val(item.issue_date);
+            row.find('input[name="cert[expiration_date][]"]').val(item.expiration_date);
+            row.find('input[name="cert[credential_id][]"]').val(item.credential_id);
+            row.find('input[name="cert[credential_url][]"]').val(item.credential_url);
+
+            container.append(row);
+        });
+
+        updateRowNumbers(container);
+    }
+
+    function loadExistingEdu(data) {
+        const container = $("#edu-container");
+
+        data.forEach(item => {
+            const row = $(templates.edu);
+
+            row.find('input[name="edu[degree][]"]').val(item.degree);
+            row.find('input[name="edu[major][]"]').val(item.major);
+            row.find('input[name="edu[institution][]"]').val(item.institution);
+            row.find('input[name="edu[start_year][]"]').val(item.start_year);
+
+            container.append(row);
+        });
+
+        updateRowNumbers(container);
+    }
+
+    function loadExistingCourse(data) {
+        const container = $("#course-container");
+
+        data.forEach(item => {
+            const row = $(templates.course);
+
+            row.find('select[name="course[semester][]"]')
+                .val(item.semester)
+                .trigger('change');
+
+            row.find('input[name="course[course_name][]"]').val(item.course_name);
+            row.find('input[name="course[course_code][]"]').val(item.course_code);
+            row.find('input[name="course[credits][]"]').val(item.credits);
+
+            container.append(row);
+            initializeCourseSelect(row);
+        });
+
+        updateRowNumbers(container);
+    }
 });
+
 </script>

@@ -6,83 +6,10 @@ $baseMembersUrl = $route->base_url('members');
 
 <h1 class="page-header d-flex justify-content-between align-items-center">
     <span>Manajemen Anggota</span>
-    <!-- <button class="btn btn-primary" onclick="createMember()">
-        <span class="fa fa-plus"></span> Tambah
-    </button> -->
     <a href="<?= $baseMembersUrl ?>/create" class="btn btn-primary">
         <span class="fa fa-plus"></span> Tambah
     </a>
 </h1>
-
-<!-- <div class="row g-4 mb-4">
-    <div class="col-xl-3 col-md-6">
-        <div class="stat-card card-primary">
-            <div class="gradient-overlay"></div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="stat-label">Total Anggota</div>
-                        <h3 class="stat-value"><?= $stats['total_members'] ?? 0 ?></h3>
-                    </div>
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6">
-        <div class="stat-card card-success">
-            <div class="gradient-overlay"></div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="stat-label">Jabatan Terdaftar</div>
-                        <h3 class="stat-value"><?= $stats['total_jabatan'] ?? 0 ?></h3>
-                    </div>
-                    <div class="stat-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-        <div class="stat-card card-danger">
-            <div class="gradient-overlay"></div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="stat-label">Email Terisi</div>
-                        <h3 class="stat-value"><?= $stats['filled_email'] ?? 0 ?></h3>
-                    </div>
-                    <div class="stat-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-        <div class="stat-card card-warning">
-            <div class="gradient-overlay"></div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="stat-label">Telepon Terisi</div>
-                        <h3 class="stat-value"><?= $stats['filled_phone'] ?? 0 ?></h3>
-                    </div>
-                    <div class="stat-icon">
-                        <i class="fas fa-phone-alt"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div> -->
 
 <div class="panel panel-default">
     <div class="panel-body">

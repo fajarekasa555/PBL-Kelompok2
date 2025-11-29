@@ -7,12 +7,14 @@ use App\Middleware\AuthMiddleware;
 use App\Models\MembersModel;
 use App\Models\ExpertiesModel;
 use App\Models\MemberExpertisesModel;
+use App\Requests\MemberRequest;
 
 class MembersController extends Controller
 {
     private $membersModel;
     private $expertiesModel;
     private $memberExpertisesModel;
+    private $requestValidator;
 
     public function __construct()
     {
@@ -25,6 +27,7 @@ class MembersController extends Controller
         $this->membersModel = new MembersModel();
         $this->expertiesModel = new ExpertiesModel();
         $this->memberExpertisesModel = new MemberExpertisesModel();
+        $this->requestValidator = new MemberRequest();
     }
 
     public function index()
@@ -67,6 +70,10 @@ class MembersController extends Controller
     {
         $member = $this->membersModel->findOrFail($id);
         $expertises = $this->memberExpertisesModel->getExpertisesByMember($id);
+        $social = $this->membersModel->getSocialMedia($id);
+        $education = $this->membersModel->getEducations($id);
+        $courses = $this->membersModel->getCourses($id);
+        $certifications = $this->membersModel->getCertifications($id);
 
         return include __DIR__ . '/../Views/cms/anggota_lab/members/view.php';
     }
@@ -75,7 +82,6 @@ class MembersController extends Controller
     {
         $allExpertises = $this->expertiesModel->all();
         return $this->view('cms/anggota_lab/members/create', ['allExpertises' => $allExpertises]);
-        // return include __DIR__ . '/../Views/cms/anggota_lab/members/create.php';
     }
 
     public function store()
@@ -97,6 +103,16 @@ class MembersController extends Controller
                 'photo'         => ''
             ];
 
+            $errors = $this->requestValidator->validate($data);
+
+            if (!empty($errors)) {
+                http_response_code(422);
+                echo json_encode([
+                    'status' => 'error',
+                    'errors' => $errors
+                ]);
+                return;
+            }
 
             if ($data['name'] === '' || $data['jabatan'] === '' || $data['email'] === '') {
                 http_response_code(400);
@@ -286,73 +302,125 @@ class MembersController extends Controller
 
     public function edit($id)
     {
-        $members = $this->membersModel->findOrFail($id);
+        $member = $this->membersModel->findOrFail($id);
+
         $allExpertises = $this->expertiesModel->all();
         $memberExpertises = $this->memberExpertisesModel->getByMember($id);
 
+        $social        = $this->membersModel->getSocialMedia($id);
+        $education     = $this->membersModel->getEducations($id);
+        $courses       = $this->membersModel->getCourses($id);
+        $certifications = $this->membersModel->getCertifications($id);
+
         return $this->view('cms/anggota_lab/members/edit', [
-            'members' => $members,
-            'allExpertises' => $allExpertises,
-            'memberExpertises' => $memberExpertises
+            'members'          => $member,
+            'allExpertises'    => $allExpertises,
+            'memberExpertises' => $memberExpertises,
+            'social'           => $social,
+            'education'        => $education,
+            'courses'          => $courses,
+            'certifications'   => $certifications
         ]);
     }
 
+
     public function update()
     {
+        header("Content-Type: application/json; charset=utf-8");
+
         $id = intval($_POST['id']);
         $old = $this->membersModel->findOrFail($id);
 
-        $data = [
-            'nip' => trim($_POST['nip'] ?? ''),
-            'nidn' => trim($_POST['nidn'] ?? ''),
-            'name' => trim($_POST['name'] ?? ''),
-            'title_prefix' => trim($_POST['title_prefix'] ?? ''),
-            'title_suffix' => trim($_POST['title_suffix'] ?? ''),
-            'program_studi' => trim($_POST['program_studi'] ?? ''),
-            'jabatan' => trim($_POST['jabatan'] ?? ''),
-            'email' => trim($_POST['email'] ?? ''),
-            'phone' => trim($_POST['phone'] ?? ''),
-            'address' => trim($_POST['address'] ?? ''),
-            'photo' => $old['photo']
-        ];
-
-        $expertises = $_POST['expertises'] ?? [];
-
-        // Upload Foto
-        if (!empty($_FILES['photo']['name'])) {
-            $uploadDir = __DIR__ . '/../../public/uploads/members/';
-            if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
-
-            $filename = time() . '_' . basename($_FILES['photo']['name']);
-            $targetFile = $uploadDir . $filename;
-
-            if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
-                $data['photo'] = 'uploads/members/' . $filename;
-            }
-        }
-
         try {
-            $this->membersModel->update($id, $data);
+
+            $data = [
+                'id'            => $id,
+                'nip'           => trim($_POST['nip'] ?? ''),
+                'nidn'          => trim($_POST['nidn'] ?? ''),
+                'name'          => trim($_POST['name'] ?? ''),
+                'title_prefix'  => trim($_POST['title_prefix'] ?? ''),
+                'title_suffix'  => trim($_POST['title_suffix'] ?? ''),
+                'program_studi' => trim($_POST['program_studi'] ?? ''),
+                'jabatan'       => trim($_POST['jabatan'] ?? ''),
+                'email'         => trim($_POST['email'] ?? ''),
+                'phone'         => trim($_POST['phone'] ?? ''),
+                'address'       => trim($_POST['address'] ?? ''),
+                'photo'         => $old['photo']
+            ];
+
+            $errors = $this->requestValidator->validate($data, isUpdate: true);
+
+            if (!empty($errors)) {
+                http_response_code(422);
+                echo json_encode([
+                    'status' => 'error',
+                    'errors' => $errors
+                ]);
+                return;
+            }
+
+            if (!empty($_FILES['photo']['name'])) {
+
+                $uploadDir = __DIR__ . '/../../public/uploads/members/';
+                if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
+
+                $filename = time() . '_' . basename($_FILES['photo']['name']);
+                $target = $uploadDir . $filename;
+
+                if (move_uploaded_file($_FILES['photo']['tmp_name'], $target)) {
+                    $data['photo'] = 'uploads/members/' . $filename;
+                }
+            }
+
+            $social = $this->prepareSocialMediaData($_POST['social'] ?? []);
+            $data['soc_platform'] = $social['platforms'];
+            $data['soc_icon']     = $social['icons'];
+            $data['soc_url']      = $social['urls'];
+
+            $edu = $this->prepareEducationData($_POST['edu'] ?? []);
+            $data['degree']      = $edu['degrees'];
+            $data['major']       = $edu['majors'];
+            $data['institution'] = $edu['institutions'];
+            $data['start_year']  = $edu['start_years'] ?? [];
+            $data['end_year']    = $edu['end_years'];
+
+            $courses = $this->prepareCoursesData($_POST['course'] ?? []);
+            $data['course_name'] = $courses['course_names'];
+            $data['semester']    = $courses['semesters'];
+            $data['course_code'] = $courses['codes'];
+            $data['credits']     = $courses['credits'];
+
+            $cert = $this->prepareCertificationsData($_POST['cert'] ?? []);
+            $data['cert_title']      = $cert['titles'];
+            $data['cert_issuer']     = $cert['issuers'];
+            $data['cert_issue_date'] = $cert['issue_dates'];
+            $data['cert_exp_date']   = $cert['expiration_dates'];
+            $data['cred_id']         = $cert['credential_ids'];
+            $data['cred_url']        = $cert['credential_urls'];
+
+            $expertises = $_POST['expertises'] ?? [];
+
+            $this->membersModel->updateWithStoredProcedure($id, $data);
 
             $this->memberExpertisesModel->deleteByMember($id);
             if (!empty($expertises)) {
                 $this->memberExpertisesModel->insertMany($id, $expertises);
             }
-            header('Content-Type: application/json');
+
             echo json_encode([
-                'status' => 'success',
+                'status'  => 'success',
                 'message' => 'Anggota berhasil diperbarui.'
             ]);
-        } catch (\Exception $e) {
-            http_response_code(400);
-            header('Content-Type: application/json');
+
+        } catch (\Throwable $e) {
+
+            http_response_code(500);
             echo json_encode([
-                'status' => 'error',
-                'message' => 'Gagal memperbarui anggota: ' . $e->getMessage()
+                'status'  => 'error',
+                'message' => 'Gagal mengupdate: ' . $e->getMessage()
             ]);
         }
     }
-
 
     public function delete($id)
     {

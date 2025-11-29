@@ -179,6 +179,91 @@ class MembersModel {
         ]);
     }
 
+    public function updateWithStoredProcedure($memberId, $data)
+    {
+        try {
+            $sql = "
+                SELECT sp_update_member_full(
+                    :member_id,
+                    :nip,
+                    :nidn,
+                    :name,
+                    :title_prefix,
+                    :title_suffix,
+                    :program_studi,
+                    :jabatan,
+                    :email,
+                    :phone,
+                    :address,
+                    :photo,
+
+                    :soc_platform,
+                    :soc_icon,
+                    :soc_url,
+
+                    :degree,
+                    :major,
+                    :institution,
+                    :start_year,
+                    :end_year,
+
+                    :course_name,
+                    :semester,
+
+                    :cert_title,
+                    :cert_issuer,
+                    :cert_issue_date,
+                    :cert_exp_date,
+                    :cred_id,
+                    :cred_url
+                );
+            ";
+
+            $stmt = $this->conn->prepare($sql);
+
+            $stmt->bindValue(':member_id', $memberId, PDO::PARAM_INT);
+            $stmt->bindValue(':nip', $data['nip']);
+            $stmt->bindValue(':nidn', $data['nidn']);
+            $stmt->bindValue(':name', $data['name']);
+            $stmt->bindValue(':title_prefix', $data['title_prefix']);
+            $stmt->bindValue(':title_suffix', $data['title_suffix']);
+            $stmt->bindValue(':program_studi', $data['program_studi']);
+            $stmt->bindValue(':jabatan', $data['jabatan']);
+            $stmt->bindValue(':email', $data['email']);
+            $stmt->bindValue(':phone', $data['phone']);
+            $stmt->bindValue(':address', $data['address']);
+            $stmt->bindValue(':photo', $data['photo']);
+
+            $stmt->bindValue(':soc_platform', $this->toPgArray($data['soc_platform'] ?? []));
+            $stmt->bindValue(':soc_icon',     $this->toPgArray($data['soc_icon'] ?? []));
+            $stmt->bindValue(':soc_url',      $this->toPgArray($data['soc_url'] ?? []));
+
+            $stmt->bindValue(':degree',      $this->toPgArray($data['degree'] ?? []));
+            $stmt->bindValue(':major',       $this->toPgArray($data['major'] ?? []));
+            $stmt->bindValue(':institution', $this->toPgArray($data['institution'] ?? []));
+            $stmt->bindValue(':start_year',  $this->toPgArray($data['start_year'] ?? [], 'int'));
+            $stmt->bindValue(':end_year',    $this->toPgArray($data['end_year'] ?? [], 'int'));
+
+            $stmt->bindValue(':course_name', $this->toPgArray($data['course_name'] ?? []));
+            $stmt->bindValue(':semester',    $this->toPgArray($data['semester'] ?? []));
+
+            $stmt->bindValue(':cert_title',      $this->toPgArray($data['cert_title'] ?? []));
+            $stmt->bindValue(':cert_issuer',     $this->toPgArray($data['cert_issuer'] ?? []));
+            $stmt->bindValue(':cert_issue_date', $this->toPgArray($data['cert_issue_date'] ?? [], 'date'));
+            $stmt->bindValue(':cert_exp_date',   $this->toPgArray($data['cert_exp_date'] ?? [], 'date'));
+            $stmt->bindValue(':cred_id',         $this->toPgArray($data['cred_id'] ?? []));
+            $stmt->bindValue(':cred_url',        $this->toPgArray($data['cred_url'] ?? []));
+
+            $stmt->execute();
+
+            return true;
+
+        } catch (\PDOException $e) {
+            echo "<pre>SP ERROR:\n" . $e->getMessage() . "</pre>";
+            return false;
+        }
+    }
+
     public function delete($id) {
         $query = "DELETE FROM {$this->table} WHERE id = :id";
         $stmt = $this->conn->prepare($query);
@@ -207,5 +292,60 @@ class MembersModel {
         }, $phpArray);
 
         return '{' . implode(',', $converted) . '}';
+    }
+
+    public function getSocialMedia($memberId)
+    {
+        $sql = "SELECT id, platform, icon, url 
+                FROM social_media 
+                WHERE member_id = :id
+                ORDER BY id ASC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id' => $memberId]);
+        return $stmt->fetchAll();
+    }
+
+    public function getEducations($memberId)
+    {
+        $sql = "SELECT id, degree, major, institution, start_year, end_year
+                FROM educations
+                WHERE member_id = :id
+                ORDER BY start_year ASC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id' => $memberId]);
+        return $stmt->fetchAll();
+    }
+
+    public function getCourses($memberId)
+    {
+        $sql = "SELECT id, course_name, semester
+                FROM courses
+                WHERE member_id = :id
+                ORDER BY course_name ASC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id' => $memberId]);
+        return $stmt->fetchAll();
+    }
+
+    public function getCertifications($memberId)
+    {
+        $sql = "SELECT 
+                    id, 
+                    title,
+                    issuer,
+                    issue_date,
+                    expiration_date,
+                    credential_id,
+                    credential_url
+                FROM certifications
+                WHERE member_id = :id
+                ORDER BY issue_date DESC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id' => $memberId]);
+        return $stmt->fetchAll();
     }
 }

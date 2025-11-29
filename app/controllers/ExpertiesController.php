@@ -5,10 +5,12 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Middleware\AuthMiddleware;
 use App\Models\expertiesModel;
+use App\Requests\ExpertiseRequest;
 
 class ExpertiesController extends Controller
 {
     private $expertiesModel;
+    private $expertiseRequest;
 
     public function __construct()
     {
@@ -18,6 +20,7 @@ class ExpertiesController extends Controller
 
         AuthMiddleware::requireAdmin();
         $this->expertiesModel = new expertiesModel();
+        $this->expertiseRequest = new ExpertiseRequest();
     }
 
     public function index()
@@ -62,11 +65,23 @@ class ExpertiesController extends Controller
 
     public function store()
     {
-        $name = trim($_POST['name'] ?? '');
+        header('Content-Type: application/json; charset=utf-8');
 
-        if ($name !== '') {
-            $this->expertiesModel->create($name);
+        $data = ['name' => trim($_POST['name'] ?? '')];
+
+        $errors = $this->expertiseRequest->validate($data);
+
+        if (!empty($errors)) {
+            echo json_encode(['status' => 'error', 'errors' => $errors]);
+            return;
         }
+
+        $this->expertiesModel->create($data['name']);
+
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Keahlian berhasil ditambahkan.'
+        ]);
     }
 
     public function edit($id)
@@ -79,12 +94,23 @@ class ExpertiesController extends Controller
 
     public function update()
     {
-        $id = $_POST['id'] ?? null;
-        $name = trim($_POST['name'] ?? '');
+        header('Content-Type: application/json; charset=utf-8');
 
-        if ($id && $name) {
-            $this->expertiesModel->update($id, $name);
+        $id = intval($_POST['id']);
+        $data = ['name' => trim($_POST['name'] ?? '')];
+
+        $errors = $this->expertiseRequest->validate($data);
+        if (!empty($errors)) {
+            echo json_encode(['status' => 'error', 'errors' => $errors]);
+            return;
         }
+
+        $this->expertiesModel->update($id, $data['name']);
+
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Keahlian berhasil diperbarui.'
+        ]);
     }
 
     public function delete($id)
