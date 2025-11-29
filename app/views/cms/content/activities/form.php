@@ -17,7 +17,7 @@
 </style>
 
 <div class="mb-3 text-left">
-    <label>Judul Kegiatan</label>
+    <label>Judul Kegiatan <span class="text-danger">*</span></label>
     <input type="text" class="form-control" name="title"
         value="<?= htmlspecialchars($activity['title'] ?? '') ?>"
         placeholder="Masukkan judul kegiatan" required>
@@ -38,7 +38,7 @@
     </div>
 
     <div class="col-md-6 text-left">
-        <label>Tanggal Kegiatan</label>
+        <label>Tanggal Kegiatan <span class="text-danger">*</span></label>
         <input type="date" class="form-control" name="date"
             value="<?= htmlspecialchars($activity['date'] ?? '') ?>">
     </div>

@@ -7,6 +7,7 @@ use App\Middleware\AuthMiddleware;
 use App\Models\ActivitiesModel;
 use App\Models\MembersModel;
 use App\Models\ActivityMemberModel;
+use App\Requests\ActivityRequest;
 use PDOException;
 
 class ActivitiesController extends Controller
@@ -14,6 +15,7 @@ class ActivitiesController extends Controller
     private $activitiesModel;
     private $memberModel;
     private $activityMembersModel;
+    private $requet;
 
     public function __construct()
     {
@@ -26,6 +28,7 @@ class ActivitiesController extends Controller
         $this->activitiesModel = new ActivitiesModel();
         $this->memberModel = new MembersModel();
         $this->activityMembersModel = new ActivityMemberModel();
+        $this->requet = new ActivityRequest();
     }
 
     public function index()
@@ -80,23 +83,31 @@ class ActivitiesController extends Controller
 
     public function store()
     {
+        header('Content-Type: application/json; charset=utf-8');
+
         try {
             $db = $this->activitiesModel->getConnection();
             $db->beginTransaction();
 
             $data = [
-                'title' => trim($_POST['title'] ?? ''),
-                'date' => trim($_POST['date'] ?? ''),
-                'location' => trim($_POST['location'] ?? ''),
-                'description' => trim($_POST['description'] ?? ''),
-                'documentation' => '',
+                'title'        => trim($_POST['title'] ?? ''),
+                'date'         => trim($_POST['date'] ?? ''),
+                'location'     => trim($_POST['location'] ?? ''),
+                'description'  => trim($_POST['description'] ?? ''),
+                'documentation' => ''
             ];
 
-            if ($data['title'] === '') {
-                throw new \Exception("Judul kegiatan wajib diisi.");
+            $validator = new ActivityRequest();
+            $errors = $validator->validate($data, false);
+
+            if (!empty($errors)) {
+                throw new \Exception(json_encode([
+                    'status'  => 'error',
+                    'message' => 'Validasi gagal.',
+                    'errors'  => $errors
+                ]));
             }
 
-            // Upload file
             if (!empty($_FILES['documentation']['name'])) {
                 $this->validateFile($_FILES['documentation']['type']);
 
@@ -107,24 +118,26 @@ class ActivitiesController extends Controller
                 $targetFile = $uploadDir . $filename;
 
                 if (!move_uploaded_file($_FILES['documentation']['tmp_name'], $targetFile)) {
-                    throw new \Exception("Gagal mengupload file.");
+                    throw new \Exception(json_encode([
+                        'status'  => 'error',
+                        'message' => 'Gagal mengupload file.'
+                    ]));
                 }
 
                 $data['documentation'] = 'uploads/activities/' . $filename;
             }
 
             $members = $_POST['members'] ?? [];
-
             $membersFormatted = [];
 
             foreach ($members as $m) {
                 $membersFormatted[] = [
                     'member_id' => (int)$m,
-                    'role' => null
+                    'role'      => null
                 ];
             }
 
-            $activityId = $this->activitiesModel->createWithMembers(
+            $this->activitiesModel->createWithMembers(
                 $data['title'],
                 $data['description'],
                 $data['location'],
@@ -134,18 +147,36 @@ class ActivitiesController extends Controller
             );
 
             $db->commit();
-            echo "OK";
 
-        } catch (PDOException $e) {
-            $db->rollback();
-            http_response_code(500);
-            echo "Database error: " . $e->getMessage();
+            echo json_encode([
+                'status'  => 'success',
+                'message' => 'Kegiatan berhasil ditambahkan.'
+            ]);
+            return;
+
         } catch (\Exception $e) {
+
             if ($db->inTransaction()) $db->rollback();
-            http_response_code(400);
-            echo $e->getMessage();
+
+            $msg = $e->getMessage();
+
+            if ($this->isJson($msg)) {
+                echo $msg;
+            } else {
+                echo json_encode([
+                    'status'  => 'error',
+                    'message' => $msg
+                ]);
+            }
         }
     }
+
+    private function isJson($string)
+    {
+        json_decode($string);
+        return (json_last_error() === JSON_ERROR_NONE);
+    }
+
 
     public function edit($id)
     {
@@ -159,6 +190,8 @@ class ActivitiesController extends Controller
 
     public function update()
     {
+        header('Content-Type: application/json; charset=utf-8');
+
         try {
             $db = $this->activitiesModel->getConnection();
             $db->beginTransaction();
@@ -167,7 +200,25 @@ class ActivitiesController extends Controller
             $old = $this->activitiesModel->findOrFail($id);
             $documentation = $old['documentation'];
 
-            // File upload
+            $data = [
+                'title'        => trim($_POST['title'] ?? ''),
+                'date'         => trim($_POST['date'] ?? ''),
+                'location'     => trim($_POST['location'] ?? ''),
+                'description'  => trim($_POST['description'] ?? ''),
+                'documentation'=> $documentation
+            ];
+
+            $validator = new ActivityRequest();
+            $errors = $validator->validate($data, true);
+
+            if (!empty($errors)) {
+                throw new \Exception(json_encode([
+                    'status'  => 'error',
+                    'message' => 'Validasi gagal.',
+                    'errors'  => $errors
+                ]));
+            }
+
             if (!empty($_FILES['documentation']['name'])) {
                 $this->validateFile($_FILES['documentation']['type']);
 
@@ -178,36 +229,47 @@ class ActivitiesController extends Controller
                 $targetFile = $uploadDir . $filename;
 
                 if (!move_uploaded_file($_FILES['documentation']['tmp_name'], $targetFile)) {
-                    throw new \Exception("Gagal mengupload file.");
+                    throw new \Exception(json_encode([
+                        'status'  => 'error',
+                        'message' => 'Gagal mengupload file.'
+                    ]));
                 }
 
-                $documentation = 'uploads/activities/' . $filename;
+                $data['documentation'] = 'uploads/activities/' . $filename;
             }
 
-            // Update main data
             $this->activitiesModel->update(
                 $id,
-                $_POST['title'],
-                $_POST['description'],
-                $_POST['location'],
-                $_POST['date'],
-                $documentation
+                $data['title'],
+                $data['description'],
+                $data['location'],
+                $data['date'],
+                $data['documentation']
             );
 
-            // Update members
             $this->activityMembersModel->deleteByActivity($id);
             $this->activityMembersModel->insertMany($id, $_POST['members'] ?? []);
-            $db->commit();
-            echo "OK";
 
-        } catch (PDOException $e) {
-            $db->rollback();
-            http_response_code(500);
-            echo "Database error: " . $e->getMessage();
+            $db->commit();
+
+            echo json_encode([
+                'status'  => 'success',
+                'message' => 'Kegiatan berhasil diperbarui.'
+            ]);
+            return;
+
         } catch (\Exception $e) {
             if ($db->inTransaction()) $db->rollback();
-            http_response_code(400);
-            echo $e->getMessage();
+
+            $msg = $e->getMessage();
+            if ($this->isJson($msg)) {
+                echo $msg;
+            } else {
+                echo json_encode([
+                    'status'  => 'error',
+                    'message' => $msg
+                ]);
+            }
         }
     }
 

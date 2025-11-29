@@ -1,15 +1,15 @@
 <div class="mb-3 text-left">
-    <label>Username</label>
+    <label>Username <span class="text-danger">*</span></label>
     <input type="text" class="form-control" id="username" name="username" value="<?= isset($user_edit) && $user_edit != '' ? $user_edit['username'] : '' ?>" placeholder="Masukkan username" required autocomplete="off">
 </div>
 
 <div class="mb-3 text-left">
-    <label>Password</label>
+    <label>Password <span class="text-danger">*</span></label>
     <input type="password" class="form-control" id="password" name="password" placeholder="<?= isset($user_edit) ? 'Kosongkan jika tidak diubah' : 'Masukkan password' ?>" <?= isset($user_edit) && $user_edit != '' ? '' : 'required' ?> autocomplete="off">
 </div>
 
 <div class="mb-3 text-left">
-    <label>Role</label>
+    <label>Role <span class="text-danger">*</span></label>
     <select class="form-control select2" id="role_id" name="role_id" required>
         <option value="">-- Pilih Role --</option>
         <?php foreach ($roles as $role): ?>

@@ -5,16 +5,19 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Models\UserModel;
 use App\Models\RoleModel;
+use App\Requests\UserRequest;
 
 class UserController extends Controller
 {
     protected $userModel;
     protected $roleModel;
+    protected $request;
 
     public function __construct()
     {
         $this->userModel = new UserModel();
         $this->roleModel = new RoleModel();
+        $this->request = new UserRequest();
     }
 
     public function index()
@@ -63,13 +66,26 @@ class UserController extends Controller
 
     public function store()
     {
+        header('Content-Type: application/json; charset=utf-8');
+
         $data = [
             'username' => $_POST['username'] ?? '',
             'password' => $_POST['password'] ?? '',
-            'role_id'  => $_POST['role_id'] ?? ''
+            'role_id'  => $_POST['role_id'] ?? null
         ];
 
+        $errors = $this->request->validate($data);
+        if (!empty($errors)) {
+            echo json_encode(['status' => 'error', 'errors' => $errors]);
+            return;
+        }
+
         $this->userModel->create($data);
+
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'User berhasil dibuat.'
+        ]);
     }
 
     public function edit($id)
@@ -82,15 +98,29 @@ class UserController extends Controller
 
     public function update()
     {
+        header('Content-Type: application/json; charset=utf-8');
+
         $id = $_POST['id'] ?? null;
 
         $data = [
+            'id'       => $_POST['id'] ?? null,
             'username' => $_POST['username'] ?? '',
             'password' => $_POST['password'] ?? '',
-            'role_id'  => $_POST['role_id'] ?? ''
+            'role_id'  => $_POST['role_id'] ?? null
         ];
 
+        $errors = $this->request->validate($data);
+        if (!empty($errors)) {
+            echo json_encode(['status' => 'error', 'errors' => $errors]);
+            return;
+        }
+
         $this->userModel->update($id, $data);
+
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'User berhasil diperbarui.'
+        ]);
     }
 
     public function delete($id)

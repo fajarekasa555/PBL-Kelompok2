@@ -104,8 +104,48 @@ function storeActivity() {
         data: formData,
         processData: false,
         contentType: false,
-        success: function() {
+        success: function(response) {
             Swal.close();
+
+            if (typeof response === 'string') {
+                try {
+                    response = JSON.parse(response);
+                } catch (e) {
+                    response = { status: 'error', message: response };
+                }
+            }
+
+            if (response.status === 'error') {
+                let errorText = '';
+                if (response.errors) {
+                    Object.values(response.errors).forEach(err => {
+                        errorText += `<li>${err}</li>`;
+                    });
+                }
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    html: `
+                        <div style="
+                            text-align:center;
+                            margin-top:15px;
+                            padding:10px 15px;
+                            border-radius:8px;
+                            background:#f8d7da;
+                            color:#842029;
+                            font-size:14px;
+                            line-height:1.6;
+                        ">
+                            <ul style="list-style:none; padding-left:0; margin:0;">
+                                ${errorText || response.message}
+                            </ul>
+                        </div>
+                    `
+                });
+                return;
+            }
+
             activitiesTable.ajax.reload(null, false);
 
             Swal.fire({
@@ -117,12 +157,13 @@ function storeActivity() {
             });
         },
         error: function() {
-            Swal.fire('Gagal', 'Terjadi kesalahan saat menambahkan data.', 'error');
+            Swal.fire('Gagal', 'Terjadi kesalahan server.', 'error');
         }
     });
 
     return false;
 }
+
 
 function editActivity(id) {
     $.get(`${baseActivitiesUrl}/edit/${id}?ajax=1`, function(response) {
@@ -156,7 +197,7 @@ function editActivity(id) {
 
 function updateActivity() {
     const form = $('#form-edit-activities')[0];
-    if (!form) return;
+    if (!form) return false;
 
     const formData = new FormData(form);
 
@@ -168,22 +209,64 @@ function updateActivity() {
         data: formData,
         processData: false,
         contentType: false,
-        success: function() {
+        success: function(response) {
             Swal.close();
-            activitiesTable.ajax.reload(null, false);
+            try {
+                const res = typeof response === 'object' ? response : JSON.parse(response);
 
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Kegiatan berhasil diperbarui.',
-                timer: 1500,
-                showConfirmButton: false
-            });
+                if (res.status === 'error') {
+                    let errorText = '';
+                    if (res.errors) {
+                        Object.values(res.errors).forEach(err => {
+                            errorText += `<li>${err}</li>`;
+                        });
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validasi Gagal',
+                        html: `
+                            <div style="
+                                text-align:center;
+                                margin-top:15px;
+                                padding:10px 15px;
+                                border-radius:8px;
+                                background:#f8d7da;
+                                color:#842029;
+                                font-size:14px;
+                                line-height:1.6;
+                            ">
+                                <ul style="
+                                    list-style:none;
+                                    padding-left:0;
+                                    margin:0;
+                                ">
+                                    ${errorText || res.message}
+                                </ul>
+                            </div>
+                        `
+                    });
+                    return;
+                }
+
+                activitiesTable.ajax.reload(null, false);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: res.message || 'Kegiatan berhasil diperbarui.',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            } catch (e) {
+                Swal.fire('Gagal', 'Response server tidak valid.', 'error');
+            }
         },
         error: function() {
             Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data.', 'error');
         }
     });
+
+    return false;
 }
 
 function deleteActivity(id) {
