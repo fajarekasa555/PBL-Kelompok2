@@ -694,6 +694,7 @@
                     <li class="nav-item"><a class="nav-link" href="#tim">TIM</a></li>
                     <li class="nav-item"><a class="nav-link" href="#fasilitas">FASILITAS</a></li>
                     <li class="nav-item"><a class="nav-link" href="#publikasi">PUBLIKASI</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#matkul">MATA KULIAH</a></li>
                     <!-- <li class="nav-item">
                         <button class="btn btn-login">LOGIN</button>
                     </li> -->

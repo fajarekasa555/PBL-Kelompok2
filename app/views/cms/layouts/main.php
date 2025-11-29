@@ -311,7 +311,6 @@
     <script src="<?= $route->base_url('public/assets/plugins/DataTables/extensions/TreeGrid/dataTables.treeGrid.js') ?>"></script>
 
     <!-- Form Plugins -->
-    <script src="<?= $route->base_url('public/assets/js/demo/form-plugins.demo.js') ?>"></script>
     <script src="<?= $route->base_url('public/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') ?>"></script>
 	<script src="<?= $route->base_url('public/assets/plugins/ionRangeSlider/js/ion-rangeSlider/ion.rangeSlider.min.js') ?>"></script>
 	<script src="<?= $route->base_url('public/assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') ?>"></script>
@@ -340,7 +339,6 @@
 	<script src="<?= $route->base_url('public/assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js') ?>"></script>
 	<script src="<?= $route->base_url('public/assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js') ?>"></script>
 	<script src="<?= $route->base_url('public/assets/plugins/gritter/js/jquery.gritter.js') ?>"></script>
-	<script src="<?= $route->base_url('public/assets/js/demo/dashboard-v2.min.js') ?>"></script>
     <!-- CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.3/dist/sweetalert2.all.min.js"></script>
 	<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
@@ -377,6 +375,20 @@
 			FilePondPluginFileValidateType,
 			FilePondPluginFileValidateSize
 		);
+
+		
+		function initFilePond(selector) {
+			return FilePond.create(document.querySelector(selector), {
+				storeAsFile: true,
+				allowMultiple: false,
+				instantUpload: false,
+
+				labelIdle: 'Drag & Drop foto atau <span class="filepond--label-action">Browse</span>',
+				acceptedFileTypes: ['image/png', 'image/jpeg', 'image/jpg'],
+				maxFileSize: '2MB',
+				credits: false,
+			});
+		}
 	</script>
 </body>
 </html>

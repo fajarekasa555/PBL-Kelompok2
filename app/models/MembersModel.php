@@ -3,6 +3,7 @@ namespace App\Models;
 
 use PDO;
 use App\Config\Database;
+use PDOException;
 
 class MembersModel {
 
@@ -35,9 +36,11 @@ class MembersModel {
         $query = "INSERT INTO {$this->table} 
             (nip, nidn, name, title_prefix, title_suffix, program_studi, jabatan, email, phone, address, photo) 
             VALUES 
-            (:nip, :nidn, :name, :title_prefix, :title_suffix, :program_studi, :jabatan, :email, :phone, :address, :photo)";
+            (:nip, :nidn, :name, :title_prefix, :title_suffix, :program_studi, :jabatan, :email, :phone, :address, :photo)
+            RETURNING id";
+
         $stmt = $this->conn->prepare($query);
-        return $stmt->execute([
+        $stmt->execute([
             'nip' => $data['nip'] ?? null,
             'nidn' => $data['nidn'] ?? null,
             'name' => $data['name'] ?? null,
@@ -50,6 +53,96 @@ class MembersModel {
             'address' => $data['address'] ?? null,
             'photo' => $data['photo'] ?? null,
         ]);
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row && isset($row['id'])) {
+            return $row['id'];
+        }
+
+        return false;
+    }
+
+    public function createWithStoredProcedure($data)
+    {
+        try {
+            $query = "
+                SELECT sp_insert_member_full(
+                    :nip,
+                    :nidn,
+                    :name,
+                    :title_prefix,
+                    :title_suffix,
+                    :program_studi,
+                    :jabatan,
+                    :email,
+                    :phone,
+                    :address,
+                    :photo,
+
+                    :soc_platform,
+                    :soc_icon,
+                    :soc_url,
+
+                    :degree,
+                    :major,
+                    :institution,
+                    :start_year,
+                    :end_year,
+
+                    :course_name,
+                    :semester,
+
+                    :cert_title,
+                    :cert_issuer,
+                    :cert_issue_date,
+                    :cert_exp_date,
+                    :cred_id,
+                    :cred_url
+                ) AS id
+            ";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindValue(':nip', $data['nip']);
+            $stmt->bindValue(':nidn', $data['nidn']);
+            $stmt->bindValue(':name', $data['name']);
+            $stmt->bindValue(':title_prefix', $data['title_prefix']);
+            $stmt->bindValue(':title_suffix', $data['title_suffix']);
+            $stmt->bindValue(':program_studi', $data['program_studi']);
+            $stmt->bindValue(':jabatan', $data['jabatan']);
+            $stmt->bindValue(':email', $data['email']);
+            $stmt->bindValue(':phone', $data['phone']);
+            $stmt->bindValue(':address', $data['address']);
+            $stmt->bindValue(':photo', $data['photo']);
+
+            $stmt->bindValue(':soc_platform', $this->toPgArray($data['soc_platform'] ?? []));
+            $stmt->bindValue(':soc_icon', $this->toPgArray($data['soc_icon'] ?? []));
+            $stmt->bindValue(':soc_url', $this->toPgArray($data['soc_url'] ?? []));
+
+            $stmt->bindValue(':degree', $this->toPgArray($data['degree'] ?? []));
+            $stmt->bindValue(':major', $this->toPgArray($data['major'] ?? []));
+            $stmt->bindValue(':institution', $this->toPgArray($data['institution'] ?? []));
+            $stmt->bindValue(':start_year', $this->toPgArray($data['start_year'] ?? [], 'int'));
+            $stmt->bindValue(':end_year', $this->toPgArray($data['end_year'] ?? [], 'int'));
+
+            $stmt->bindValue(':course_name', $this->toPgArray($data['course_name'] ?? []));
+            $stmt->bindValue(':semester', $this->toPgArray($data['semester'] ?? []));
+            $stmt->bindValue(':cert_title', $this->toPgArray($data['cert_title'] ?? []));
+            $stmt->bindValue(':cert_issuer', $this->toPgArray($data['cert_issuer'] ?? []));
+            $stmt->bindValue(':cert_issue_date', $this->toPgArray($data['cert_issue_date'] ?? [], 'date'));
+            $stmt->bindValue(':cert_exp_date', $this->toPgArray($data['cert_exp_date'] ?? [], 'date'));
+            $stmt->bindValue(':cred_id', $this->toPgArray($data['cred_id'] ?? []));
+            $stmt->bindValue(':cred_url', $this->toPgArray($data['cred_url'] ?? []));
+
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['id'] ?? false;
+
+        } catch (PDOException $e) {
+            error_log("SP ERROR: " . $e->getMessage());
+            return false;
+        }
     }
 
     public function update($id, $data) {
@@ -90,5 +183,29 @@ class MembersModel {
         $query = "DELETE FROM {$this->table} WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute(['id' => $id]);
+    }
+
+    private function toPgArray($phpArray)
+    {
+        if (empty($phpArray)) {
+            return null;
+        }
+
+        $converted = array_map(function ($item) {
+
+            if (is_null($item)) {
+                return 'NULL';
+            }
+
+            if (is_int($item)) {
+                return $item;
+            }
+
+            $escaped = str_replace('"', '\"', (string)$item);
+
+            return '"' . $escaped . '"';
+        }, $phpArray);
+
+        return '{' . implode(',', $converted) . '}';
     }
 }

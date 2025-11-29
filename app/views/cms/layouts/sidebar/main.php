@@ -370,17 +370,17 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
         </a>
       </li>
 
-      <li class="has-sub <?= in_array($currentRoute, ['publications', 'members', 'social_media', 'educations', 'experties', 'certifications', 'courses']) ? 'active expand' : '' ?>">
+      <li class="has-sub <?= in_array($currentRoute, ['publications', 'members', 'members/create', 'members/edit', 'social_media', 'educations', 'experties', 'certifications', 'courses']) ? 'active expand' : '' ?>">
         <a href="javascript:;">
           <b class="caret"></b>
           <i class="fa fa-user"></i>
           <span>Anggota Lab</span>
         </a>
         <ul class="sub-menu">
-          <li class="<?= $currentRoute === 'members' ? 'active' : '' ?>">
+          <li class="<?= in_array($currentRoute, ['members', 'members/create', 'members/edit']) ? 'active' : '' ?>">
             <a href="<?= $route->base_url('members') ?>">Anggota</a>
           </li>
-          <li class="<?= $currentRoute === 'social_media' ? 'active' : '' ?>">
+          <!-- <li class="<?= $currentRoute === 'social_media' ? 'active' : '' ?>">
             <a href="<?= $route->base_url('social_media') ?>">Sosial Media</a>
           </li>
           <li class="<?= $currentRoute === 'educations' ? 'active' : '' ?>">
@@ -391,7 +391,7 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
           </li>
           <li class="<?= $currentRoute === 'courses' ? 'active' : '' ?>">
             <a href="<?= $route->base_url('courses') ?>">Mata Kuliah</a>
-          </li>
+          </li> -->
           <li class="<?= $currentRoute === 'publications' ? 'active' : '' ?>">
             <a href="<?= $route->base_url('publications') ?>">Publikasi</a>
           </li>

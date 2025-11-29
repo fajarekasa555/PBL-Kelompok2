@@ -74,55 +74,214 @@ class MembersController extends Controller
     public function create()
     {
         $allExpertises = $this->expertiesModel->all();
-        return include __DIR__ . '/../Views/cms/anggota_lab/members/create.php';
+        return $this->view('cms/anggota_lab/members/create', ['allExpertises' => $allExpertises]);
+        // return include __DIR__ . '/../Views/cms/anggota_lab/members/create.php';
     }
 
     public function store()
     {
-        $data = [
-            'nip' => trim($_POST['nip'] ?? ''),
-            'nidn' => trim($_POST['nidn'] ?? ''),
-            'name' => trim($_POST['name'] ?? ''),
-            'title_prefix' => trim($_POST['title_prefix'] ?? ''),
-            'title_suffix' => trim($_POST['title_suffix'] ?? ''),
-            'program_studi' => trim($_POST['program_studi'] ?? ''),
-            'jabatan' => trim($_POST['jabatan'] ?? ''),
-            'email' => trim($_POST['email'] ?? ''),
-            'phone' => trim($_POST['phone'] ?? ''),
-            'address' => trim($_POST['address'] ?? ''),
-            'photo' => ''
-        ];
+        header('Content-Type: application/json; charset=utf-8');
+        try {
 
-        $expertises = $_POST['expertises'] ?? [];
+            $data = [
+                'nip'           => trim($_POST['nip'] ?? ''),
+                'nidn'          => trim($_POST['nidn'] ?? ''),
+                'name'          => trim($_POST['name'] ?? ''),
+                'title_prefix'  => trim($_POST['title_prefix'] ?? ''),
+                'title_suffix'  => trim($_POST['title_suffix'] ?? ''),
+                'program_studi' => trim($_POST['program_studi'] ?? ''),
+                'jabatan'       => trim($_POST['jabatan'] ?? ''),
+                'email'         => trim($_POST['email'] ?? ''),
+                'phone'         => trim($_POST['phone'] ?? ''),
+                'address'       => trim($_POST['address'] ?? ''),
+                'photo'         => ''
+            ];
 
-        if ($data['name'] === '' || $data['jabatan'] === '') {
-            http_response_code(400);
-            echo "Nama dan jabatan wajib diisi.";
-            exit;
+
+            if ($data['name'] === '' || $data['jabatan'] === '' || $data['email'] === '') {
+                http_response_code(400);
+                echo json_encode([
+                    'status'  => 'error',
+                    'message' => 'Nama, jabatan, dan email wajib diisi.'
+                ]);
+                return;
+            }
+
+            if (!empty($_FILES['photo']['name'])) {
+                $uploadDir = __DIR__ . '/../../public/uploads/members/';
+                if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
+
+                $filename = time() . '_' . basename($_FILES['photo']['name']);
+                $targetFile = $uploadDir . $filename;
+
+                if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
+                    $data['photo'] = 'uploads/members/' . $filename;
+                }
+            }
+
+            $social    = $this->prepareSocialMediaData($_POST['social'] ?? []);
+            $education = $this->prepareEducationData($_POST['edu'] ?? []);
+            $courses   = $this->prepareCoursesData($_POST['course'] ?? []);
+            $cert      = $this->prepareCertificationsData($_POST['cert'] ?? []);
+
+            $data['soc_platform'] = $social['platforms'] ?? [];
+            $data['soc_icon']     = $social['icons'] ?? [];
+            $data['soc_url']      = $social['urls'] ?? [];
+
+            $data['degree']      = $education['degrees'] ?? [];
+            $data['major']       = $education['majors'] ?? [];
+            $data['institution'] = $education['institutions'] ?? [];
+            $data['start_year']  = $education['start_years'] ?? [];
+            $data['end_year']    = $education['end_years'] ?? [];
+
+            $data['course_name'] = $courses['course_names'] ?? [];
+            $data['semester']    = $courses['semesters'] ?? [];
+
+            $data['cert_title']      = $cert['titles'] ?? [];
+            $data['cert_issuer']     = $cert['issuers'] ?? [];
+            $data['cert_issue_date'] = $cert['issue_dates'] ?? [];
+            $data['cert_exp_date']   = $cert['expiration_dates'] ?? [];
+            $data['cred_id']         = $cert['credential_ids'] ?? [];
+            $data['cred_url']        = $cert['credential_urls'] ?? [];
+
+            $memberId = $this->membersModel->createWithStoredProcedure($data);
+
+            $expertises = $_POST['expertises'] ?? [];
+            if ($memberId && !empty($expertises)) {
+                $this->memberExpertisesModel->insertMany($memberId, $expertises);
+            }
+
+            echo json_encode([
+                'status'    => 'success',
+                'message'   => 'Anggota berhasil ditambahkan.',
+                'member_id' => $memberId
+            ]);
+
+        } catch (\Throwable $e) {
+            http_response_code(500);
+            echo json_encode([
+                'status'  => 'error',
+                'message' => 'Gagal menambahkan anggota: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    private function prepareSocialMediaData($socialData)
+    {
+        if (empty($socialData['platform'])) {
+            return ['platforms' => [], 'icons' => [], 'urls' => []];
         }
 
-        // Upload Foto
-        if (!empty($_FILES['photo']['name'])) {
-            $uploadDir = __DIR__ . '/../../public/uploads/members/';
-            if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
+        $platforms = [];
+        $icons = [];
+        $urls = [];
 
-            $filename = time() . '_' . basename($_FILES['photo']['name']);
-            $targetFile = $uploadDir . $filename;
-
-            if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
-                $data['photo'] = 'uploads/members/' . $filename;
+        foreach ($socialData['platform'] as $index => $platform) {
+            if (!empty($platform) && !empty($socialData['url'][$index])) {
+                $platforms[] = $platform;
+                $icons[] = $socialData['icon'][$index] ?? '';
+                $urls[] = $socialData['url'][$index];
             }
         }
 
-        // Insert anggota
-        $memberId = $this->membersModel->create($data);
+        return [
+            'platforms' => $platforms,
+            'icons' => $icons,
+            'urls' => $urls
+        ];
+    }
 
-        // Insert expertises
-        if ($memberId && !empty($expertises)) {
-            $this->memberExpertisesModel->insertMany($memberId, $expertises);
+    private function prepareEducationData($eduData)
+    {
+        if (empty($eduData['degree'])) {
+            return ['degrees' => [], 'majors' => [], 'institutions' => [], 'strart_years' => [], 'end_years' => []];
         }
 
-        echo "OK";
+        $degrees = [];
+        $majors = [];
+        $institutions = [];
+        $startYears = [];
+        $endYears = [];
+
+        foreach ($eduData['degree'] as $index => $degree) {
+            if (!empty($degree) && !empty($eduData['major'][$index]) && !empty($eduData['institution'][$index])) {
+                $degrees[] = $degree;
+                $majors[] = $eduData['major'][$index];
+                $institutions[] = $eduData['institution'][$index];
+                $startYears[] = !empty($eduData['start_year'][$index]) ? (int)$eduData['start_year'][$index] : null;
+                $endYears[] = !empty($eduData['end_year'][$index]) ? (int)$eduData['end_year'][$index] : null;
+            }
+        }
+
+        return [
+            'degrees' => $degrees,
+            'majors' => $majors,
+            'institutions' => $institutions,
+            'start_years' => $startYears,
+            'end_years' => $endYears
+        ];
+    }
+
+    private function prepareCoursesData($courseData)
+    {
+        if (empty($courseData['course_name'])) {
+            return ['course_names' => [], 'semesters' => [], 'codes' => [], 'credits' => []];
+        }
+
+        $courseNames = [];
+        $semesters = [];
+        $codes = [];
+        $credits = [];
+
+        foreach ($courseData['course_name'] as $index => $courseName) {
+            if (!empty($courseName) && !empty($courseData['semester'][$index])) {
+                $courseNames[] = $courseName;
+                $semesters[] = $courseData['semester'][$index];
+                $codes[] = $courseData['course_code'][$index] ?? '';
+                $credits[] = !empty($courseData['credits'][$index]) ? (int)$courseData['credits'][$index] : null;
+            }
+        }
+
+        return [
+            'course_names' => $courseNames,
+            'semesters' => $semesters,
+            'codes' => $codes,
+            'credits' => $credits
+        ];
+    }
+
+    private function prepareCertificationsData($certData)
+    {
+        if (empty($certData['title'])) {
+            return ['titles' => [], 'issuers' => [], 'issue_dates' => [], 'expiration_dates' => [], 'credential_ids' => [], 'credential_urls' => []];
+        }
+
+        $titles = [];
+        $issuers = [];
+        $issueDates = [];
+        $expirationDates = [];
+        $credentialIds = [];
+        $credentialUrls = [];
+
+        foreach ($certData['title'] as $index => $title) {
+            if (!empty($title) && !empty($certData['issuer'][$index])) {
+                $titles[] = $title;
+                $issuers[] = $certData['issuer'][$index];
+                $issueDates[] = $certData['issue_date'][$index] ?? null;
+                $expirationDates[] = $certData['expiration_date'][$index] ?? null;
+                $credentialIds[] = $certData['credential_id'][$index] ?? null;
+                $credentialUrls[] = $certData['credential_url'][$index] ?? null;
+            }
+        }
+
+        return [
+            'titles' => $titles,
+            'issuers' => $issuers,
+            'issue_dates' => $issueDates,
+            'expiration_dates' => $expirationDates,
+            'credential_ids' => $credentialIds,
+            'credential_urls' => $credentialUrls
+        ];
     }
 
     public function edit($id)
@@ -131,7 +290,11 @@ class MembersController extends Controller
         $allExpertises = $this->expertiesModel->all();
         $memberExpertises = $this->memberExpertisesModel->getByMember($id);
 
-        return include __DIR__ . '/../Views/cms/anggota_lab/members/edit.php';
+        return $this->view('cms/anggota_lab/members/edit', [
+            'members' => $members,
+            'allExpertises' => $allExpertises,
+            'memberExpertises' => $memberExpertises
+        ]);
     }
 
     public function update()
@@ -155,6 +318,7 @@ class MembersController extends Controller
 
         $expertises = $_POST['expertises'] ?? [];
 
+        // Upload Foto
         if (!empty($_FILES['photo']['name'])) {
             $uploadDir = __DIR__ . '/../../public/uploads/members/';
             if (!file_exists($uploadDir)) mkdir($uploadDir, 0777, true);
@@ -167,16 +331,28 @@ class MembersController extends Controller
             }
         }
 
-        $this->membersModel->update($id, $data);
+        try {
+            $this->membersModel->update($id, $data);
 
-        $this->memberExpertisesModel->deleteByMember($id);
-
-        if (!empty($expertises)) {
-            $this->memberExpertisesModel->insertMany($id, $expertises);
+            $this->memberExpertisesModel->deleteByMember($id);
+            if (!empty($expertises)) {
+                $this->memberExpertisesModel->insertMany($id, $expertises);
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Anggota berhasil diperbarui.'
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Gagal memperbarui anggota: ' . $e->getMessage()
+            ]);
         }
-
-        echo "OK";
     }
+
 
     public function delete($id)
     {
