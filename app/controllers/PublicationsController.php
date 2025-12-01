@@ -80,6 +80,8 @@ class PublicationsController extends Controller
             'title'     => trim($_POST['title'] ?? ''),
             'date'      => $_POST['date'] ?? '',
             'link'      => trim($_POST['link'] ?? ''),
+            'description' => trim($_POST['description'] ?? ''),
+            'type'      => trim($_POST['type'] ?? ''),
             'member_id' => intval($_POST['member_id'] ?? 0)
         ];
 
@@ -93,7 +95,7 @@ class PublicationsController extends Controller
             return;
         }
 
-        $this->publicationsModel->create($data['member_id'], $data['title'], $data['date'], $data['link']);
+        $this->publicationsModel->create($data['member_id'], $data['title'], $data['date'], $data['link'], $data['description'], $data['type']);
 
         echo json_encode([
             'status'  => 'success',
@@ -121,6 +123,8 @@ class PublicationsController extends Controller
             'title'     => trim($_POST['title'] ?? ''),
             'date'      => $_POST['date'] ?? '',
             'link'      => trim($_POST['link'] ?? ''),
+            'description' => trim($_POST['description'] ?? ''),
+            'type'      => trim($_POST['type'] ?? ''),
             'member_id' => intval($_POST['member_id'] ?? 0)
         ];
 
@@ -134,7 +138,7 @@ class PublicationsController extends Controller
             return;
         }
 
-        $this->publicationsModel->update($data['id'], $data['member_id'], $data['title'], $data['date'], $data['link']);
+        $this->publicationsModel->update($data['id'], $data['member_id'], $data['title'], $data['date'], $data['link'], $data['description'], $data['type']);
 
         echo json_encode([
             'status'  => 'success',

@@ -42,27 +42,31 @@ class PublicationsModel {
         return $data ?: null;
     }
 
-    public function create($member_id, $title, $date, $link) {
+    public function create($member_id, $title, $date, $link, $description, $type) {
         $query = "
-            INSERT INTO {$this->table} (member_id, title, date, link) 
-            VALUES (:member_id, :title, :date, :link)
+            INSERT INTO {$this->table} (member_id, title, date, link, description, type) 
+            VALUES (:member_id, :title, :date, :link, :description, :type)
         ";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute([
             'member_id' => $member_id,
             'title' => $title,
             'date' => $date,
-            'link' => $link
+            'link' => $link,
+            'description' => $description,
+            'type' => $type
         ]);
     }
 
-    public function update($id, $member_id, $title, $date, $link) {
+    public function update($id, $member_id, $title, $date, $link, $description, $type) {
         $query = "
             UPDATE {$this->table}
             SET member_id = :member_id,
                 title = :title,
                 date = :date,
-                link = :link
+                link = :link,
+                description = :description,
+                type = :type
             WHERE id = :id
         ";
         $stmt = $this->conn->prepare($query);
@@ -71,7 +75,9 @@ class PublicationsModel {
             'member_id' => $member_id,
             'title' => $title,
             'date' => $date,
-            'link' => $link
+            'link' => $link,
+            'description' => $description,
+            'type' => $type
         ]);
     }
 

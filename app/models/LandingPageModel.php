@@ -47,4 +47,34 @@ class LandingPageModel {
         $stmt = $this->conn->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getActivity() {
+        $query = "SELECT * FROM activities ORDER BY id ASC";
+        $stmt = $this->conn->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getProjects() {
+        $query = "SELECT * FROM projects ORDER BY id ASC";
+        $stmt = $this->conn->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getFacilities() {
+        $query = "SELECT * FROM facilities ORDER BY id ASC";
+        $stmt = $this->conn->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getPublications() {
+        $query = "SELECT * FROM publications ORDER BY id ASC";
+        $stmt = $this->conn->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function getMembers() {
+        $query = "SELECT * FROM members ORDER BY id ASC";
+        $stmt = $this->conn->query($query);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } 
 }
