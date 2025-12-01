@@ -6,6 +6,7 @@
     <title>Laboratorium Data & Teknologi</title>
 	<link rel="icon" type="image/png" href="public/assets/img/logo/logo-icon.png" />
     <link rel="stylesheet" href="public/assets/plugins/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link href="public/assets/plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         :root {
@@ -705,7 +706,20 @@
             }
         }
 
-        /* Search box styling */
+        /* Publikasi - Minimal Clean Design */
+        .section-publikasi {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+
+        .publikasi-controls {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+
         .search-box {
             position: relative;
         }
@@ -719,28 +733,242 @@
             z-index: 1;
         }
 
+        #searchPublikasi,
+        #filterYear {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        #searchPublikasi {
+            padding-left: 45px;
+        }
+
         #searchPublikasi:focus,
         #filterYear:focus {
             border-color: var(--accent-color);
             outline: none;
-            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        #resetFilter {
+            background: var(--accent-color);
+            color: white;
+            border-radius: 12px;
+            border: none;
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.95rem;
         }
 
         #resetFilter:hover {
             background: var(--secondary-color);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+        }
+
+        /* Publikasi - Modern Clean Design */
+        .section-publikasi {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+
+        .publikasi-controls {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            z-index: 1;
+        }
+
+        #searchPublikasi {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            padding-left: 45px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        #searchPublikasi:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        /* Year Filter Pills */
+        .year-filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+
+        .year-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1.25rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            background: white;
+            color: #666;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .year-pill:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+        }
+
+        .year-pill.active {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            border-color: var(--accent-color);
+            color: white;
             box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
         }
 
-        /* Pagination styling */
+        .year-pill.active:hover {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .year-pill i {
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        #resetFilter {
+            background: var(--accent-color);
+            color: white;
+            border-radius: 12px;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        #resetFilter:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+        }
+
+        #resetFilter i {
+            margin-right: 0.5rem;
+        }
+
+        /* Publikasi Card - Clean & Minimal */
+        .publikasi-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #f0f0f0;
+        }
+
+        .publikasi-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            border-color: var(--accent-color);
+        }
+
+        .publikasi-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .publikasi-date {
+            color: #999;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .publikasi-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin: 1rem 0;
+            line-height: 1.4;
+        }
+
+        .publikasi-desc {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .publikasi-link {
+            color: var(--accent-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .publikasi-link:hover {
+            gap: 0.75rem;
+            color: var(--secondary-color);
+        }
+
+        /* Pagination - Clean Design */
+        .pagination {
+            gap: 0.5rem;
+        }
+
         .pagination .page-item .page-link {
             color: var(--primary-color);
-            border: 2px solid #e0e0e0;
-            margin: 0 3px;
-            border-radius: 8px;
-            padding: 0.5rem 0.75rem;
-            font-weight: 600;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 0.6rem 1rem;
+            font-weight: 500;
             transition: all 0.3s;
+            font-size: 0.9rem;
         }
 
         .pagination .page-item.active .page-link {
@@ -749,7 +977,7 @@
             color: white;
         }
 
-        .pagination .page-item .page-link:hover {
+        .pagination .page-item .page-link:hover:not(.page-item.disabled .page-link) {
             background: var(--accent-color);
             border-color: var(--accent-color);
             color: white;
@@ -759,27 +987,57 @@
         .pagination .page-item.disabled .page-link {
             color: #ccc;
             border-color: #e0e0e0;
+            background: #f8f9fa;
         }
 
-        /* Animation for filtered items */
+        /* No Results */
+        #noResults {
+            display: none;
+            padding: 4rem 0;
+        }
+
+        #noResults i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1.5rem;
+        }
+
+        #noResults h4 {
+            color: #999;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        #noResults p {
+            color: #bbb;
+        }
+
+        /* Animation */
         .publikasi-item {
             transition: all 0.3s ease;
         }
 
         .publikasi-item.hiding {
             opacity: 0;
-            transform: scale(0.9);
+            transform: translateY(20px);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .publikasi-controls .col-md-6,
-            .publikasi-controls .col-md-3 {
-                width: 100%;
+            .year-filter-container {
+                flex-direction: column;
+                align-items: flex-start;
             }
             
-            #searchPublikasi {
-                font-size: 14px;
+            .year-pills-wrapper {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .year-pill {
+                font-size: 0.85rem;
+                padding: 0.4rem 1rem;
             }
         }
     </style>
@@ -1053,11 +1311,11 @@
             <h2 class="section-title text-center scroll-animate">Sorotan</h2>
             <h3 class="section-subtitle text-center mb-5 scroll-animate">Publikasi</h3>
             
-            <!-- Filter & Search Section -->
-            <div class="publikasi-controls mb-4">
-                <div class="row align-items-center">
-                    <!-- Search Box -->
-                    <div class="col-md-6 mb-3 mb-md-0">
+            <!-- Filter & Search -->
+            <div class="publikasi-controls">
+                <!-- Search Box -->
+                <div class="row mb-4">
+                    <div class="col-12">
                         <div class="search-box">
                             <i class="fas fa-search"></i>
                             <input 
@@ -1065,105 +1323,89 @@
                                 id="searchPublikasi" 
                                 class="form-control" 
                                 placeholder="Cari publikasi berdasarkan judul atau deskripsi..."
-                                style="
-                                    padding-left: 45px;
-                                    border: 2px solid #e0e0e0;
-                                    border-radius: 25px;
-                                    transition: all 0.3s;
-                                "
                             >
                         </div>
                     </div>
-                    
-                    <!-- Year Filter -->
-                    <div class="col-md-3 mb-3 mb-md-0">
-                        <select 
-                            id="filterYear" 
-                            class="form-control"
-                            style="
-                                border: 2px solid #e0e0e0;
-                                border-radius: 25px;
-                                padding: 0.5rem 1rem;
-                                transition: all 0.3s;
-                            "
-                        >
-                            <option value="">Semua Tahun</option>
-                            <?php
-                            // Get unique years from publications
-                            $years = array_unique(array_map(function($pub) {
-                                return date('Y', strtotime($pub['date']));
-                            }, $publications));
-                            rsort($years);
-                            foreach ($years as $year):
-                            ?>
-                            <option value="<?= $year ?>"><?= $year ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                </div>
+                
+                <!-- Year Filter Pills -->
+                <div class="row align-items-center">
+                    <div class="col-lg-9 mb-3 mb-lg-0">
+                        <div class="year-filter-container">
+                            <span class="filter-label">
+                                <i class="fas fa-calendar-alt mr-2"></i>Filter Tahun:
+                            </span>
+                            <div class="year-pills-wrapper" id="yearPills">
+                                <div class="year-pill active" data-year="">
+                                    <i class="fas fa-th"></i>
+                                    Semua
+                                </div>
+                                <?php
+                                $years = array_unique(array_map(function($pub) {
+                                    return date('Y', strtotime($pub['date']));
+                                }, $publications));
+                                rsort($years);
+                                foreach ($years as $year):
+                                ?>
+                                <div class="year-pill" data-year="<?= $year ?>">
+                                    <?= $year ?>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
                     </div>
                     
-                    <!-- Reset Button -->
-                    <div class="col-md-3">
-                        <button 
-                            id="resetFilter" 
-                            class="btn btn-block"
-                            style="
-                                background: var(--accent-color);
-                                color: white;
-                                border-radius: 25px;
-                                border: none;
-                                padding: 0.5rem 1rem;
-                                font-weight: 600;
-                                transition: all 0.3s;
-                            "
-                        >
-                            <i class="fas fa-redo mr-2"></i>Reset Filter
+                    <div class="col-lg-3">
+                        <button id="resetFilter" class="btn btn-block">
+                            <i class="fas fa-redo"></i>Reset
                         </button>
                     </div>
                 </div>
             </div>
             
             <!-- Publications Grid -->
-            <div class="row" id="publikasiContainer">
+            <div id="publikasiContainer">
                 <?php foreach ($publications as $key => $publication): ?>
-                <div class="col-md-6 publikasi-item" 
+                <div class="publikasi-item" 
                     data-year="<?= date('Y', strtotime($publication['date'])) ?>"
                     data-title="<?= strtolower(htmlspecialchars($publication['title'])) ?>"
                     data-desc="<?= strtolower(htmlspecialchars($publication['description'])) ?>">
-                    <div class="publikasi-card <?php if ($key % 2 == 0) { echo 'scroll-slide-left'; } else { echo 'scroll-slide-right'; } ?>">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <span class="badge-custom"><?= htmlspecialchars(strtoupper($publication['type'])) ?></span>
-                            <span style="color: #999; font-size: 0.9rem;">
-                                <i class="far fa-calendar-alt mr-1"></i>
+                    <div class="publikasi-card">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="publikasi-badge"><?= htmlspecialchars(strtoupper($publication['type'])) ?></span>
+                            <span class="publikasi-date">
+                                <i class="far fa-calendar-alt"></i>
                                 <?= date('d M Y', strtotime($publication['date'])) ?>
                             </span>
                         </div>
-                        <h5 style="color: var(--primary-color); font-weight: 600; margin-bottom: 1rem;">
+                        <h5 class="publikasi-title">
                             <?= htmlspecialchars($publication['title']) ?>
                         </h5>
-                        <p style="color: #666;">
+                        <p class="publikasi-desc">
                             <?= htmlspecialchars($publication['description']) ?>
                         </p>
                         <a href="<?= htmlspecialchars($publication['link']) ?>" 
-                        style="color: var(--accent-color); font-weight: 600;" 
+                        class="publikasi-link" 
                         target="_blank" 
                         rel="noopener">
-                            Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                            Baca selengkapnya 
+                            <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
                 <?php endforeach; ?>
             </div>
             
-            <!-- No Results Message -->
-            <div id="noResults" class="text-center" style="display: none; padding: 3rem 0;">
-                <i class="fas fa-search" style="font-size: 4rem; color: #ddd; margin-bottom: 1rem;"></i>
-                <h4 style="color: #999;">Tidak ada publikasi yang ditemukan</h4>
-                <p style="color: #bbb;">Coba ubah filter atau kata kunci pencarian</p>
+            <!-- No Results -->
+            <div id="noResults" class="text-center">
+                <i class="fas fa-search"></i>
+                <h4>Tidak ada publikasi yang ditemukan</h4>
+                <p>Coba ubah filter atau kata kunci pencarian</p>
             </div>
             
             <!-- Pagination -->
             <nav id="paginationNav" class="mt-5">
-                <ul class="pagination justify-content-center" id="pagination" style="flex-wrap: wrap;"></ul>
+                <ul class="pagination justify-content-center" id="pagination"></ul>
             </nav>
         </div>
     </section>
@@ -1174,10 +1416,11 @@
             <h2 class="section-title text-center scroll-animate">Mata Kuliah</h2>
             <h3 class="section-subtitle text-center mb-5 scroll-animate">Terkait</h3>
             <div class="row">
-                <?php foreach ($courses as $course): ?>
+                <?php $icons = ['fa-chart-line', 'fa-database', 'fa-code']; ?>
+                <?php foreach ($courses as $index => $course): ?>
                 <div class="col-md-4">
                     <div class="riset-card scroll-scale">
-                        <div class="riset-icon"><i class="fas fa-code"></i></div>
+                        <div class="riset-icon"><i class="fas <?= $icons[$index % count($icons)] ?>"></i></div>
                         <h5 class="riset-title"><?= htmlspecialchars($course['name']) ?></h5>
                         <p><?= htmlspecialchars($course['description']) ?></p>
                     </div>
@@ -1226,8 +1469,14 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="public/assets/plugins/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<script src="public/assets/plugins/select2/dist/js/select2.min.js"></script>
     
     <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                width: '100%'
+            });
+        });
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1264,27 +1513,42 @@
             });
         });
         document.addEventListener('DOMContentLoaded', function() {
-            const itemsPerPage = 6;
+            const itemsPerPage = 4;
             let currentPage = 1;
             let filteredItems = [];
+            let selectedYear = '';
             
             const searchInput = document.getElementById('searchPublikasi');
-            const yearFilter = document.getElementById('filterYear');
             const resetBtn = document.getElementById('resetFilter');
+            const yearPills = document.querySelectorAll('.year-pill');
             const container = document.getElementById('publikasiContainer');
             const noResults = document.getElementById('noResults');
             const pagination = document.getElementById('pagination');
             const paginationNav = document.getElementById('paginationNav');
             
-            // Get all publication items
+            // Year pill click handler
+            yearPills.forEach(pill => {
+                pill.addEventListener('click', function() {
+                    // Remove active from all pills
+                    yearPills.forEach(p => p.classList.remove('active'));
+                    
+                    // Add active to clicked pill
+                    this.classList.add('active');
+                    
+                    // Set selected year
+                    selectedYear = this.dataset.year;
+                    
+                    // Filter publications
+                    filterPublications();
+                });
+            });
+            
             function getAllItems() {
                 return Array.from(document.querySelectorAll('.publikasi-item'));
             }
             
-            // Filter publications
             function filterPublications() {
                 const searchTerm = searchInput.value.toLowerCase();
-                const selectedYear = yearFilter.value;
                 const allItems = getAllItems();
                 
                 filteredItems = allItems.filter(item => {
@@ -1302,11 +1566,9 @@
                 displayPublications();
             }
             
-            // Display publications with pagination
             function displayPublications() {
                 const allItems = getAllItems();
                 
-                // Hide all items first
                 allItems.forEach(item => {
                     item.style.display = 'none';
                     item.classList.remove('hiding');
@@ -1321,24 +1583,19 @@
                 noResults.style.display = 'none';
                 paginationNav.style.display = 'block';
                 
-                // Calculate pagination
                 const startIndex = (currentPage - 1) * itemsPerPage;
                 const endIndex = startIndex + itemsPerPage;
                 const itemsToShow = filteredItems.slice(startIndex, endIndex);
                 
-                // Show items for current page
                 itemsToShow.forEach((item, index) => {
                     setTimeout(() => {
                         item.style.display = 'block';
-                        // Trigger reflow
-                        void item.offsetWidth;
-                    }, index * 50);
+                    }, index * 80);
                 });
                 
                 renderPagination();
             }
             
-            // Render pagination
             function renderPagination() {
                 const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
                 pagination.innerHTML = '';
@@ -1350,7 +1607,7 @@
                 
                 paginationNav.style.display = 'block';
                 
-                // Previous button
+                // Previous
                 const prevLi = document.createElement('li');
                 prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
                 prevLi.innerHTML = `<a class="page-link" href="#publikasi"><i class="fas fa-chevron-left"></i></a>`;
@@ -1364,13 +1621,9 @@
                 }
                 pagination.appendChild(prevLi);
                 
-                // Page numbers
+                // Pages
                 for (let i = 1; i <= totalPages; i++) {
-                    if (
-                        i === 1 || 
-                        i === totalPages || 
-                        (i >= currentPage - 1 && i <= currentPage + 1)
-                    ) {
+                    if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
                         const li = document.createElement('li');
                         li.className = `page-item ${i === currentPage ? 'active' : ''}`;
                         li.innerHTML = `<a class="page-link" href="#publikasi">${i}</a>`;
@@ -1381,10 +1634,7 @@
                             scrollToSection();
                         };
                         pagination.appendChild(li);
-                    } else if (
-                        i === currentPage - 2 || 
-                        i === currentPage + 2
-                    ) {
+                    } else if (i === currentPage - 2 || i === currentPage + 2) {
                         const li = document.createElement('li');
                         li.className = 'page-item disabled';
                         li.innerHTML = `<a class="page-link">...</a>`;
@@ -1392,7 +1642,7 @@
                     }
                 }
                 
-                // Next button
+                // Next
                 const nextLi = document.createElement('li');
                 nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
                 nextLi.innerHTML = `<a class="page-link" href="#publikasi"><i class="fas fa-chevron-right"></i></a>`;
@@ -1407,7 +1657,6 @@
                 pagination.appendChild(nextLi);
             }
             
-            // Scroll to section
             function scrollToSection() {
                 document.getElementById('publikasi').scrollIntoView({ 
                     behavior: 'smooth', 
@@ -1415,19 +1664,20 @@
                 });
             }
             
-            // Reset filter
             function resetFilter() {
                 searchInput.value = '';
-                yearFilter.value = '';
+                selectedYear = '';
+                
+                // Reset pills
+                yearPills.forEach(p => p.classList.remove('active'));
+                yearPills[0].classList.add('active'); // Activate "Semua"
+                
                 filterPublications();
             }
             
-            // Event listeners
             searchInput.addEventListener('input', filterPublications);
-            yearFilter.addEventListener('change', filterPublications);
             resetBtn.addEventListener('click', resetFilter);
             
-            // Initialize
             filteredItems = getAllItems();
             displayPublications();
         });
