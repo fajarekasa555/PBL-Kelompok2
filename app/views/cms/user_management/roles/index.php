@@ -62,17 +62,65 @@ function createRole() {
 }
 
 function storeRole() {
-    $.post(`${baseRoleUrl}/store`, $('#form-create-role').serialize(), function() {
-        Swal.close();
-        roleTable.ajax.reload(null, false);
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil',
-            text: 'Role berhasil ditambahkan.',
-            timer: 1500,
-            showConfirmButton: false
+    const form = $('#form-create-role');
+    if (!form.length) return;
+
+    $.post(`${baseRoleUrl}/store`, form.serialize())
+        .done((response) => {
+            if (response.status === 'error') {
+                let errorText = '';
+                if (response.errors) {
+                    Object.values(response.errors).forEach(err => {
+                        errorText += `<li>${err}</li>`;
+                    });
+                }
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    html: `
+                        <div style="
+                            text-align:center;
+                            margin-top:15px;
+                            padding:10px 15px;
+                            border-radius:8px;
+                            background:#f8d7da;
+                            color:#842029;
+                            font-size:14px;
+                            line-height:1.6;
+                        ">
+                            <ul style="
+                                list-style:none;
+                                padding-left:0;
+                                margin:0;
+                            ">
+                                ${errorText}
+                            </ul>
+                        </div>
+                    `
+                });
+
+                return;
+            }
+
+            Swal.close();
+            roleTable.ajax.reload(null, false);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Role berhasil ditambahkan.',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        })
+        .fail(() => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Terjadi kesalahan server.'
+            });
         });
-    });
 }
 
 function editRole(id) {
@@ -97,18 +145,67 @@ function editRole(id) {
 }
 
 function updateRole() {
-    $.post(`${baseRoleUrl}/update`, $('#form-edit-role').serialize(), function() {
-        Swal.close();
-        roleTable.ajax.reload(null, false);
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil',
-            text: 'Role berhasil diperbarui.',
-            timer: 1500,
-            showConfirmButton: false
+    const form = $('#form-edit-role');
+    if (!form.length) return;
+
+    $.post(`${baseRoleUrl}/update`, form.serialize())
+        .done((response) => {
+            if (response.status === 'error') {
+                let errorText = '';
+                if (response.errors) {
+                    Object.values(response.errors).forEach(err => {
+                        errorText += `<li>${err}</li>`;
+                    });
+                }
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    html: `
+                        <div style="
+                            text-align:center;
+                            margin-top:15px;
+                            padding:10px 15px;
+                            border-radius:8px;
+                            background:#f8d7da;
+                            color:#842029;
+                            font-size:14px;
+                            line-height:1.6;
+                        ">
+                            <ul style="
+                                list-style:none;
+                                padding-left:0;
+                                margin:0;
+                            ">
+                                ${errorText}
+                            </ul>
+                        </div>
+                    `
+                });
+
+                return;
+            }
+
+            Swal.close();
+            roleTable.ajax.reload(null, false);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Role berhasil diperbarui.',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        })
+        .fail(() => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Terjadi kesalahan server.'
+            });
         });
-    });
 }
+
 
 function deleteRole(id) {
     swalConfirm('Hapus role ini?', function() {

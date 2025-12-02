@@ -6,6 +6,7 @@
     <title>Laboratorium Data & Teknologi</title>
 	<link rel="icon" type="image/png" href="public/assets/img/logo/logo-icon.png" />
     <link rel="stylesheet" href="public/assets/plugins/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link href="public/assets/plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         :root {
@@ -256,6 +257,47 @@
             padding: 100px 0;
             background: linear-gradient(135deg, var(--primary-color), var(--dark-blue));
             color: white;
+        }
+
+        .section-tim .team-card {
+            position: relative;
+        }
+
+        .section-tim .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 15px;
+            pointer-events: none;
+        }
+
+        .section-tim .team-card:hover::before {
+            opacity: 1;
+        }
+
+        .section-tim .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3) !important;
+        }
+
+        .section-tim .team-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Ketua card special styling */
+        .section-tim .ketua-card {
+            border: 2px solid var(--accent-color);
+        }
+
+        .section-tim .ketua-card:hover {
+            border-color: var(--secondary-color);
+            box-shadow: 0 20px 50px rgba(76, 175, 80, 0.3) !important;
         }
         
         .team-card {
@@ -663,6 +705,341 @@
                 height: 250px;
             }
         }
+
+        /* Publikasi - Minimal Clean Design */
+        .section-publikasi {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+
+        .publikasi-controls {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            z-index: 1;
+        }
+
+        #searchPublikasi,
+        #filterYear {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        #searchPublikasi {
+            padding-left: 45px;
+        }
+
+        #searchPublikasi:focus,
+        #filterYear:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        #resetFilter {
+            background: var(--accent-color);
+            color: white;
+            border-radius: 12px;
+            border: none;
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        #resetFilter:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+        }
+
+        /* Publikasi - Modern Clean Design */
+        .section-publikasi {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+
+        .publikasi-controls {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            z-index: 1;
+        }
+
+        #searchPublikasi {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            padding-left: 45px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        #searchPublikasi:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        /* Year Filter Pills */
+        .year-filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+
+        .year-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1.25rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            background: white;
+            color: #666;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .year-pill:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+        }
+
+        .year-pill.active {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            border-color: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .year-pill.active:hover {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .year-pill i {
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        #resetFilter {
+            background: var(--accent-color);
+            color: white;
+            border-radius: 12px;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        #resetFilter:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+        }
+
+        #resetFilter i {
+            margin-right: 0.5rem;
+        }
+
+        /* Publikasi Card - Clean & Minimal */
+        .publikasi-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #f0f0f0;
+        }
+
+        .publikasi-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            border-color: var(--accent-color);
+        }
+
+        .publikasi-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .publikasi-date {
+            color: #999;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .publikasi-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin: 1rem 0;
+            line-height: 1.4;
+        }
+
+        .publikasi-desc {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .publikasi-link {
+            color: var(--accent-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .publikasi-link:hover {
+            gap: 0.75rem;
+            color: var(--secondary-color);
+        }
+
+        /* Pagination - Clean Design */
+        .pagination {
+            gap: 0.5rem;
+        }
+
+        .pagination .page-item .page-link {
+            color: var(--primary-color);
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 0.6rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .pagination .page-item.active .page-link {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .pagination .page-item .page-link:hover:not(.page-item.disabled .page-link) {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #ccc;
+            border-color: #e0e0e0;
+            background: #f8f9fa;
+        }
+
+        /* No Results */
+        #noResults {
+            display: none;
+            padding: 4rem 0;
+        }
+
+        #noResults i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1.5rem;
+        }
+
+        #noResults h4 {
+            color: #999;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        #noResults p {
+            color: #bbb;
+        }
+
+        /* Animation */
+        .publikasi-item {
+            transition: all 0.3s ease;
+        }
+
+        .publikasi-item.hiding {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .year-filter-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .year-pills-wrapper {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .year-pill {
+                font-size: 0.85rem;
+                padding: 0.4rem 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -694,6 +1071,7 @@
                     <li class="nav-item"><a class="nav-link" href="#tim">TIM</a></li>
                     <li class="nav-item"><a class="nav-link" href="#fasilitas">FASILITAS</a></li>
                     <li class="nav-item"><a class="nav-link" href="#publikasi">PUBLIKASI</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#matkul">MATA KULIAH</a></li>
                     <!-- <li class="nav-item">
                         <button class="btn btn-login">LOGIN</button>
                     </li> -->
@@ -709,9 +1087,9 @@
                 <div class="col-lg-6">
                     <h1 class="hero-title"><?= $lab_information['hero_title'] ?? '' ?></h1>
                     <p class="hero-subtitle"><?= $lab_information['hero_subtitle'] ?? '' ?></p>
-                    <button class="btn btn-login btn-lg">
+                    <!-- <button class="btn btn-login btn-lg">
                         <i class="fas fa-arrow-right mr-2"></i>Pelajari Lebih Lanjut
-                    </button>
+                    </button> -->
                 </div>
                 <div class="col-lg-6">
                     <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop" alt="Lab Team" class="img-fluid hero-image">
@@ -772,11 +1150,16 @@
             <h2 class="section-title text-center scroll-animate">Fokus Riset</h2>
             <h3 class="section-subtitle text-center mb-5 scroll-animate">Laboratorium</h3>
             <div class="row">
-                <?php if(isset($research_focuses)) { ?>
-                    <?php foreach($research_focuses as $research) { ?>
+                <?php if(isset($research_focuses)) { 
+                    $research_icons = ['fa-brain', 'fa-network-wired', 'fa-robot', 'fa-chart-line', 'fa-database', 'fa-code'];
+                    $icon_index = 0;
+                    foreach($research_focuses as $research) { 
+                        $icon = $research_icons[$icon_index % count($research_icons)];
+                        $icon_index++;
+                ?>
                     <div class="col-md-4">
                         <div class="riset-card scroll-scale">
-                            <div class="riset-icon"><i class="fas fa-brain"></i></div>
+                            <div class="riset-icon"><i class="fas <?= $icon ?>"></i></div>
                             <h5 class="riset-title"><?= htmlspecialchars($research['title']) ?></h5>
                             <b class="riset-subtitle"><?= htmlspecialchars($research['field']) ?></b>
                             <p><?= htmlspecialchars($research['description']) ?></p>
@@ -793,33 +1176,35 @@
             <h2 class="section-title text-center scroll-animate">Kegiatan dan Proyek</h2>
             <h3 class="section-subtitle text-center mb-5 scroll-animate">Laboratorium</h3>
             <div class="row">
+                <?php if(isset($activities)) { 
+                    foreach($activities as $activity) {
+                ?>
+
                 <div class="col-md-4">
                     <div class="card activity-card scroll-scale">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop" alt="Data Analysis">
+                        <img src="public/<?= htmlspecialchars($activity['documentation']) ?>" alt="Data Analysis">
                         <div class="card-body">
-                            <h5 class="card-title" style="color: var(--primary-color); font-weight: 600;">Analisis Data</h5>
-                            <p class="card-text">Workshop dan pelatihan analisis data menggunakan tools modern</p>
+                            <h5 class="card-title" style="color: var(--primary-color); font-weight: 600;"><?= htmlspecialchars($activity['title']) ?></h5>
+                            <p class="card-text"><?= htmlspecialchars($activity['description']) ?></p>
                         </div>
                     </div>
                 </div>
+                <?php }
+                } ?>
+                <?php if(isset($projects)) { 
+                    foreach($projects as $project) {
+                ?>
                 <div class="col-md-4">
                     <div class="card activity-card scroll-scale">
-                        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&h=250&fit=crop" alt="Research">
+                        <img src="public/<?= htmlspecialchars($project['documentation']) ?>" alt="Research">
                         <div class="card-body">
-                            <h5 class="card-title" style="color: var(--primary-color); font-weight: 600;">Riset & Pengembangan</h5>
-                            <p class="card-text">Proyek riset bersama dosen dan mahasiswa dalam teknologi terkini</p>
+                            <h5 class="card-title" style="color: var(--primary-color); font-weight: 600;"><?= htmlspecialchars($project['name']) ?></h5>
+                            <p class="card-text"><?= htmlspecialchars($project['description']) ?></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card activity-card scroll-scale">
-                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop" alt="Collaboration">
-                        <div class="card-body">
-                            <h5 class="card-title" style="color: var(--primary-color); font-weight: 600;">Kolaborasi</h5>
-                            <p class="card-text">Kerjasama dengan industri dan institusi pendidikan</p>
-                        </div>
-                    </div>
-                </div>
+                <?php }
+                } ?>
             </div>
         </div>
     </section>
@@ -827,36 +1212,79 @@
     <!-- Tim Section -->
     <section id="tim" class="section-tim">
         <div class="container">
+            <!-- Section Header -->
             <h2 class="section-title text-center scroll-animate" style="color: white;">Anggota Tim</h2>
             <p class="text-center mb-5 scroll-animate" style="font-size: 1.2rem;">Tim ahli dan peneliti kami</p>
+
+            <?php 
+            $ketua = null;
+            $anggota = [];
+
+            foreach ($members as $m) {
+                if (strtolower($m['jabatan']) === 'ketua') {
+                    $ketua = $m;
+                } else {
+                    $anggota[] = $m;
+                }
+            }
+            ?>
+
+            <!-- Ketua Card -->
+            <?php if ($ketua): ?>
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-4 col-md-6">
+                    <a href="landing_page/detail_member/<?= htmlspecialchars($ketua['id']) ?>" class="team-card-link">
+                    <div class="team-card ketua-card scroll-scale">
+                        <!-- Badge Ketua -->
+                        <div style="
+                            position: absolute;
+                            top: 15px;
+                            right: 15px;
+                            background: var(--accent-color);
+                            color: white;
+                            padding: 0.4rem 1rem;
+                            border-radius: 20px;
+                            font-size: 0.85rem;
+                            font-weight: 600;
+                            z-index: 5;
+                            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+                        ">
+                            <i class="fas fa-star mr-1"></i>KETUA
+                        </div>
+
+                        <!-- Photo -->
+                        <img src="public/<?= htmlspecialchars($ketua['photo']) ?>" alt="<?= htmlspecialchars($ketua['name']) ?>">
+
+                        <!-- Info -->
+                        <div class="team-info">
+                            <h4 class="team-name" style="font-size: 1.4rem; font-weight: 600;">
+                                <?= htmlspecialchars($ketua['title_prefix']) . ' ' . htmlspecialchars($ketua['name']) . ' ' . htmlspecialchars($ketua['title_suffix']) ?>
+                            </h4>
+                            <p class="team-position" style="font-weight: 500;">
+                                <?= htmlspecialchars($ketua['jabatan']) ?>
+                            </p>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <!-- Anggota Cards -->
             <div class="row justify-content-center">
+                <?php foreach ($anggota as $member): ?>
                 <div class="col-md-4">
+                    <a href="landing_page/detail_member/<?= htmlspecialchars($member['id']) ?>" class="team-card-link">
                     <div class="team-card scroll-scale">
-                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&h=250&fit=crop" alt="Team Member">
+                        <img src="public/<?= htmlspecialchars($member['photo']) ?>" alt="<?= htmlspecialchars($member['name']) ?>">
                         <div class="team-info">
-                            <h5 class="team-name">Dr. Ahmad Wijaya</h5>
-                            <p class="team-position">Kepala Laboratorium</p>
+                            <h5 class="team-name"><?= htmlspecialchars($member['title_prefix']) . ' ' . htmlspecialchars($member['name']) . ' ' . htmlspecialchars($member['title_suffix']) ?></h5>
+                            <p class="team-position"><?= htmlspecialchars($member['jabatan']) ?></p>
                         </div>
                     </div>
+                    </a>
                 </div>
-                <div class="col-md-4">
-                    <div class="team-card scroll-scale">
-                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=250&fit=crop" alt="Team Member">
-                        <div class="team-info">
-                            <h5 class="team-name">Sarah Putri, M.Kom</h5>
-                            <p class="team-position">Koordinator Riset</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="team-card scroll-scale">
-                        <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=300&h=250&fit=crop" alt="Team Member">
-                        <div class="team-info">
-                            <h5 class="team-name">Budi Santoso, M.T</h5>
-                            <p class="team-position">Asisten Peneliti</p>
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -867,48 +1295,17 @@
             <h2>Fasilitas Lab</h2>
             <p>Infrastruktur modern untuk pembelajaran dan riset</p>
         </div>
-        
         <div class="facility-grid">
-            <!-- Facility 1 -->
+        <?php foreach ($facilities as $key => $facility) { ?>
             <div class="facility-item scroll-scale">
-                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&h=400&fit=crop" alt="Lab Komputer">
+                <img src="public/<?= htmlspecialchars($facility['image']) ?>" alt="<?= htmlspecialchars($facility['slug']) ?>">
                 <div class="facility-overlay">
-                    <div class="facility-number">01</div>
-                    <h5>Lab Komputer</h5>
-                    <p>Ruang komputer dengan 40 unit PC high-performance untuk analisis data, programming, dan simulasi.</p>
+                    <div class="facility-number"><?= str_pad($key + 1, 2, '0', STR_PAD_LEFT) ?></div>
+                    <h5><?= htmlspecialchars($facility['slug']) ?></h5>
+                    <p><?= htmlspecialchars($facility['description']) ?></p>
                 </div>
             </div>
-            
-            <!-- Facility 2 -->
-            <div class="facility-item scroll-scale">
-                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop" alt="Server Room">
-                <div class="facility-overlay">
-                    <div class="facility-number">02</div>
-                    <h5>Server Room</h5>
-                    <p>Infrastruktur server modern dengan kapasitas besar untuk cloud computing dan big data processing.</p>
-                </div>
-            </div>
-            
-            <!-- Facility 3 -->
-            <div class="facility-item scroll-scale">
-                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop" alt="IoT Lab">
-                <div class="facility-overlay">
-                    <div class="facility-number">03</div>
-                    <!-- <div class="facility-icon"><i class="fas fa-server"></i></div> -->
-                    <h5>IoT Laboratory</h5>
-                    <p>Lab khusus Internet of Things dengan berbagai sensor, microcontroller, dan perangkat embedded systems.</p>
-                </div>
-            </div>
-            
-            <!-- Facility 4 -->
-            <div class="facility-item scroll-scale">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop" alt="Collaboration Space">
-                <div class="facility-overlay">
-                    <div class="facility-number">04</div>
-                    <h5>Ruang Kolaborasi</h5>
-                    <p>Area diskusi dan kolaborasi modern dengan whiteboard digital untuk tim project dan brainstorming.</p>
-                </div>
-            </div>
+        <?php } ?>
         </div>
     </section>
 
@@ -917,24 +1314,104 @@
         <div class="container">
             <h2 class="section-title text-center scroll-animate">Sorotan</h2>
             <h3 class="section-subtitle text-center mb-5 scroll-animate">Publikasi</h3>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="publikasi-card scroll-slide-left">
-                        <span class="badge-custom">JURNAL</span>
-                        <h5 style="color: var(--primary-color); font-weight: 600; margin-bottom: 1rem;">Implementasi Deep Learning untuk Prediksi Cuaca</h5>
-                        <p style="color: #666;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                        <a href="#" style="color: var(--accent-color); font-weight: 600;">Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i></a>
+            
+            <!-- Filter & Search -->
+            <div class="publikasi-controls">
+                <!-- Search Box -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input 
+                                type="text" 
+                                id="searchPublikasi" 
+                                class="form-control" 
+                                placeholder="Cari publikasi berdasarkan judul atau deskripsi..."
+                            >
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="publikasi-card scroll-slide-right">
-                        <span class="badge-custom">KONFERENSI</span>
-                        <h5 style="color: var(--primary-color); font-weight: 600; margin-bottom: 1rem;">Optimasi Algoritma Clustering untuk Big Data</h5>
-                        <p style="color: #666;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                        <a href="#" style="color: var(--accent-color); font-weight: 600;">Baca selengkapnya <i class="fas fa-arrow-right ml-1"></i></a>
+                
+                <!-- Year Filter Pills -->
+                <div class="row align-items-center">
+                    <div class="col-lg-9 mb-3 mb-lg-0">
+                        <div class="year-filter-container">
+                            <span class="filter-label">
+                                <i class="fas fa-calendar-alt mr-2"></i>Filter Tahun:
+                            </span>
+                            <div class="year-pills-wrapper" id="yearPills">
+                                <div class="year-pill active" data-year="">
+                                    <i class="fas fa-th"></i>
+                                    Semua
+                                </div>
+                                <?php
+                                $years = array_unique(array_map(function($pub) {
+                                    return date('Y', strtotime($pub['date']));
+                                }, $publications));
+                                rsort($years);
+                                foreach ($years as $year):
+                                ?>
+                                <div class="year-pill" data-year="<?= $year ?>">
+                                    <?= $year ?>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3">
+                        <button id="resetFilter" class="btn btn-block">
+                            <i class="fas fa-redo"></i>Reset
+                        </button>
                     </div>
                 </div>
             </div>
+            
+            <!-- Publications Grid -->
+            <div id="publikasiContainer">
+                <?php foreach ($publications as $key => $publication): ?>
+                <div class="publikasi-item" 
+                    data-year="<?= date('Y', strtotime($publication['date'])) ?>"
+                    data-title="<?= strtolower(htmlspecialchars($publication['title'])) ?>"
+                    data-desc="<?= strtolower(htmlspecialchars($publication['description'])) ?>">
+                    <div class="publikasi-card">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="publikasi-badge"><?= htmlspecialchars(strtoupper($publication['type'])) ?></span>
+                            <span class="publikasi-date">
+                                <?= htmlspecialchars($publication['member_name']) ?>
+                                <i class="far fa-calendar-alt"></i>
+                                <?= date('d M Y', strtotime($publication['date'])) ?>
+                            </span>
+                        </div>
+                        <h5 class="publikasi-title">
+                            <?= htmlspecialchars($publication['title']) ?>
+                        </h5>
+                        <p class="publikasi-desc">
+                            <?= htmlspecialchars($publication['description']) ?>
+                        </p>
+                        <a href="<?= htmlspecialchars($publication['link']) ?>" 
+                        class="publikasi-link" 
+                        target="_blank" 
+                        rel="noopener">
+                            Baca selengkapnya 
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            
+            <!-- No Results -->
+            <div id="noResults" class="text-center">
+                <i class="fas fa-search"></i>
+                <h4>Tidak ada publikasi yang ditemukan</h4>
+                <p>Coba ubah filter atau kata kunci pencarian</p>
+            </div>
+            
+            <!-- Pagination -->
+            <nav id="paginationNav" class="mt-5">
+                <ul class="pagination justify-content-center" id="pagination"></ul>
+            </nav>
         </div>
     </section>
 
@@ -944,10 +1421,11 @@
             <h2 class="section-title text-center scroll-animate">Mata Kuliah</h2>
             <h3 class="section-subtitle text-center mb-5 scroll-animate">Terkait</h3>
             <div class="row">
-                <?php foreach ($courses as $course): ?>
+                <?php $icons = ['fa-chart-line', 'fa-database', 'fa-code']; ?>
+                <?php foreach ($courses as $index => $course): ?>
                 <div class="col-md-4">
                     <div class="riset-card scroll-scale">
-                        <div class="riset-icon"><i class="fas fa-code"></i></div>
+                        <div class="riset-icon"><i class="fas <?= $icons[$index % count($icons)] ?>"></i></div>
                         <h5 class="riset-title"><?= htmlspecialchars($course['name']) ?></h5>
                         <p><?= htmlspecialchars($course['description']) ?></p>
                     </div>
@@ -996,8 +1474,14 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="public/assets/plugins/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<script src="public/assets/plugins/select2/dist/js/select2.min.js"></script>
     
     <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                width: '100%'
+            });
+        });
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1032,6 +1516,175 @@
                     }
                 });
             });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const itemsPerPage = 4;
+            let currentPage = 1;
+            let filteredItems = [];
+            let selectedYear = '';
+            
+            const searchInput = document.getElementById('searchPublikasi');
+            const resetBtn = document.getElementById('resetFilter');
+            const yearPills = document.querySelectorAll('.year-pill');
+            const container = document.getElementById('publikasiContainer');
+            const noResults = document.getElementById('noResults');
+            const pagination = document.getElementById('pagination');
+            const paginationNav = document.getElementById('paginationNav');
+            
+            // Year pill click handler
+            yearPills.forEach(pill => {
+                pill.addEventListener('click', function() {
+                    // Remove active from all pills
+                    yearPills.forEach(p => p.classList.remove('active'));
+                    
+                    // Add active to clicked pill
+                    this.classList.add('active');
+                    
+                    // Set selected year
+                    selectedYear = this.dataset.year;
+                    
+                    // Filter publications
+                    filterPublications();
+                });
+            });
+            
+            function getAllItems() {
+                return Array.from(document.querySelectorAll('.publikasi-item'));
+            }
+            
+            function filterPublications() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const allItems = getAllItems();
+                
+                filteredItems = allItems.filter(item => {
+                    const title = item.dataset.title;
+                    const desc = item.dataset.desc;
+                    const year = item.dataset.year;
+                    
+                    const matchesSearch = title.includes(searchTerm) || desc.includes(searchTerm);
+                    const matchesYear = !selectedYear || year === selectedYear;
+                    
+                    return matchesSearch && matchesYear;
+                });
+                
+                currentPage = 1;
+                displayPublications();
+            }
+            
+            function displayPublications() {
+                const allItems = getAllItems();
+                
+                allItems.forEach(item => {
+                    item.style.display = 'none';
+                    item.classList.remove('hiding');
+                });
+                
+                if (filteredItems.length === 0) {
+                    noResults.style.display = 'block';
+                    paginationNav.style.display = 'none';
+                    return;
+                }
+                
+                noResults.style.display = 'none';
+                paginationNav.style.display = 'block';
+                
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const itemsToShow = filteredItems.slice(startIndex, endIndex);
+                
+                itemsToShow.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.display = 'block';
+                    }, index * 80);
+                });
+                
+                renderPagination();
+            }
+            
+            function renderPagination() {
+                const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+                pagination.innerHTML = '';
+                
+                if (totalPages <= 1) {
+                    paginationNav.style.display = 'none';
+                    return;
+                }
+                
+                paginationNav.style.display = 'block';
+                
+                // Previous
+                const prevLi = document.createElement('li');
+                prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+                prevLi.innerHTML = `<a class="page-link" href="#publikasi"><i class="fas fa-chevron-left"></i></a>`;
+                if (currentPage > 1) {
+                    prevLi.querySelector('a').onclick = (e) => {
+                        e.preventDefault();
+                        currentPage--;
+                        displayPublications();
+                        scrollToSection();
+                    };
+                }
+                pagination.appendChild(prevLi);
+                
+                // Pages
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                        const li = document.createElement('li');
+                        li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                        li.innerHTML = `<a class="page-link" href="#publikasi">${i}</a>`;
+                        li.querySelector('a').onclick = (e) => {
+                            e.preventDefault();
+                            currentPage = i;
+                            displayPublications();
+                            scrollToSection();
+                        };
+                        pagination.appendChild(li);
+                    } else if (i === currentPage - 2 || i === currentPage + 2) {
+                        const li = document.createElement('li');
+                        li.className = 'page-item disabled';
+                        li.innerHTML = `<a class="page-link">...</a>`;
+                        pagination.appendChild(li);
+                    }
+                }
+                
+                // Next
+                const nextLi = document.createElement('li');
+                nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+                nextLi.innerHTML = `<a class="page-link" href="#publikasi"><i class="fas fa-chevron-right"></i></a>`;
+                if (currentPage < totalPages) {
+                    nextLi.querySelector('a').onclick = (e) => {
+                        e.preventDefault();
+                        currentPage++;
+                        displayPublications();
+                        scrollToSection();
+                    };
+                }
+                pagination.appendChild(nextLi);
+            }
+            
+            function scrollToSection() {
+                document.getElementById('publikasi').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }
+            
+            function resetFilter() {
+                searchInput.value = '';
+                selectedYear = '';
+                
+                // Reset pills
+                yearPills.forEach(p => p.classList.remove('active'));
+                yearPills[0].classList.add('active'); // Activate "Semua"
+                
+                filterPublications();
+            }
+            
+            searchInput.addEventListener('input', filterPublications);
+            resetBtn.addEventListener('click', resetFilter);
+            
+            filteredItems = getAllItems();
+            displayPublications();
         });
     </script>
 </body>

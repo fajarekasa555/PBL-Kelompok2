@@ -86,9 +86,47 @@ function storePublications() {
     if (!form.length) return;
 
     $.post(`${basePublicationsUrl}/store`, form.serialize())
-        .done(() => {
+        .done((response) => {
+            if (response.status === 'error') {
+                let errorText = '';
+
+                if (response.errors) {
+                    Object.values(response.errors).forEach(err => {
+                        errorText += `<li>${err}</li>`;
+                    });
+                }
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    html: `
+                        <div style="
+                            text-align:center;
+                            margin-top:15px;
+                            padding:10px 15px;
+                            border-radius:8px;
+                            background:#f8d7da;
+                            color:#842029;
+                            font-size:14px;
+                            line-height:1.6;
+                        ">
+                            <ul style="
+                                list-style:none;
+                                padding-left:0;
+                                margin:0;
+                            ">
+                                ${errorText}
+                            </ul>
+                        </div>
+                    `
+                });
+
+                return;
+            }
+
             Swal.close();
             publicationsTable.ajax.reload(null, false);
+
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
@@ -98,9 +136,14 @@ function storePublications() {
             });
         })
         .fail(() => {
-            Swal.fire('Gagal', 'Terjadi kesalahan saat menambahkan data.', 'error');
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Terjadi kesalahan pada server.'
+            });
         });
 }
+
 
 function editPublications(id) {
     $.get(`${basePublicationsUrl}/edit/${id}?ajax=1`, function(response) {
@@ -139,9 +182,48 @@ function updatePublications() {
     if (!form.length) return;
 
     $.post(`${basePublicationsUrl}/update`, form.serialize())
-        .done(() => {
+        .done((response) => {
+
+            if (response.status === 'error') {
+                let errorText = '';
+
+                if (response.errors) {
+                    Object.values(response.errors).forEach(err => {
+                        errorText += `<li>${err}</li>`;
+                    });
+                }
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    html: `
+                        <div style="
+                            text-align:center;
+                            margin-top:15px;
+                            padding:10px 15px;
+                            border-radius:8px;
+                            background:#f8d7da;
+                            color:#842029;
+                            font-size:14px;
+                            line-height:1.6;
+                        ">
+                            <ul style="
+                                list-style:none;
+                                padding-left:0;
+                                margin:0;
+                            ">
+                                ${errorText}
+                            </ul>
+                        </div>
+                    `
+                });
+
+                return;
+            }
+
             Swal.close();
             publicationsTable.ajax.reload(null, false);
+
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
@@ -151,9 +233,14 @@ function updatePublications() {
             });
         })
         .fail(() => {
-            Swal.fire('Gagal', 'Terjadi kesalahan saat memperbarui data.', 'error');
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Terjadi kesalahan pada server.'
+            });
         });
 }
+
 
 function deletePublications(id) {
     swalConfirm('Hapus publikasi ini?', function() {

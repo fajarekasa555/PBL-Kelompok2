@@ -58,15 +58,25 @@ class UserModel {
     }
 
     public function create($data) {
+        $role_id = ($data['role_id'] === '' || $data['role_id'] === null)
+            ? null
+            : (int)$data['role_id'];
+
         $query = "INSERT INTO {$this->table} (username, password, role_id)
-                  VALUES (:username, crypt(:password, gen_salt('bf')), :role_id)";
+                VALUES (:username, crypt(:password, gen_salt('bf')), :role_id)";
 
         $stmt = $this->conn->prepare($query);
-        return $stmt->execute([
-            'username'  => $data['username'],
-            'password'  => $data['password'],
-            'role_id'   => $data['role_id']
-        ]);
+
+        $stmt->bindValue(':username', $data['username'], \PDO::PARAM_STR);
+        $stmt->bindValue(':password', $data['password'], \PDO::PARAM_STR);
+
+        if ($role_id === null) {
+            $stmt->bindValue(':role_id', null, \PDO::PARAM_NULL);
+        } else {
+            $stmt->bindValue(':role_id', $role_id, \PDO::PARAM_INT);
+        }
+
+        return $stmt->execute();
     }
 
     public function update($id, $data) {

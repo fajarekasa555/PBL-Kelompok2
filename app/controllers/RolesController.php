@@ -5,10 +5,12 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Middleware\AuthMiddleware;
 use App\Models\RoleModel;
+use App\Requests\RoleRequest;
 
 class RolesController extends Controller
 {
     private $roleModel;
+    private $request;
 
     public function __construct()
     {
@@ -18,6 +20,7 @@ class RolesController extends Controller
 
         AuthMiddleware::requireAdmin();
         $this->roleModel = new RoleModel();
+        $this->request = new RoleRequest();
     }
 
     public function index()
@@ -62,11 +65,22 @@ class RolesController extends Controller
 
     public function store()
     {
-        $name = trim($_POST['name'] ?? '');
+        header('Content-Type: application/json; charset=utf-8');
 
-        if ($name !== '') {
-            $this->roleModel->create($name);
+        $data['name'] = trim($_POST['name'] ?? '');
+
+        $errors = $this->request->validate($data);
+        if (!empty($errors)) {
+            echo json_encode(['status' => 'error', 'errors' => $errors]);
+            return;
         }
+
+        $this->roleModel->create($data['name']);
+
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Role berhasil dibuat.'
+        ]);
     }
 
     public function edit($id)
@@ -79,12 +93,23 @@ class RolesController extends Controller
 
     public function update()
     {
-        $id = $_POST['id'] ?? null;
-        $name = trim($_POST['name'] ?? '');
+        header('Content-Type: application/json; charset=utf-8');
 
-        if ($id && $name) {
-            $this->roleModel->update($id, $name);
+        $data['id'] = $_POST['id'] ?? null;
+        $data['name'] = trim($_POST['name'] ?? '');
+
+        $errors = $this->request->validate($data);
+        if (!empty($errors)) {
+            echo json_encode(['status' => 'error', 'errors' => $errors]);
+            return;
         }
+
+        $this->roleModel->update($data['id'], $data['name']);
+
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Role berhasil diperbarui.'
+        ]);
     }
 
     public function delete($id)
