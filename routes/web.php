@@ -32,6 +32,7 @@ use App\Controllers\UserController;
 return [
 
     'landing_page' => [LandingPageController::class, 'index', []],
+    'landing_page/detail_member/{id}' => [LandingPageController::class, 'detailMember', []],
     '' => [DashboardController::class, 'index', ['auth']],
     'dashboard' => [DashboardController::class, 'index', ['auth']],
 

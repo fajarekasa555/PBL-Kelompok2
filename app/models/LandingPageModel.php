@@ -67,7 +67,12 @@ class LandingPageModel {
     }
 
     public function getPublications() {
-        $query = "SELECT * FROM publications ORDER BY id ASC";
+        $query = "
+            SELECT p.*, m.name AS member_name 
+            FROM publications p
+            LEFT JOIN members m ON p.member_id = m.id
+            ORDER BY p.id ASC
+        ";
         $stmt = $this->conn->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -76,5 +81,13 @@ class LandingPageModel {
         $query = "SELECT * FROM members ORDER BY id ASC";
         $stmt = $this->conn->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } 
+    }
+
+    public function getMemberById($id) {
+        $query = "SELECT * FROM v_member_full WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

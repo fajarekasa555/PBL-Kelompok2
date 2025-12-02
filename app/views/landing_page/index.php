@@ -1087,9 +1087,9 @@
                 <div class="col-lg-6">
                     <h1 class="hero-title"><?= $lab_information['hero_title'] ?? '' ?></h1>
                     <p class="hero-subtitle"><?= $lab_information['hero_subtitle'] ?? '' ?></p>
-                    <button class="btn btn-login btn-lg">
+                    <!-- <button class="btn btn-login btn-lg">
                         <i class="fas fa-arrow-right mr-2"></i>Pelajari Lebih Lanjut
-                    </button>
+                    </button> -->
                 </div>
                 <div class="col-lg-6">
                     <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop" alt="Lab Team" class="img-fluid hero-image">
@@ -1233,6 +1233,7 @@
             <?php if ($ketua): ?>
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-4 col-md-6">
+                    <a href="landing_page/detail_member/<?= htmlspecialchars($ketua['id']) ?>" class="team-card-link">
                     <div class="team-card ketua-card scroll-scale">
                         <!-- Badge Ketua -->
                         <div style="
@@ -1264,6 +1265,7 @@
                             </p>
                         </div>
                     </div>
+                    </a>
                 </div>
             </div>
             <?php endif; ?>
@@ -1272,6 +1274,7 @@
             <div class="row justify-content-center">
                 <?php foreach ($anggota as $member): ?>
                 <div class="col-md-4">
+                    <a href="landing_page/detail_member/<?= htmlspecialchars($member['id']) ?>" class="team-card-link">
                     <div class="team-card scroll-scale">
                         <img src="public/<?= htmlspecialchars($member['photo']) ?>" alt="<?= htmlspecialchars($member['name']) ?>">
                         <div class="team-info">
@@ -1279,6 +1282,7 @@
                             <p class="team-position"><?= htmlspecialchars($member['jabatan']) ?></p>
                         </div>
                     </div>
+                    </a>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -1374,6 +1378,7 @@
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <span class="publikasi-badge"><?= htmlspecialchars(strtoupper($publication['type'])) ?></span>
                             <span class="publikasi-date">
+                                <?= htmlspecialchars($publication['member_name']) ?>
                                 <i class="far fa-calendar-alt"></i>
                                 <?= date('d M Y', strtotime($publication['date'])) ?>
                             </span>

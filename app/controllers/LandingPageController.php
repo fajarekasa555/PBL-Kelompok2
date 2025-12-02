@@ -40,4 +40,23 @@ class LandingPageController extends Controller
             'members' => $members
         ], false);
     }
+
+    public function detailMember($id)
+    {
+        $member = $this->landingPageModel->getMemberById($id);
+        if (!$member) {
+            return $this->view('errors/404', [], false);
+        }
+        
+        $member['social_media'] = json_decode($member['social_media'], true);
+        $member['educations'] = json_decode($member['educations'], true);
+        $member['courses'] = json_decode($member['courses'], true);
+        $member['certifications'] = json_decode($member['certifications'], true);
+        $member['publications'] = json_decode($member['publications'], true);
+        $member['expertises'] = json_decode($member['expertises'], true);
+
+        return $this->view('landing_page/detail_member', [
+            'member' => $member
+        ], false);
+    }
 }

@@ -23,6 +23,14 @@ class PublicationRequest
             $errors['link'] = "Link publikasi harus berupa URL yang valid.";
         }
 
+        if (empty($data['description'])) {
+            $errors['description'] = "Deskripsi publikasi wajib diisi.";
+        }
+
+        if (empty($data['type'])) {
+            $errors['type'] = "Tipe publikasi wajib diisi.";
+        }
+
         if (empty($data['member_id'])) {
             $errors['member_id'] = "Member wajib dipilih.";
         } elseif (!ctype_digit((string)$data['member_id'])) {
