@@ -14,6 +14,7 @@ use App\Controllers\LabMissionController;
 use App\Controllers\LabVisionController;
 use App\Controllers\LandingPageController;
 use App\Controllers\MembersController;
+use App\Controllers\MemberStudentController;
 use App\Controllers\ProjectController;
 use App\Controllers\PublicationsController;
 use App\Controllers\ResearchFocusController;
@@ -33,6 +34,11 @@ return [
 
     'landing_page' => [LandingPageController::class, 'index', []],
     'landing_page/detail_member/{id}' => [LandingPageController::class, 'detailMember', []],
+    'landing_page/pendaftaran' => [LandingPageController::class, 'pendaftaran', []],
+    'landing_page/pendaftaran/daftar' => [LandingPageController::class, 'daftar', []],
+    'landing_page/activities' => [LandingPageController::class, 'activities', []],
+
+
     '' => [DashboardController::class, 'index', ['auth']],
     'dashboard' => [DashboardController::class, 'index', ['auth']],
 
@@ -164,4 +170,15 @@ return [
     'facilities/edit/{id}'   => [FacilitiesController::class, 'edit', ['auth', 'admin']],
     'facilities/update'      => [FacilitiesController::class, 'update', ['auth', 'admin']],
     'facilities/delete/{id}' => [FacilitiesController::class, 'delete', ['auth', 'admin']],
+
+    'approval'              => [MemberStudentController::class, 'index', ['auth', 'admin']],
+    'approval/show/{id}'    => [MemberStudentController::class, 'show', ['auth', 'admin']],
+    'approval/approve/{id}' => [MemberStudentController::class, 'approve', ['auth', 'admin']],
+    'approval/reject/{id}'  => [MemberStudentController::class, 'reject', ['auth', 'admin']],
+
+    'student/{filter}'            => [MemberStudentController::class, 'index', ['auth', 'admin']],
+    'student/show/{id}'           => [MemberStudentController::class, 'show', ['auth', 'admin']],
+    'student/delete/{id}'         => [MemberStudentController::class, 'destroy', ['auth', 'admin']],
+
+
 ];

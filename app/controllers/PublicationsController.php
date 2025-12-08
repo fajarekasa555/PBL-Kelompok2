@@ -28,6 +28,7 @@ class PublicationsController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -35,8 +36,21 @@ class PublicationsController extends Controller
             $data = [];
 
             foreach ($publications as $p) {
+                $type = strtolower($p['type']);
+
+                $badgeColor = match ($type) {
+                    'jurnal'      => 'badge-primary',
+                    'konferensi'  => 'badge-success',
+                    'buku'        => 'badge-warning',
+                    'artikel'     => 'badge-info',
+                    'skripsi'     => 'badge-danger',
+                    default       => 'badge-secondary',
+                };
+
+                $typeBadge = '<span class="badge ' . $badgeColor . '">' . htmlspecialchars($p['type']) . '</span>';
                 $data[] = [
                     'title' => htmlspecialchars($p['title']),
+                    'type' => $typeBadge,
                     'date' => htmlspecialchars(date('d F Y', strtotime($p['date']))),
                     'member_name' => htmlspecialchars($p['member_name']),
                     'action' => '
@@ -62,7 +76,8 @@ class PublicationsController extends Controller
         $publications = $this->publicationsModel->all();
 
         return $this->view('cms/anggota_lab/publication/index', [
-            'publications' => $publications
+            'publications' => $publications,
+            'user' => $user
         ]);
     }
 

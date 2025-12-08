@@ -25,6 +25,7 @@ class EducationController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -60,7 +61,8 @@ class EducationController extends Controller
         $educations = $this->educationsModel->all();
 
         return $this->view('cms/anggota_lab/education/index', [
-            'educations' => $educations
+            'educations' => $educations,
+            'user' => $user
         ]);
     }
 

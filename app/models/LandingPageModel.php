@@ -49,13 +49,13 @@ class LandingPageModel {
     }
 
     public function getActivity() {
-        $query = "SELECT * FROM activities ORDER BY id ASC";
+        $query = "SELECT * FROM activity_with_members ORDER BY id ASC";
         $stmt = $this->conn->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getProjects() {
-        $query = "SELECT * FROM projects ORDER BY id ASC";
+        $query = "SELECT * FROM project_with_members ORDER BY id ASC";
         $stmt = $this->conn->query($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

@@ -22,6 +22,7 @@ class ResearchFocusController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -53,7 +54,8 @@ class ResearchFocusController extends Controller
         $focuses = $this->focusModel->all();
 
         return $this->view('cms/content/research_focuses/index', [
-            'focuses' => $focuses
+            'focuses' => $focuses,
+            'user' => $user
         ]);
     }
 

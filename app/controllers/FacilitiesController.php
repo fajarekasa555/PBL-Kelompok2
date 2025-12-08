@@ -27,6 +27,7 @@ class FacilitiesController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -56,7 +57,9 @@ class FacilitiesController extends Controller
             exit;
         }
 
-        return $this->view('cms/content/facilities/index');
+        return $this->view('cms/content/facilities/index', [
+            'user' => $user
+        ]);
     }
 
     public function show($id)

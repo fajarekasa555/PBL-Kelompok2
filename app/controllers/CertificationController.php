@@ -25,6 +25,7 @@ class CertificationController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -58,7 +59,9 @@ class CertificationController extends Controller
             exit;
         }
 
-        return $this->view('cms/anggota_lab/certifications/index');
+        return $this->view('cms/anggota_lab/certifications/index', [
+            'user' => $user
+        ]);
     }
 
     public function create()

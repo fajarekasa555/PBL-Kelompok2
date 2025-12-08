@@ -32,6 +32,7 @@ class MembersController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -63,7 +64,9 @@ class MembersController extends Controller
             exit;
         }
 
-        return $this->view('cms/anggota_lab/members/index');
+        return $this->view('cms/anggota_lab/members/index', [
+            'user' => $user
+        ]);
     }
 
     public function show($id)

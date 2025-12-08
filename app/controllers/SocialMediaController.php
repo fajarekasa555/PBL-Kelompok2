@@ -25,6 +25,7 @@ class SocialMediaController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -59,7 +60,8 @@ class SocialMediaController extends Controller
         $social_media = $this->socialMediaModel->all();
 
         return $this->view('cms/anggota_lab/social_media/index', [
-            'social_media' => $social_media
+            'social_media' => $social_media,
+            'user' => $user
         ]);
     }
 

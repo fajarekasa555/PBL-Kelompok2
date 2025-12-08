@@ -22,6 +22,7 @@ class LabMissionController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -57,7 +58,8 @@ class LabMissionController extends Controller
         $missions = $this->missionModel->all();
 
         return $this->view('cms/content/mission/index', [
-            'missions' => $missions
+            'missions' => $missions,
+            'user' => $user
         ]);
     }
 

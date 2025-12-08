@@ -17,6 +17,7 @@ $basePublicationsUrl = $route->base_url('publications');
             <thead>
                 <tr>
                     <th>Judul</th>
+                    <th width="2">Tipe</th>
                     <th>Tanggal</th>
                     <th>Anggota</th>
                     <th width="120" class="text-center">Aksi</th>
@@ -37,6 +38,7 @@ $(function() {
         ajax: `${basePublicationsUrl}?ajax=1`,
         columns: [
             { data: 'title' },
+            { data: 'type', orderable: false, searchable: false, className: 'text-center' },
             { data: 'date' },
             { data: 'member_name', defaultContent: '-' },
             { 

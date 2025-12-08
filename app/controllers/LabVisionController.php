@@ -22,6 +22,7 @@ class LabVisionController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -51,7 +52,8 @@ class LabVisionController extends Controller
         $visions = $this->visionModel->all();
 
         return $this->view('cms/content/vision/index', [
-            'visions' => $visions
+            'visions' => $visions,
+            'user' => $user
         ]);
     }
 

@@ -62,5 +62,5 @@
             </option>
         <?php endforeach; ?>
     </select>
-    <small class="text-muted">Pilih satu atau lebih bidang keahlian.</small>
+    <small class="text-muted">Pilih satu atau lebih anggota.</small>
 </div>

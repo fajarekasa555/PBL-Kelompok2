@@ -22,6 +22,7 @@ class UserController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -52,7 +53,8 @@ class UserController extends Controller
         $users = $this->userModel->all();
 
         return $this->view('cms/user_management/users/index', [
-            'users' => $users
+            'users' => $users,
+            'user' => $user
         ]);
     }
 

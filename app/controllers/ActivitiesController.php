@@ -33,6 +33,7 @@ class ActivitiesController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -64,7 +65,9 @@ class ActivitiesController extends Controller
             exit;
         }
 
-        return $this->view('cms/content/activities/index');
+        return $this->view('cms/content/activities/index', [
+            'user' => $user
+        ]);
     }
 
     public function show($id)

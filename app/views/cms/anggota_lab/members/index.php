@@ -5,7 +5,7 @@ $baseMembersUrl = $route->base_url('members');
 ?>
 
 <h1 class="page-header d-flex justify-content-between align-items-center">
-    <span>Manajemen Anggota</span>
+    <span>Manajemen Dosen</span>
     <a href="<?= $baseMembersUrl ?>/create" class="btn btn-primary">
         <span class="fa fa-plus"></span> Tambah
     </a>

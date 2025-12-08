@@ -25,6 +25,7 @@ class ExpertiesController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -54,7 +55,8 @@ class ExpertiesController extends Controller
         $experties = $this->expertiesModel->all();
 
         return $this->view('cms/anggota_lab/experties/index', [
-            'experties' => $experties   
+            'experties' => $experties,
+            'user' => $user
         ]);
     }
 

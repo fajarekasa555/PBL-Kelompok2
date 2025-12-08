@@ -370,7 +370,7 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
         </a>
       </li>
 
-      <li class="has-sub <?= in_array($currentRoute, ['publications', 'members', 'members/create', 'members/edit', 'social_media', 'educations', 'experties', 'certifications', 'courses']) ? 'active expand' : '' ?>">
+      <li class="has-sub <?= in_array($currentRoute, ['publications', 'members', 'members/create', 'members/edit', 'social_media', 'educations', 'experties', 'certifications', 'courses', 'student/approve']) ? 'active expand' : '' ?>">
         <a href="javascript:;">
           <b class="caret"></b>
           <i class="fa fa-user"></i>
@@ -378,7 +378,10 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
         </a>
         <ul class="sub-menu">
           <li class="<?= in_array($currentRoute, ['members', 'members/create', 'members/edit']) ? 'active' : '' ?>">
-            <a href="<?= $route->base_url('members') ?>">Anggota</a>
+            <a href="<?= $route->base_url('members') ?>">Dosen</a>
+          </li>
+          <li class="<?= in_array($currentRoute, ['student/approve']) ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('student/approve') ?>">Mahasiswa</a>
           </li>
           <!-- <li class="<?= $currentRoute === 'social_media' ? 'active' : '' ?>">
             <a href="<?= $route->base_url('social_media') ?>">Sosial Media</a>
@@ -429,6 +432,20 @@ $currentRoute = $_GET['route'] ?? 'dashboard';
           </li>
           <li class="<?= $currentRoute === 'mission' ? 'active' : '' ?>">
             <a href="<?= $route->base_url('mission') ?>">Misi</a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Pendaftaran -->
+      <li class="has-sub <?= in_array($currentRoute, ['approval']) ? 'active expand' : '' ?>">
+        <a href="javascript:;">
+          <b class="caret"></b>
+          <i class="fa fa-check"></i>
+          <span>Pendaftaran</span>
+        </a>
+        <ul class="sub-menu">
+          <li class="<?= $currentRoute === 'approval' ? 'active' : '' ?>">
+            <a href="<?= $route->base_url('approval') ?>">Approval</a>
           </li>
         </ul>
       </li>

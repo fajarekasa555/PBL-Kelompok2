@@ -22,6 +22,7 @@ class LabCourseController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -52,7 +53,8 @@ class LabCourseController extends Controller
         $courses = $this->courseModel->all();
 
         return $this->view('cms/content/lab_courses/index', [
-            'courses' => $courses
+            'courses' => $courses,
+            'user' => $user
         ]);
     }
 

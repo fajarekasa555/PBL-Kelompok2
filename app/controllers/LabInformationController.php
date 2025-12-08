@@ -23,6 +23,7 @@ class LabInformationController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -49,7 +50,9 @@ class LabInformationController extends Controller
             exit;
         }
 
-        return $this->view('cms/lab_information/index');
+        return $this->view('cms/lab_information/index', [
+            'user' => $user
+        ]);
     }
 
 

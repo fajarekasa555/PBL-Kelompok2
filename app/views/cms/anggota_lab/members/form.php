@@ -180,7 +180,7 @@
             <option value="">-- Pilih Jabatan --</option>
             <option value="ketua"   <?= ($members['jabatan'] ?? '') == 'ketua' ? 'selected' : '' ?>>Ketua</option>
             <option value="wakil"   <?= ($members['jabatan'] ?? '') == 'wakil' ? 'selected' : '' ?>>Wakil</option>
-            <option value="anggota" <?= ($members['jabatan'] ?? '') == 'anggota' ? 'selected' : '' ?>>Anggota</option>
+            <option value="anggota" <?= ($members['jabatan'] ?? '') == 'pengurus' ? 'selected' : '' ?>>Pengurus</option>
         </select>
     </div>
 </div>

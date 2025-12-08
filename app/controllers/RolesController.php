@@ -25,6 +25,7 @@ class RolesController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -54,7 +55,8 @@ class RolesController extends Controller
         $roles = $this->roleModel->all();
 
         return $this->view('cms/user_management/roles/index', [
-            'roles' => $roles
+            'roles' => $roles,
+            'user' => $user
         ]);
     }
 

@@ -25,6 +25,7 @@ class CourseController extends Controller
 
     public function index()
     {
+        $user = $_SESSION['user'] ?? null;
         if (isset($_GET['ajax'])) {
             header('Content-Type: application/json; charset=utf-8');
 
@@ -53,7 +54,9 @@ class CourseController extends Controller
             exit;
         }
 
-        return $this->view('cms/anggota_lab/courses/index');
+        return $this->view('cms/anggota_lab/courses/index', [
+            'user' => $user
+        ]);
     }
 
     public function create()
