@@ -2168,7 +2168,7 @@
                 </div>
             </div>
             <div class="text-center" style="opacity: 0.7; font-size: 0.9rem;">
-                &copy; 2025 Laboratorium Data & Teknologi. All rights reserved.
+                &copy; 2025 Kelompok 2. All rights reserved.
             </div>
         </div>
     </footer>

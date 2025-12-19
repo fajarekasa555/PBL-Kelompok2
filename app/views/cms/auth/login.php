@@ -535,7 +535,7 @@
 
 			<!-- Login Footer -->
 			<div class="login-footer">
-				<p>&copy; 2024 DataLab. All rights reserved.</p>
+				<p>&copy; 2025 Kelompok 2. All rights reserved.</p>
 			</div>
 		</div>
 	</div>
